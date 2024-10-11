@@ -18,9 +18,7 @@ def install(offline=None, unistall=False):
     
     
     try:
-        with open(userSetupFile, 'r'):
-            
-            input = open(userSetupFile, 'r')
+        with open(userSetupFile, 'r', encoding='utf-8') as input:
             lines = input.readlines()  
             
             # clear old aTool codes, if there is any
