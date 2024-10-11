@@ -1,0 +1,40 @@
+_____ _____  ______           _____ ______     
+/ ____|  __ \|  ____|   /\    / ____|  ____|_   
+| |    | |__) | |__     /  \  | (___ | |__ _| |_ 
+| |    |  _  /|  __|   / /\ \  \___ \|  __|_   _|
+| |____| | \ \| |____ / ____ \ ____) | |____|_|  
+\_____|_|  \_\______/_/    \_\_____/|______|    
+
+This version of CreasePlus is rewritten entirely in python cmds(maya) and API's.
+thus there is no longer support for MayaLT. And the run-in lang is Python.
+
+install :
+extract, then just place icon and main folders in documents/maya/(maya_version)/scripts/
+restart maya if opened.
+
+#
+# attach it as python script / runtime command to hotkey:
+import maya.cmds as cmds
+from CreasePlus import CreasePlusMain
+CreasePlusMain.start()
+
+if not cmds.pluginInfo("CreasePlusNodes", q=True, loaded=True):
+    cmds.loadPlugin("CreasePlusNodes.py")
+
+
+# attach it as python script / runtime command to hotkey, for attribute iteration in context (optional):
+from CreasePlus import CreasePlusMain
+CreasePlusMain.crepcore.creasePlusLastCtx()
+
+# attach it as python script / runtime command to hotkey, for edge soft/hard toggle (optional):
+from CreasePlus import CreasePlusMain
+CreasePlusMain.crepcore.creasePlusToggleEdgeSmooth()
+
+# attach it as python script / runtime command to hotkey, for edge makeUV (optional):
+from CreasePlus import CreasePlusMain
+CreasePlusMain.crepcore.creasePlusMakeUv()
+
+
+# commands / defs for bindings / scripts can be found in def_sheet file
+
+# thank you

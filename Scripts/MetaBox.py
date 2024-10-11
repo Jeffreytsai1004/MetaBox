@@ -1,0 +1,641 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import maya.cmds as cmds # type: ignore
+import maya.mel as mel # type: ignore
+import sys
+import os
+import importlib
+import traceback
+
+current_dir = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
+sys.path.append(current_dir)
+print(f"Current directory: {current_dir}")
+
+from Modeling.Manage import Rename
+from Modeling.Edit import SpeedCut
+from Modeling.Edit import EvenEdgeLoop
+from Modeling.Edit import SpeedBend
+from Modeling.Edit import PolyFold
+from Modeling.Edit import ArcDeformer
+from Modeling.Edit import InstantDrag
+from Modeling.Edit import UnBevel
+from Modeling.Edit import RoundInset
+from Modeling.Edit import CreasePlus
+importlib.reload(CreasePlus)
+from Modeling.Edit import EdgeSensei
+from Modeling.Select import EdgeLoopSmartSelect
+from Modeling.Select import SamePositionSelector
+from Modeling.Select import IntervalSelectEdge
+from Modeling.UV import UVSetEditor
+from Modeling.Display import Xray
+from Groom.Edit import ExtractCurve
+from Metahuman.Custom import BodyPrep
+from Metahuman.Custom import BatchImport
+from Metahuman.Display import XrayJoint
+from Metahuman.Blendshape import MorphShape
+import sys
+import os
+
+# 获取 MetaBox 目录的绝对路径
+metabox_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 构建 aTools 的绝对路径
+aTools_Path = os.path.normpath(os.path.join(metabox_dir, 'Scripts', 'Animation', 'aTools')).replace('\\', '/')
+
+# 将 aTools 路径添加到 sys.path
+if aTools_Path not in sys.path:
+    sys.path.append(aTools_Path)
+
+# 如果 aTools 未安装，则安装它
+if not cmds.pluginInfo('aTools', query=True, loaded=True):
+    try:
+        from Animation.aTools import setup
+        setup.install([aTools_Path, True])
+    except ImportError:
+        print(f"无法导入 aTools。请确保 aTools 已正确安装在以下路径：{aTools_Path}")
+        print(f"当前 sys.path: {sys.path}")
+
+class MetaBox:
+    def __init__(self):
+        self.window_name = "MetaBoxWindow"
+        self.window_title = "MetaBox Dev 1.0"
+
+    def create_button_row(self, labels, commands):
+        num_buttons = len(labels)
+        form = cmds.formLayout(numberOfDivisions=100)
+        buttons = []
+        for i, (label, command) in enumerate(zip(labels, commands)):
+            button = cmds.button(label=label, command=command, parent=form)
+            buttons.append(button)
+        
+        for i, button in enumerate(buttons):
+            if i == 0:
+                cmds.formLayout(form, edit=True, attachForm=[(button, 'left', 0), (button, 'top', 0), (button, 'bottom', 0)])
+                if num_buttons == 1:
+                    cmds.formLayout(form, edit=True, attachForm=[(button, 'right', 0)])
+                else:
+                    cmds.formLayout(form, edit=True, attachPosition=[(button, 'right', 0, 100 // num_buttons)])
+            elif i == num_buttons - 1:
+                cmds.formLayout(form, edit=True, attachForm=[(button, 'right', 0), (button, 'top', 0), (button, 'bottom', 0)])
+                cmds.formLayout(form, edit=True, attachControl=[(button, 'left', 0, buttons[i-1])])
+            else:
+                cmds.formLayout(form, edit=True, attachControl=[(button, 'left', 0, buttons[i-1])])
+                cmds.formLayout(form, edit=True, attachForm=[(button, 'top', 0), (button, 'bottom', 0)])
+                cmds.formLayout(form, edit=True, attachPosition=[(button, 'right', 0, (i + 1) * 100 // num_buttons)])
+        
+        cmds.setParent('..')
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Create window
+    def show(self):
+        # Check if the window exists, if so, delete it
+        if cmds.window(self.window_name, exists=True):
+            cmds.deleteUI(self.window_name)
+        if cmds.dockControl(self.window_name + "Dock", exists=True):
+            cmds.deleteUI(self.window_name + "Dock")
+
+        # Create main window
+        self.window = cmds.window(self.window_name, title=self.window_title, widthHeight=(400, 300), menuBar=True, backgroundColor=(0.2,0.2,0.2), resizeToFitChildren=True)
+        main_layout = cmds.columnLayout(adjustableColumn=True)
+        tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=main_layout)
+        # Modeling tab
+        modeling_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
+        modeling_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=modeling_tab)
+        self.create_modeling_sub_tabs(modeling_sub_tabs)
+        # Groom tab
+        groom_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
+        groom_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=groom_tab)
+        self.create_groom_sub_tabs(groom_sub_tabs)
+        # Metahuman tab
+        metahuman_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
+        metahuman_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=metahuman_tab)
+        self.create_metahuman_sub_tabs(metahuman_sub_tabs)
+        # Rigging tab
+        rigging_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
+        rigging_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=rigging_tab)
+        self.create_rigging_sub_tabs(rigging_sub_tabs)
+        # Animation tab
+        animation_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
+        animation_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=animation_tab)
+        self.create_animation_sub_tabs(animation_sub_tabs)
+        # Set tab labels
+        cmds.tabLayout(tabs, edit=True, tabLabel=(
+            (modeling_tab, "Modeling"),
+            (groom_tab, "Groom"),
+            (metahuman_tab, "Metahuman"),
+            (rigging_tab, "Rigging"),
+            (animation_tab, "Animation")
+        ))
+        cmds.showWindow(self.window)
+        cmds.dockControl(self.window_name + "Dock", label=self.window_title, area='right', content=self.window, allowedArea='all')
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Modeling tab
+    def create_modeling_sub_tabs(self, parent):
+        self.create_modeling_select_tab(parent)
+        self.create_modeling_edit_tab(parent)
+        self.create_modeling_display_tab(parent)
+        self.create_modeling_check_tab(parent)
+
+    def create_modeling_select_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Select")))
+        selector_frame = cmds.frameLayout(label="Selector", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=selector_frame)
+        self.create_button_row(["Interval Select Edge"], [self.run_select_edge])
+        self.create_button_row(["Same Position Selector"], [self.run_same_position_selector])
+        self.create_button_row(["Edge Loop Smart Select"], [self.run_edge_loop_smart_select])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        cmds.setParent('..')  # Close sub_tab
+
+    def create_modeling_edit_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close sub_tab
+
+        manage_frame = cmds.frameLayout(label="Manage", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=manage_frame)
+        self.create_button_row(["Rename", "Batch Import"], [self.run_rename, self.run_batch_import])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+        tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
+        self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
+        self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
+        self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
+        self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+    
+        edit_frame = cmds.frameLayout(label="Edit", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=edit_frame)
+        self.create_button_row(["Instant Drag", "Un Bevel"], [self.run_instant_drag, self.run_unbevel])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+        uv_frame = cmds.frameLayout(label="UV", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=uv_frame)
+        self.create_button_row(["UV Set Editor"], [self.run_uv_set_editor])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+    def create_modeling_display_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Display")))
+
+        mesh_frame = cmds.frameLayout(label="Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=mesh_frame)
+        self.create_button_row(["Xray"], [self.run_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+        joint_frame = cmds.frameLayout(label="Joint", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=joint_frame)
+        self.create_button_row(["Joint Xray"], [self.run_joint_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+    def create_modeling_check_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Check")))
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        cmds.setParent('..')  # Close sub_tab
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Groom tab
+    
+    def create_groom_sub_tabs(self, parent):
+        self.create_groom_select_tab(parent)
+        self.create_groom_edit_tab(parent)
+        self.create_groom_display_tab(parent)
+
+    def create_groom_select_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Select")))
+        curve_frame = cmds.frameLayout(label="Curve", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=curve_frame)
+        guide_frame = cmds.frameLayout(label="Guide", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=guide_frame)
+        description_frame = cmds.frameLayout(label="Description", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=description_frame)
+
+    def create_groom_edit_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
+        curve_frame = cmds.frameLayout(label="Curve", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=curve_frame)
+        self.create_button_row(["Extra Curve"], [self.run_extra_curve])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        guide_frame = cmds.frameLayout(label="Guide", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=guide_frame)
+        description_frame = cmds.frameLayout(label="Description", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=description_frame)
+        expression_frame = cmds.frameLayout(label="Expression", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=expression_frame)
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+    def create_groom_display_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Display")))
+        curve_frame = cmds.frameLayout(label="Curve", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=curve_frame)
+        guide_frame = cmds.frameLayout(label="Guide", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=guide_frame)
+        description_frame = cmds.frameLayout(label="Description", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=description_frame)
+
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Metahuman tab
+    def create_metahuman_sub_tabs(self, parent):
+        self.create_metahuman_custom_tab(parent)
+        self.create_metahuman_display_tab(parent)
+        self.create_metahuman_select_tab(parent)
+
+    def create_metahuman_custom_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Custom")))
+        preparation_frame = cmds.frameLayout(label="Preparation", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=preparation_frame)
+        self.create_button_row(["Body Prepare"], [self.run_body_prepare])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        import_frame = cmds.frameLayout(label="Import", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=import_frame)
+        self.create_button_row(["Batch Import"], [self.run_batch_import])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        custom_mesh_frame = cmds.frameLayout(label="Custom Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=custom_mesh_frame)
+        rigging_frame = cmds.frameLayout(label="Rigging", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=rigging_frame)
+        select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=select_frame)
+        blendshape_frame = cmds.frameLayout(label="Blendshape", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=blendshape_frame)
+        self.create_button_row(["Morph Shape"], [self.run_morph_shape])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        dna_frame = cmds.frameLayout(label="DNA", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=dna_frame)
+        export_frame = cmds.frameLayout(label="Export", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=export_frame)
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+    def create_metahuman_display_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Display")))
+        mesh_frame = cmds.frameLayout(label="Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=mesh_frame)
+        self.create_button_row(["Xray"], [self.run_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        joint_frame = cmds.frameLayout(label="Joint", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=joint_frame)
+        self.create_button_row(["Joint Xray"], [self.run_joint_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
+    def create_metahuman_select_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Select")))
+        mesh_frame = cmds.frameLayout(label="Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=mesh_frame)
+        skeleton_frame = cmds.frameLayout(label="Skeleton", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=skeleton_frame)
+        controller_frame = cmds.frameLayout(label="Controller", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=controller_frame)
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Rigging tab
+    def create_rigging_sub_tabs(self, parent):
+        self.create_rigging_skeleton_tab(parent)
+        self.create_rigging_skin_tab(parent)
+
+    def create_rigging_skeleton_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Skeleton")))
+        display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=display_frame)
+        self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=select_frame)
+
+    def create_rigging_skin_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Skin")))
+        skin_frame = cmds.frameLayout(label="Skin", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=skin_frame)
+        constraint_frame = cmds.frameLayout(label="Constraint", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=constraint_frame)
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Animation tab
+    def create_animation_sub_tabs(self, parent):
+        self.create_animation_edit_tab(parent)
+        
+    def create_animation_edit_tab(self, parent):
+        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
+        tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
+        self.create_button_row(["Epic Pose Wrangler", "aTools"], [self.open_epic_pose_wrangler, self.open_aTools])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        time_frame = cmds.frameLayout(label="Time", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=time_frame)
+        key_frame = cmds.frameLayout(label="Key", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=key_frame)
+        pose_frame = cmds.frameLayout(label="Pose", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=pose_frame)
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Define button functionalities
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Modeling Functions
+    # ****************************************************************************************************************
+
+    def run_rename(self, *args):
+        try:
+            Rename_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Manage', 'Rename.py')).replace('\\', '/')
+            sys.path.append(Rename_Path)
+            Rename.UI()
+        except Exception as e:
+            error_message = f"Error occurred while running Rename: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_crease_plus(self, *args):
+        try:
+            crease_plus_dir = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'CreasePlus')).replace('\\', '/')
+            print(f"CreasePlus directory: {crease_plus_dir}")
+            sys.path.append(crease_plus_dir)
+            from Modeling.Edit.CreasePlus import CreasePlusMain
+            CreasePlusMain.start()
+            print("CreasePlus loaded successfully")
+        except Exception as e:
+            error_message = f"Error occurred while running Crease Plus: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+            print(f"Detailed error: {traceback.format_exc()}")
+
+    def run_speed_cut(self, *args):
+        try:
+            SpeedCut.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Speed Cut: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_edge_sensei(self, *args):
+        try:
+            EdgeSensei.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Edge Sensei: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_even_edge_loop(self, *args):
+        try:
+            EvenEdgeLoop.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Even Edge Loop: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
+
+    def run_speed_bend(self, *args):
+        try:
+            SpeedBend.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Speed Bend: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_poly_fold(self, *args):
+        try:
+            PolyFold.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Poly Fold: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_round_inset(self, *args):
+        try:
+            RoundInset.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Round Inset: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_arc_deformer(self, *args):
+        try:
+            ArcDeformer.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Arc Deformer: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_instant_drag(self, *args):
+        try:
+            InstantDrag.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Instant Drag: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_unbevel(self, *args):
+        try:
+            UnBevel.run()
+        except Exception as e:
+            error_message = f"Error occurred while running UnBevel: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # Select
+    def run_edge_loop_smart_select(self, *args):
+        try:
+            EdgeLoopSmartSelect.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Edge Loop Smart Select: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_select_edge(self, *args):
+        try:
+            IntervalSelectEdge.show()
+        except Exception as e:
+            error_message = f"Error occurred while running Interval Select Edge: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_same_position_selector(self, *args):
+        try:
+            SamePositionSelector.show()
+        except Exception as e:
+            error_message = f"Error occurred while running SamePositionSelector: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # Display
+    def run_xray(self, *args):
+        try:
+            Xray.Xray()
+        except Exception as e:
+            error_message = f"Error occurred while running Xray: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
+    
+    def run_joint_xray(self, *args):
+        try:
+            XrayJoint.XrayJoint()
+        except Exception as e:
+            error_message = f"Error occurred while running XrayJoint: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
+
+    # ****************************************************************************************************************
+    def run_uv_set_editor(self, *args):
+        try:
+            UVSetEditor.show()
+        except Exception as e:
+            error_message = f"Error occurred while opening UV Set Editor: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Groom Functions
+    # ****************************************************************************************************************
+    def run_extra_curve(self, *args):
+        try:
+            ExtractCurve.run()
+        except Exception as e:
+            error_message = f"Error occurred while running ExtractCurve: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Metahuman Functions
+    # ****************************************************************************************************************
+    # Preparation
+    def run_body_prepare(self, *args):
+        try:
+            BodyPrep.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Body Prepare: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # Import
+    def run_batch_import(self, *args):
+        try:
+            BatchImport.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Batch Import: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+    
+    # Blendshape
+    def run_morph_shape(self, *args):
+        try:
+            MorphShape.show()
+        except Exception as e:
+            error_message = f"Error occurred while running MorphShape: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Animation Functions
+    # ****************************************************************************************************************
+    # Pose
+    def open_epic_pose_wrangler(self, *args):
+        try:
+            # Add Epic Pose Wrangler path
+            epic_pose_wrangler_path = os.path.join(current_dir, 'Animation', 'epic_pose_wrangler')
+            sys.path.append(epic_pose_wrangler_path)
+            print(epic_pose_wrangler_path)
+            print(f"Attempting to import Epic Pose Wrangler from: {epic_pose_wrangler_path}")            
+            # Get current Maya version
+            maya_version = cmds.about(version=True).split()[0]            
+            # Load necessary plugins
+            plugin_dir = os.path.join(epic_pose_wrangler_path, 'plugins', 'Windows', maya_version)
+            for plugin in ['embeddedRL4.mll', f'MayaUE4RBFPlugin{maya_version}.mll', 'MayaUERBFPlugin.mll']:
+                plugin_path = os.path.join(plugin_dir, plugin)
+                if os.path.exists(plugin_path):
+                    if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
+                        cmds.loadPlugin(plugin_path)
+                else:
+                    print(f"Warning: Plugin file does not exist: {plugin_path}")
+
+            # Import and run Epic Pose Wrangler
+            sys.path.insert(0, os.path.dirname(epic_pose_wrangler_path))
+            from Animation.epic_pose_wrangler import main
+            pose_wrangler = main.PoseWrangler()
+            
+            cmds.inViewMessage(amg='Epic Pose Wrangler loaded successfully', pos='midCenter', fade=True)
+        except Exception as e:
+            error_message = f"Error occurred while running Epic Pose Wrangler: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def open_aTools(self, *args):
+        try:
+            # Get aTools path
+            aTools_Path = os.path.normpath(os.path.join(current_dir, 'Animation', 'aTools')).replace('\\', '/')
+            print(f"aTools_Path: {aTools_Path}")
+
+            # Add aTools path to sys.path
+            if aTools_Path not in sys.path:
+                sys.path.insert(0, aTools_Path)
+            
+            print(f"Current sys.path: {sys.path}")
+
+            # Change current working directory
+            os.chdir(aTools_Path)
+            print(f"Current working directory: {os.getcwd()}")
+
+            # Add parent directory to sys.path
+            parent_dir = os.path.dirname(aTools_Path)
+            if parent_dir not in sys.path:
+                sys.path.insert(0, parent_dir)
+            print(f"Updated sys.path: {sys.path}")
+
+            # Try to import setup module
+            print("Attempting to import setup...")
+            import setup
+            print("Setup imported successfully")
+
+            # Install aTools
+            setup.install([aTools_Path, True])
+            print("aTools installed successfully")
+
+            # Import animBarUI
+            print("Attempting to import animBarUI...")
+            from animTools.animBar import animBarUI
+            print("animBarUI imported successfully")
+
+            importlib.reload(animBarUI)
+            animBarUI.show('refresh')
+        except Exception as e:
+            error_message = f"Error occurred while running aTools: {e}"
+            print(f"Detailed error: {traceback.format_exc()}")
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def show():
+    MetaBox().show()
+
+if __name__ == "__main__":
+    show()
+    show()
