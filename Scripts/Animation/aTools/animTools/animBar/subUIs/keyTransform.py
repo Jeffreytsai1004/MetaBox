@@ -770,7 +770,7 @@ class KeyTransformSlider_Gui(object):
                             fv = G.KT_keyValues[n][fi]
                             lv = G.KT_keyValues[n][li]                          
                             
-                            for x in xrange(ti-2, -1, -1):                            
+                            for x in range(ti-2, -1, -1):                            
                                 v = G.KT_keyValues[n][fi+x+1]
                                 if v == fv == lv:
                                     del G.KT_keysSel[n][x]

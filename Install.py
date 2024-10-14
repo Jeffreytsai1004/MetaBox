@@ -304,7 +304,7 @@ except ImportError as e:
     # Check if button was created correctly
     if cmds.shelfButton(new_button, query=True, exists=True):
         print("MetaBox button created successfully")
-        # print(button properties for verification
+        # print(button properties for verification)
         print("Button label:", cmds.shelfButton(new_button, query=True, label=True))
         print("Button image:", cmds.shelfButton(new_button, query=True, image1=True))
     else:
