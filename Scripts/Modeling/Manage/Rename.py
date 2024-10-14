@@ -1,16 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 '''
-from importlib import reload
-import Rename
-reload(Rename)
-Rename.UI()
+import ig_EzRename
+reload(ig_EzRename)
+UI()
 '''
-from Modeling.Manage import Rename
-# this text can be entered from the script editor and can be made into a button
 
-import maya.cmds as cmds # type: ignore
 
-def UI():
+import maya.cmds as cmds
+
+def run():
 	
 	global SelectName
 	global RenameText
@@ -32,23 +32,23 @@ def UI():
 	#UI Width
 	sizeX = 240
 	version = "v1.0"
-	if cmds.window("RenameWin", exists=True):
-		cmds.deleteUI("RenameWin", window=True)
+	if cmds.window("igEzRenameWin", exists=True):
+		cmds.deleteUI("igEzRenameWin", window=True)
 	
 	#Creating UI
-	igEzRenamWin = cmds.window("RenameWin", title="Rename Tool "+version, width=sizeX+6, height=385, mnb = True, mxb = False, sizeable = False)
+	igEzRenamWin = cmds.window("igEzRenameWin", title="ig Easy Rename Tool "+version, width=sizeX+6, height=385, mnb = True, mxb = False, sizeable = False)
 	
 	#Creating interface elements
 	mainLayout = cmds.columnLayout("mainColumnLayout", width = sizeX, adjustableColumn=False, co = ["both",2])
 
 	#Select All Button
 	cmds.separator(h=5, style = "none", parent = mainLayout)
-	cmds.button(label = "Select All", w=sizeX, h=25, c=SelectAll, ann = "Select ALL objects in scene")
+	cmds.button(label = "Select All", w=sizeX, h=25, c=lambda *args: SelectAll(), ann = "Select ALL objects in scene")
 	cmds.separator(h=5, style = "none", parent = mainLayout)
 
 	#Select by Name
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 25), (2, 60)], cs = [(5,5), (5,5)])
-	cmds.button(label = "Select by Name", w=sizeX/3, h=25, c=SelectName, align = "Center", ann="Select objects by name")
+	cmds.button(label = "Select by Name", w=sizeX/3, h=25, c=lambda *args: SelectName(), align = "Center", ann="Select objects by name")
 	SelectName = cmds.textField(w = sizeX*0.646, ann="Select by Name \n Use * after and/or before the text to select by prefix/suffix \n Example: *_grp")
 	cmds.separator(w = sizeX, h=15, style = "in", parent = mainLayout)
 	
@@ -71,29 +71,29 @@ def UI():
 	NumberCheck = cmds.radioButtonGrp(labelArray2=[ 'Numbers', 'Letters'], numberOfRadioButtons=2, w=sizeX, h=20, sl=1, cw = ([1,120]))
 	#ButtonRename and Number
 	cmds.separator(h=5, style = "none", parent = mainLayout)
-	cmds.button(label = "Rename and Number", w=sizeX, h=25, c=RenameNumber, align = "Center", parent = mainLayout)
+	cmds.button(label = "Rename and Number", w=sizeX, h=25, c=lambda *args: RenameNumber(), align = "Center", parent = mainLayout)
 	cmds.separator(w = sizeX, h=15, style = "in", parent = mainLayout)
 
 	#RemoveCharacter
 	#Remove First/Last
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 25), (2, 60)], cs = [(5,5)])
 	cmds.text(label="  Remove:", font = "boldLabelFont", w = sizeX/3-12, align="left")
-	cmds.button(label = "First Char->", w=sizeX/3, h=25, c=lambda *args: Rename.Remove(True), align = "Center")
-	cmds.button(label = "<-Last Char", w=sizeX/3, h=25, c=lambda *args: Rename.Remove(False), align = "Center")
+	cmds.button(label = "First Char->", w=sizeX/3, h=25, c=lambda *args: Remove(True), align = "Center")
+	cmds.button(label = "<-Last Char", w=sizeX/3, h=25, c=lambda *args: Remove(False), align = "Center")
 	cmds.separator(h=5, style = "none", parent = mainLayout)
 
 	#Remove pasted__
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 25), (2, 60)], cs = [(90,90)])
 	cmds.text(label="  ", font = "boldLabelFont", w = sizeX/3-12, align="left")
-	cmds.button(label = "pasted__", w=sizeX/3, h=25, c=RemovePasted, align = "Center")
+	cmds.button(label = "pasted__", w=sizeX/3, h=25, c=lambda *args: RemovePasted(), align = "Center")
 
 	#Remove UI
 	cmds.separator(h=5, style = "none", parent = mainLayout)
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 25), (2, 60)], cs = [(8.5,8.5)])
 	RemoveFirst = cmds.textField(w = sizeX/5, tx="0", ann="Write the amount of characters you want to delete on text beginning")
-	cmds.button(label = "-", w=25, h=25, c=lambda *args: Rename.RemoveChar('begin'), align = "Center", ann="Delete on text beginning")
-	cmds.button(label = "Remove", w=sizeX/4, h=25, c=lambda *args: Rename.RemoveChar('all'), align = "Center", ann="Delete on text beginning and ending")
-	cmds.button(label = "-", w=25, h=25, c=lambda *args: Rename.RemoveChar('end'), align = "Center", ann="Delete on text ending")
+	cmds.button(label = "-", w=25, h=25, c=lambda *args: RemoveChar('begin'), align = "Center", ann="Delete on text beginning")
+	cmds.button(label = "Remove", w=sizeX/4, h=25, c=lambda *args: RemoveChar('all'), align = "Center", ann="Delete on text beginning and ending")
+	cmds.button(label = "-", w=25, h=25, c=lambda *args: RemoveChar('end'), align = "Center", ann="Delete on text ending")
 	RemoveEnd = cmds.textField(w = sizeX/5, tx="3", ann="Write the amount of characters you want to delete on text ending")
 	cmds.separator(w = sizeX, h=15, style = "in", parent = mainLayout)
 	
@@ -102,22 +102,22 @@ def UI():
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 20), (2, 60)], cs = [(5,5)])
 	cmds.text(label="  Prefix:", font = "boldLabelFont", w = sizeX/4-10, align="left", ann="Write the prefix")
 	PrefixText = cmds.textField(w = sizeX/2.5+33, tx="prefix_", ann="Write the prefix")
-	cmds.button(label = "Add", w=sizeX/4-10, h=25, c=lambda *args: Rename.PrefixSuffix(False), align = "Center")
+	cmds.button(label = "Add", w=sizeX/4-10, h=25, c=lambda *args: PrefixSuffix(False), align = "Center")
 	cmds.separator(h=5, style = "none", parent = mainLayout)
 	#Group Suffix
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 20), (2, 60)], cs = [(5,5)])
 	cmds.text(label="  Suffix:", font = "boldLabelFont", w = sizeX/4-10, align="left", ann="Write the suffix")
 	SuffixText = cmds.textField(w = sizeX/2.5+33, tx="_suffix", ann="Write the suffix")
-	cmds.button(label = "Add", w=sizeX/4-10, h=25, c=lambda *args: Rename.PrefixSuffix(True), align = "Center")
+	cmds.button(label = "Add", w=sizeX/4-10, h=25, c=lambda *args: PrefixSuffix(True), align = "Center")
 	cmds.separator(w = sizeX, h=15, style = "in", parent = mainLayout)
 
 	#Prefix
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 20), (2, 60)], cs = [(5,5)])
-	cmds.button(label = "_Grp", w=sizeX/5-4, h=25, c=lambda *args: Rename.Suffix('_Grp'), align = "Center", ann = "Add Grp suffix") 
-	cmds.button(label = "_Geo", w=sizeX/5-4, h=25, c=lambda *args: Rename.Suffix('_Geo'), align = "Center", ann = "Add Geo suffix")
-	cmds.button(label = "_Ctrl", w=sizeX/5-4, h=25, c=lambda *args: Rename.Suffix('_Ctrl'), align = "Center", ann = "Add Ctrl suffix")
-	cmds.button(label = "_Jnt", w=sizeX/5-4, h=25, c=lambda *args: Rename.Suffix('_Jnt'), align = "Center", ann = "Add Jnt suffix")
-	cmds.button(label = "_Drv", w=sizeX/5-4, h=25, c=lambda *args: Rename.Suffix('_Drv'), align = "Center", ann = "Add Drv suffix")
+	cmds.button(label = "_Grp", w=sizeX/5-4, h=25, c="Suffix('_Grp')", align = "Center", ann = "Add Grp suffix") 
+	cmds.button(label = "_Geo", w=sizeX/5-4, h=25, c="Suffix('_Geo')", align = "Center", ann = "Add Geo suffix")
+	cmds.button(label = "_Ctrl", w=sizeX/5-4, h=25, c="Suffix('_Ctrl')", align = "Center", ann = "Add Ctrl suffix")
+	cmds.button(label = "_Jnt", w=sizeX/5-4, h=25, c="Suffix('_Jnt')", align = "Center", ann = "Add Jnt suffix")
+	cmds.button(label = "_Drv", w=sizeX/5-4, h=25, c="Suffix('_Drv')", align = "Center", ann = "Add Drv suffix")
 	cmds.separator(w = sizeX, h=15, style = "in", parent = mainLayout)
 	
 	#Search and Replace
@@ -129,7 +129,7 @@ def UI():
 	ReplaceText = cmds.textField(w = sizeX/2+100, ann="Write the text to replace")
 	cmds.rowColumnLayout( numberOfRows=1, w=sizeX, parent=mainLayout, rowHeight=[(1, 20), (2, 60)], cs = [(5,5)])
 	SRCheck = cmds.radioButtonGrp(labelArray3=[ 'Selected', 'Hierarchy', 'All'], numberOfRadioButtons=3, w=sizeX, h=20, sl=1, cw = ([1,95],[2,95],[3,95]))
-	cmds.button(label = "Apply", w=sizeX, h=25, c=SearchReplace, align = "Center", parent = mainLayout)
+	cmds.button(label = "Apply", w=sizeX, h=25, c=lambda *args: SearchReplace(), align = "Center", parent = mainLayout)
 	cmds.separator(h=5, style = "none", parent = mainLayout)
 	
 	#Show UI:
@@ -345,7 +345,7 @@ def Suffix(Text):
 	selection = cmds.ls(selection = True, sn = True)
 	
 	for objs in selection:
-		#Test if has duplicate mesh with the same name on the scene
+		#Teste if has duplicate mesh with the same name on the scene
 		trueName = testDuplicateName(objs)
 
 		#Save the original name
@@ -416,4 +416,3 @@ def testDuplicateName(Obj):
 		return trueName[len(trueName)-1]
 	except:
 		return Obj
-

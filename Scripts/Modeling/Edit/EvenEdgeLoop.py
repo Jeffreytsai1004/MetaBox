@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import maya.cmds as mc # type: ignore
-import maya.mel as mel # type: ignore
+import maya.cmds as mc
+import maya.mel as mel
 import math
 import re
 

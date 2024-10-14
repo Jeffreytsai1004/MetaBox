@@ -889,7 +889,7 @@ div.math:hover a.headerlink {
 
 /* -- printout stylesheet --------------------------------------------------- */
 
-@media print({
+@media print {
     div.document,
     div.documentwrapper,
     div.bodywrapper {

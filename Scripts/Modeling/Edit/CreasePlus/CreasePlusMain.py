@@ -26,14 +26,12 @@ try:
     
 except ImportError:
     try:
-        from PySide.QtGui import *
-        from PySide.QtCore import *
+        from PySide2.QtGui import *
+        from PySide2.QtCore import *
         def whatpyside():
             return 1   
     except ImportError:
         raise Exception("Couldn't import the PySide module.")
-    
-import importlib
 
 # from shiboken2 import wrapInstance
 
@@ -45,7 +43,7 @@ from . import CreasePlusCore
 crepcore = CreasePlusCore
 
 # TODO remove reloads
-# crepcore = importlib.reload(crepcore)
+# crepcore = reload(crepcore)
 
 maya_useNewAPI = True
 
@@ -99,6 +97,7 @@ def cPmayaMainWindow():
 
 def cPiconDir():
     icon_dir = crease_plus_dir + '/Icons/'
+    print("Icon directory:", icon_dir)
     return icon_dir
 
 # global_maya_script_dir = cmds.internalVar(usd=True)
@@ -439,7 +438,7 @@ class CreasePlusMain(QWidget):
         self.setMaximumWidth(w)
         self.setMinimumWidth(w)
 
-        # print((self.maximumWidth() )
+        # print (self.maximumWidth() )
 
         self.resize(w, h)
 
@@ -1044,7 +1043,7 @@ class CreasePlusMain(QWidget):
         # self.nextWid.close()
 
     def dummy(self):
-        print(('dummy'))
+        print ('dummy')
 
 
 

@@ -1059,7 +1059,7 @@ def cPisbevelCage(cageshpstr):
 def creasePlusHBevelLiveCmd():
     global global_CP_Nodes_pluginstr
 
-    # mel.eval("print(" + global_CP_Nodes_pluginstr + " ;")
+    # mel.eval("print " + global_CP_Nodes_pluginstr + " ;")
 
     if not mc.pluginInfo(global_CP_Nodes_pluginstr, q=True, loaded=True):
         try:
@@ -1578,7 +1578,7 @@ def creasePlusCurveSlice():
     curvemin = curveBb.min
     curvemax = curveBb.max
 
-    # print((curvemin)
+    # print (curvemin)
 
     curveWhd = (abs(curvemax.x - curvemin.x), abs(curvemax.y - curvemin.y),
                 abs(curvemax.z - curvemin.z))

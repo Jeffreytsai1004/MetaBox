@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import maya.cmds as cmds # type: ignore
-import maya.mel as mel # type: ignore
-import maya.OpenMaya as om # type: ignore
+import maya.cmds as cmds
+import maya.mel as mel
+import maya.OpenMaya as om
 import re, math
-import maya.OpenMayaUI as omui # type: ignore
-import maya.api.OpenMaya as oma # type: ignore
-import maya.api.OpenMayaUI as omuia # type: ignore
+import maya.OpenMayaUI as omui
+import maya.api.OpenMaya as oma
+import maya.api.OpenMayaUI as omuia
 mel.eval('source "dagMenuProc"')
 
 
@@ -204,9 +204,6 @@ def X92():
                 cmds.addAttr(selInitialGeo[0], at = 'long',ln='closeTo') 
             if not cmds.attributeQuery('firstRun', node = selInitialGeo[0], ex=True ):
                 cmds.addAttr(selInitialGeo[0], at = 'long',ln='firstRun') 
-            else:
-                selShortestLoop = []
-                print('no selection')
             cmds.setAttr((selInitialGeo[0]+'.firstRun'),0)
             cmds.scriptJob ( runOnce=True, event = ["SelectionChanged", selShortestLoop])
     else:

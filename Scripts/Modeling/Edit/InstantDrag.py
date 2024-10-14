@@ -435,7 +435,7 @@ def getClosestMeshHit(mayaMesh):
     for c in checkList:
         transNode = mc.listRelatives(c, p=True,f=True)
         getFaceDist,getFace,getHitPoint  = getClosestPointOnFace(transNode[0],posXXX)
-        #print((getCV, getFaceDist, getFace)
+        #print (getCV, getFaceDist, getFace)
         if getFaceDist < shortDistanceCheck:
             shortDistanceCheck = getFaceDist
             resultFace = getFace

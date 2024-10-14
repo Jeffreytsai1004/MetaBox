@@ -67,7 +67,7 @@ def createOfflineMelFile(offlineFolder, scriptsDir):
     offlineInstallPy    = os.path.join(offlineFolder, "offlineInstall.py").replace("\\", "/")
     offlineInstallMel   = os.path.join(scriptsDir, "aTools_offlineInstall.mel").replace("\\", "/")
     
-    # 修改这一部分
+    # Read the Python file
     pyContents = utilMod.readFile(offlineInstallPy)
     if isinstance(pyContents, str):
         pyContents = pyContents.split('\n')
@@ -75,6 +75,6 @@ def createOfflineMelFile(offlineFolder, scriptsDir):
         pyContents = [str(pyContents)]
     pyContents = "\\n\\".join(pyContents)
     
-    melContents         = """python("execfile('%s')")""" % offlineInstallPy.replace("\\", "/")
+    melContents = """python("execfile('%s')")""" % offlineInstallPy.replace("\\", "/")
     
     utilMod.writeFile(offlineInstallMel, melContents)

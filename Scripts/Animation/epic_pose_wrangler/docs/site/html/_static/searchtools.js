@@ -238,7 +238,7 @@ var Search = {
     //Search.lastresults = results.slice();  // a copy
     //console.info('search results:', Search.lastresults);
 
-    // print(the results
+    // print the results
     var resultCount = results.length;
     function displayNextItem() {
       // results left, load the summary and display it

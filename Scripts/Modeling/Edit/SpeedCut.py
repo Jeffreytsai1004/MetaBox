@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import maya.OpenMaya as om # type: ignore   
-import maya.OpenMayaUI as omui # type: ignore
-import maya.cmds as cmds # type: ignore
+import maya.OpenMaya as om
+import maya.OpenMayaUI as omui
+import maya.cmds as cmds
 import math
-import maya.api.OpenMaya as OpenMaya # type: ignore
-import maya.mel as mel # type: ignore
+import maya.api.OpenMaya as OpenMaya
+import maya.mel as mel
 import re
 from collections import OrderedDict
 import random
@@ -414,7 +414,7 @@ def cutter2NewMeshGrp():
         else:
             print('only work for different or after cut')
     else:
-        print('select one cutter Only!')
+        print ('select one cutter Only!')
 
 def fixShadowLink():
     listAllShadow = cmds.ls('*Shadow')
@@ -665,10 +665,6 @@ def removeArrayGrp():
         cmds.setAttr((myType[0]+'.arrayType'),'new',type="string")
         cmds.setAttr((myType[0]+'.arrayMaster'),'new',type="string")
 
-def instLink():
-    beseMesh = cmds.optionMenu('baseMeshMenu', query = True, v = True)
-    cmds.parent(beseMesh,beseMesh+'_cutterGrp')
-
 def instRadReNew():
     cmds.radioButtonGrp('arrayTypeButton',e=True, sl = 2)
     myType = checkInstType()
@@ -892,7 +888,7 @@ def instBake():
             cmds.select(arraySample)
             fixBoolNodeConnection()
     else:
-        print('nothing selected!')
+        print ('nothing selected!')
 
 def instRemove():
     beseMesh = cmds.optionMenu('baseMeshMenu', query = True, v = True)
@@ -1094,7 +1090,7 @@ def publishFinal():
     beseMesh = cmds.optionMenu('baseMeshMenu', query = True, v = True)
     if len(beseMesh) > 0:
         if cmds.objExists(beseMesh + '_publishMesh'):
-            print('publishMesh existed!')
+            print ('publishMesh existed!')
 
         else:
             if cmds.objExists(beseMesh + '_preBevelMeshFinal'):
@@ -1111,7 +1107,7 @@ def publishFinal():
                     cmds.DeleteHistory()
                     cmds.setAttr((beseMesh+ 'BoolGrp.visibility'),0)
                 else:
-                    print('nothing to publish')
+                    print ('nothing to publish')
 
 def preCheckBevelByVolumn():
     beseMesh = cmds.optionMenu('baseMeshMenu', query = True, v = True)
@@ -2126,7 +2122,6 @@ def rdMirrorHalf(side):
     buttonXOn = 1
     buttonYOn = 1
     buttonZOn = 1
-    beseMesh = cmds.optionMenu('baseMeshMenu', query = True, v = True)
     bcv = cmds.button('rMirrorXButton',q=1, bgc =1)
     totalBcVX = (bcv[0]+ bcv[1]+ bcv[2])/3
     if totalBcVX > 0.27:
@@ -2142,8 +2137,8 @@ def rdMirrorHalf(side):
     if totalBcVX > 0.27:
         buttonZOn = 0
     if buttonXOn == 0 and buttonYOn == 0 and buttonZOn == 0:
-        if cmds.objExists(beseMesh + "_rMirrorGrp"):
-            cmds.delete(beseMesh + "_rMirrorGrp")
+        if cmds.objExists((beseMesh + "_rMirrorGrp")):
+            cmds.delete((beseMesh + "_rMirrorGrp"))
     else:
         if side == 'p':
             checkV = cmds.button('rMirrorPosButton', q=1 , bgc = 1)
@@ -3332,7 +3327,7 @@ def combineSelCutters():#work with different type of OP, but mixing type may be 
             if cmds.objExists(l):
                 cmds.delete(l)
     else:
-        print('need more then one cutter!')
+        print ('need more then one cutter!')
 
 def recreateBool():
     #recreate bool
@@ -3406,7 +3401,7 @@ def bakeCutter(mode):
     selectedCutter = cmds.ls(sl=1,fl=1)
     checkGrp = cmds.ls(sl=1,fl=1,l=1)
     if mode == 'unselect' and len(selectedCutter) == 0:
-        print('nothing selected!')
+        print ('nothing selected!')
     else:
         #store any symmtry
         cmds.setAttr((beseMesh+'.visibility'), 1)
@@ -4437,7 +4432,7 @@ def useOwnCutterShape():
     if len(ownCutter) > 0:
         for o in ownCutter:
             if ('_cutterGrp') in o:
-                print('shape already been used')
+                print ('shape already been used')
             else:
                 if cmds.objExists(beseMesh + '_BoolResult') == 0:
                     restoreCutterWithSymmtry()
@@ -4502,7 +4497,7 @@ def useOwnCutterShape():
                 cmds.select(newCutter[0])
                 cmds.setAttr((newCutter[0]+'.cutterType'),'custom' ,type="string")
     else:
-        print('nothing select!')
+        print ('nothing select!')
 
 def cutterDulpicate():
     beseMesh = cmds.optionMenu('baseMeshMenu', query = True, v = True)
@@ -4534,10 +4529,10 @@ def cutterDulpicate():
                     fixBoolNodeConnection()
                     newCutterList.append(newCutter[0])
             else:
-                print(d + 'is not a cutter!!')
+                print (d + 'is not a cutter!!')
         cmds.select(newCutterList)
     else:
-        print('nothing selected!')
+        print ('nothing selected!')
 
 def QChangeCutterDir(dir):
     selObj = cmds.ls(sl=1, fl=1,l=True, type='transform')
@@ -4973,7 +4968,7 @@ def onDragCutter():
     selSample = 'sampleLoc'
     modifiers = cmds.getModifiers()
     if (modifiers == 1):
-        #print('shift Press'
+        #print 'shift Press'
         vpX, vpY, _ = cmds.draggerContext(ctxCutter, query=True, dragPoint=True)
         distanceA = (vpX - screenX)
         rotateRun = (distanceA) /4
@@ -4986,7 +4981,7 @@ def onDragCutter():
         cmds.refresh(cv=True,f=True)
 
     elif(modifiers == 4):
-        #print('ctrl selSample'
+        #print 'ctrl selSample'
         vpX, vpY, _ = cmds.draggerContext(ctxCutter, query=True, dragPoint=True)
         distanceB = vpX - screenX
         scaleCheck = distanceB / 100
@@ -5510,12 +5505,6 @@ def setCutterBaseMesh():
             meshBBox()
     else:
         removeNotExistBaseMesh()
-
-def removeNotExistBaseMesh():
-    beseMesh = cmds.optionMenu('baseMeshMenu', query = True, v = True)
-    if beseMesh is not None:
-        if cmds.objExists(beseMesh):
-            cmds.delete(beseMesh)
 
 if __name__ == "__main__":
     run()

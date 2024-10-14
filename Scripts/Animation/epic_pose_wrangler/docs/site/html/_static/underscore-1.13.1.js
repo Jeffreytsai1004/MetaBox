@@ -490,7 +490,7 @@
   // Since the regular `Object.prototype.toString` type tests don't work for
   // some types in IE 11, we use a fingerprinting heuristic instead, based
   // on the methods. It's not great, but it's the best we got.
-  // The fingerprint(method lists are defined below.
+  // The fingerprint method lists are defined below.
   function ie11fingerprint(methods) {
     var length = getLength(methods);
     return function(obj) {
