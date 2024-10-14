@@ -18,7 +18,9 @@ def install(offline=None, unistall=False):
     
     
     try:
-        with open(userSetupFile, 'r', encoding='utf-8') as input:
+        with open(userSetupFile, 'r'):
+            
+            input = open(userSetupFile, 'r')
             lines = input.readlines()  
             
             # clear old aTool codes, if there is any
@@ -67,7 +69,7 @@ def createOfflineMelFile(offlineFolder, scriptsDir):
     offlineInstallPy    = os.path.join(offlineFolder, "offlineInstall.py").replace("\\", "/")
     offlineInstallMel   = os.path.join(scriptsDir, "aTools_offlineInstall.mel").replace("\\", "/")
     
-    # Read the Python file
+    # 修改这一部分
     pyContents = utilMod.readFile(offlineInstallPy)
     if isinstance(pyContents, str):
         pyContents = pyContents.split('\n')
@@ -75,6 +77,6 @@ def createOfflineMelFile(offlineFolder, scriptsDir):
         pyContents = [str(pyContents)]
     pyContents = "\\n\\".join(pyContents)
     
-    melContents = """python("execfile('%s')")""" % offlineInstallPy.replace("\\", "/")
+    melContents         = """python("execfile('%s')")""" % offlineInstallPy.replace("\\", "/")
     
     utilMod.writeFile(offlineInstallMel, melContents)

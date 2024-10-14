@@ -98,7 +98,6 @@ class CpMsg:
 
 
 # obj assumed to be a parent
-
 def cPgotoChild(obj, mfntyp):
     dagn = om.MFnDagNode(obj)
     for i in range(dagn.childCount()):
@@ -271,10 +270,9 @@ def cPedgeToStrings(dagp, edgeComps):
     return edgeStrings
 
 
-################################  CONTEXTS
+################################################################  CONTEXTS  #################################################################
 
 # draw curve ctx
-
 try:
     global_cPcurveCtxStr
 except:
@@ -283,7 +281,6 @@ except:
 #
 
 # booleanop context
-
 try:
     global_cPboolOpCtxStr
 except:
@@ -313,7 +310,6 @@ def cPboolOpIterIncVal():
 #
 
 # mirror context
-
 try:
     global_cPmirrorCtxStr
 except:
@@ -348,7 +344,6 @@ def cPmirrorIterIncVal():
 #
 
 # hbevel context
-
 try:
     global_hBevelCtxStr
 except:
@@ -378,7 +373,6 @@ def cPhBevelIterIncVal():
 #
 
 # curvebevel context
-
 try:
     global_cPcurveBevelCtxStr
 except:
@@ -408,17 +402,14 @@ def cPcurveBevelIterIncVal():
 #
 
 # crease tool context
-
 try:
     global_cPcreaseCtxStr
 except:
-    global_cPcreaseCtxStr = cmds.polyCreaseCtx('cPcreaseCtx', es=True,
-            r=True)
+    global_cPcreaseCtxStr = cmds.polyCreaseCtx('cPcreaseCtx', es=True, r=True)
 
 #
 
 # physical crease context
-
 try:
     global_pCreaseCtxStr
 except:
@@ -476,11 +467,9 @@ def cPcontextUndo():
 try:
     global_creasePlusCtxUndoJob
 except:
-    global_creasePlusCtxUndoJob = cmds.scriptJob(event=['Undo',
-            cPcontextUndo])
+    global_creasePlusCtxUndoJob = cmds.scriptJob(event=['Undo', cPcontextUndo])
 
-
-############
+############################################################################################################
 
 def main():
     return None

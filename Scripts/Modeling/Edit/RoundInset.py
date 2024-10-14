@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import maya.cmds as cmds
+import maya.cmds as cmds # type: ignore
 import math
 import re
-import maya.mel as mel
-import maya.OpenMaya as OpenMaya
+import maya.mel as mel # type: ignore
+import maya.OpenMaya as OpenMaya # type: ignore
 
 def run():
     cmd = 'source dagMenuProc;'

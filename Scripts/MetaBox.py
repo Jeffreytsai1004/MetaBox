@@ -37,25 +37,6 @@ from Metahuman.Blendshape import MorphShape
 import sys
 import os
 
-# Get MetaBox directory
-metabox_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Build the absolute path for aTools
-aTools_Path = os.path.normpath(os.path.join(metabox_dir, 'Scripts', 'Animation', 'aTools')).replace('\\', '/')
-
-# Add aTools path to sys.path
-if aTools_Path not in sys.path:
-    sys.path.append(aTools_Path)
-
-# If aTools is not installed, install it
-if not cmds.pluginInfo('aTools', query=True, loaded=True):
-    try:
-        from Animation.aTools import setup
-        setup.install([aTools_Path, True])
-    except ImportError:
-        print(f"Failed to import aTools. Please ensure aTools is correctly installed at the following path: {aTools_Path}")
-        print(f"Current sys.path: {sys.path}")
-
 class MetaBox:
     def __init__(self):
         self.window_name = "MetaBoxWindow"
@@ -349,8 +330,9 @@ class MetaBox:
         cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
         tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
-        self.create_button_row(["Epic Pose Wrangler", "aTools"], [self.open_epic_pose_wrangler, self.open_aTools])
-        self.create_button_row(["Keyframe Pro", "Studio Library"], [self.open_keyframe_pro, self.open_studio_library])
+        self.create_button_row(["bhGhost", "aTools"], [self.run_bhghost, self.open_aTools])
+        self.create_button_row(["Keyframe Pro","Studio Library"], [self.open_keyframe_pro, self.open_studio_library])
+        self.create_button_row(["Epic Pose Wrangler"], [self.open_epic_pose_wrangler])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         time_frame = cmds.frameLayout(label="Time", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
@@ -371,7 +353,7 @@ class MetaBox:
         try:
             Rename_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Manage', 'Rename.py')).replace('\\', '/')
             sys.path.append(Rename_Path)
-            Rename.run()
+            Rename.UI()
         except Exception as e:
             error_message = f"Error occurred while running Rename: {e}"
             cmds.warning(error_message)
@@ -593,47 +575,20 @@ class MetaBox:
         try:
             # Get aTools path
             aTools_Path = os.path.normpath(os.path.join(current_dir, 'Animation', 'aTools')).replace('\\', '/')
-            print(f"aTools_Path: {aTools_Path}")
-
-            # Add aTools path to sys.path
             if aTools_Path not in sys.path:
                 sys.path.insert(0, aTools_Path)
-            
-            print(f"Current sys.path: {sys.path}")
-
-            # Change current working directory
-            os.chdir(aTools_Path)
-            print(f"Current working directory: {os.getcwd()}")
-
-            # Add parent directory to sys.path
             parent_dir = os.path.dirname(aTools_Path)
             if parent_dir not in sys.path:
                 sys.path.insert(0, parent_dir)
-            print(f"Updated sys.path: {sys.path}")
-
-            # Try to import setup module
-            print("Attempting to import setup...")
-            from Animation.aTools import setup
-            if setup:
-                print("Setup imported successfully")
-            else:
-                print("Setup not found")
-
-            # Install aTools
-            setup.install([aTools_Path, True])
-            print("aTools installed successfully")
-
-            # Import animBarUI
-            print("Attempting to import animBarUI...")
-            from Animation.aTools.animTools.animBar import animBarUI
-            if animBarUI:
-                importlib.reload(animBarUI)
-            else:
-                print("animBarUI not found")
-
-            # Launch aTools
+            atools = importlib.import_module('aTools')
+            importlib.reload(atools)
+            animTools = importlib.import_module('aTools.animTools')
+            importlib.reload(animTools)
+            animBar = importlib.import_module('aTools.animTools.animBar')
+            importlib.reload(animBar)
+            animBarUI = importlib.import_module('aTools.animTools.animBar.animBarUI')
+            importlib.reload(animBarUI)
             animBarUI.show('refresh')
-
         except Exception as e:
             error_message = f"Error occurred while running aTools: {e}"
             print(f"Detailed error: {traceback.format_exc()}")
@@ -642,16 +597,18 @@ class MetaBox:
 
     def open_keyframe_pro(self, *args):
         try:
-            # Get keyframe_pro path
-            keyframe_pro_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'keyframe_pro')).replace('\\', '/')
-            print(f"keyframe_pro_path: {keyframe_pro_path}")
-            # Add keyframe_pro path to sys.path
-            if keyframe_pro_path not in sys.path:
-                sys.path.insert(0, keyframe_pro_path)
-            # launch keyframe_pro GUI
+            keyframe_pro_paths = [
+                os.path.join(current_dir, 'Animation', 'keyframe_pro'),
+                os.path.join(current_dir, 'Animation', 'keyframe_pro', 'keyframe_pro'),
+                os.path.join(current_dir, 'Animation', 'keyframe_pro', 'keyframe_pro_maya')
+            ]
+            for path in keyframe_pro_paths:
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+            for path in sys.path:
+                print("Added the keyframe_Pro submoudle path: ", path)
             from Animation.keyframe_pro.keyframe_pro_maya.maya_to_keyframe_pro import MayaToKeyframePro
             MayaToKeyframePro.display()
-
         except Exception as e:
             error_message = f"Error occurred while running Keyframe Pro: {e}"
             cmds.warning(error_message)
@@ -659,40 +616,49 @@ class MetaBox:
 
     def open_studio_library(self, *args):
         try:
-            # Get studio library package path
-            studio_library_package_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'studiolibrary')).replace('\\', '/')
-            # Add studio library package path to sys.path
-            if studio_library_package_path not in sys.path:
-                sys.path.insert(0, studio_library_package_path)
-            # # Add studio icons path to maya icon path ：Scripts\Animation\studiolibrary\src\studiolibrary\resource\icons
-            # studio_icons_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiolibrary', 'resource', 'icons')).replace('\\', '/')
-            # print(f"studio_icons_path: {studio_icons_path}")
-            # cmds.evalDeferred(f"cmds.iconTextButton('iconButton', image='{studio_icons_path}')")
-            # # Add studio icons path to maya icon path ：Scripts\Animation\studiolibrary\src\studiolibrarymaya\resource\icons
-            # studio_icons_path_maya = os.path.normpath(os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiolibrarymaya', 'resource', 'icons')).replace('\\', '/')
-            # print(f"studio_icons_path_maya: {studio_icons_path_maya}")
-            # cmds.evalDeferred(f"cmds.iconTextButton('iconButtonMaya', image='{studio_icons_path_maya}')")
-
-            # If studioLibrarymaya is already imported, reload it
-            if 'studioLibrarymaya' in sys.modules:
-                importlib.reload(sys.modules['studioLibrarymaya'])
-            else:
-                from Animation.studiolibrary import studioLibrarymaya
-                importlib.reload(studioLibrarymaya) 
-
-            # If studioLibrary not installed, install it with Scripts\Animation\studiolibrary\install.mel
-            if not cmds.pluginInfo('studioLibrary', query=True, loaded=True):
-                cmds.source('Animation/studiolibrary/install.mel')
-            from Animation.studiolibrary import studioLibrary
-            importlib.reload(studioLibrary)
-            studioLibrarymaya.show()
-
+            studiolibrary_paths = [
+                os.path.join(current_dir, 'Animation', 'studiolibrary'),
+                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src'),
+                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiolibrary'),
+                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiolibrarymaya'),
+                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studioqt'),
+                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'mutils'),
+                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiovendor')
+            ]
+            # Added the sub path to sys.path
+            for path in studiolibrary_paths:
+                if path not in sys.path:
+                    sys.path.insert(0, path.replace('\\', '/'))
+            for path in sys.path:
+                print("Added the studiolibrary submoudle path: ", path)
+            # Import studiolibrary
+            import studiolibrary
+            # Reload studiolibrary
+            importlib.reload(studiolibrary)
+            # Run studiolibrary
+            studiolibrary.main()
         except Exception as e:
             error_message = f"Error occurred while running Studio Library: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
-# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    def run_bhghost(self, *args):
+        try:
+            bhghost_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'bhGhost')).replace('\\', '/')
+            print(bhghost_path)
+            if bhghost_path not in sys.path:
+                sys.path.insert(0, bhghost_path)
+            bhghost_mel = os.path.join(bhghost_path, 'bhGhost.mel').replace('\\', '/')
+            print(bhghost_mel)
+            mel.eval(f'source "{bhghost_mel}";')
+            print(f"bhGhost loaded successfully from {bhghost_mel}")
+        except Exception as e:
+            error_message = f"Error occurred while running bhGhost: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+            print(f"Detailed error: {traceback.format_exc()}")
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 def show():
     MetaBox().show()
 

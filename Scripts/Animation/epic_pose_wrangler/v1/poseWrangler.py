@@ -419,7 +419,7 @@ class UE4PoseDriver(object):
 
                     cmds.setKeyframe(driven_xforms, t=[i], animLayer=anim_layer)
 
-                    # print out to UE4 pose list
+                    # print(out to UE4 pose list)
                     print(p)
                     pose_list.append(p)
 
