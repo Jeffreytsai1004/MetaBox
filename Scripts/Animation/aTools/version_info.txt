@@ -1,0 +1,7 @@
+aTools version 2.03
+
+Latest updates:
+
+v2.03
+
+Switch to Python3 for newer Maya versions
