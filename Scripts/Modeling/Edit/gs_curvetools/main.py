@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """
 
 License:
@@ -27,12 +30,14 @@ import sys
 from datetime import datetime
 from functools import partial as pa
 from imp import reload
+import importlib
+import traceback
 
 import maya.cmds as mc
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from . import core, ui
-from .constants import *
+from . import constants
 from .utils import style, tooltips, utils, wrap
 from .utils.utils import deferred, deferredLp, noUndo, undo
 from .utils.wrap import WIDGETS
@@ -43,7 +48,7 @@ reload(style)
 reload(wrap)
 reload(ui)
 reload(tooltips)
-reload(sys.modules['gs_curvetools.constants'])
+reload(constants)
 
 # Loggers
 MESSAGE = utils.logger
@@ -51,6 +56,9 @@ LOGGER = utils.logger.logger
 
 LOGGER.debug('-----------------Starting Log Session-----------------')
 LOGGER.debug('                 {}                 '.format(datetime.now().strftime("%d/%m/%Y, %H:%M:%S")))
+
+# 使用常量
+from .constants import *
 
 ### Interface Script Jobs ###
 
@@ -113,14 +121,16 @@ def main():
             mc.workspaceControl(MAIN_WINDOW_NAME, e=1, fl=1)
             mc.deleteUI(MAIN_WINDOW_NAME)
     else:
-        CurveToolsUI()
-        mc.workspaceControl(MAIN_WINDOW_NAME, e=1, ui=UI_SCRIPT)
         try:
+            CurveToolsUI()
+            mc.workspaceControl(MAIN_WINDOW_NAME, e=1, ui=UI_SCRIPT)
             core.toggleColor.checkColorStorageNode()
             checkScriptJobs(MAIN_WINDOW_NAME)
             utils.deferred(core.onSceneOpenedUpdateLayerCount)()  # Also updates the UI
         except Exception as e:
-            LOGGER.exception(e)
+            LOGGER.error(f"Error in main function: {str(e)}")
+            LOGGER.error(f"Detailed error: {traceback.format_exc()}")
+            raise
 
 # Main UI
 
@@ -135,7 +145,11 @@ class CurveToolsUI(QtWidgets.QWidget):
         # Resolve Fonts
         fontDatabase = QtGui.QFontDatabase()
         fontDatabase.removeAllApplicationFonts()
-        fonts = os.listdir(utils.getFolder.fonts())
+        try:
+            fonts = os.listdir(utils.getFolder.fonts())
+        except Exception as e:
+            LOGGER.warning(f"Could not load fonts: {str(e)}")
+            fonts = []
         for font in fonts:
             fontDatabase.addApplicationFont(utils.getFolder.fonts() + font)
 

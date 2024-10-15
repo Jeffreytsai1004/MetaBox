@@ -1,34 +1,36 @@
+global string $gTheLayout;
+
 global proc bhGhost()
 {
-// build the UI
     if (`window -exists bhGhost`)
         deleteUI bhGhost;
-          global string $theLayout;
-        window -toolbox 1 -rtf true -menuBar 1 bhGhost ; 
           
-        menu -l "Color A" -to 1 optionsMenu;		
-        menuItem -divider true;
-        $colorSel =`radioMenuItemCollection`;               
-        menuItem -label "Black"  -c bhBlackLine -radioButton off blk;
-        menuItem -label "White"  -c bhWhiteLine -radioButton off wht;
-        menuItem -label "Grey"  -c bhGreyLine -radioButton off gry;
-        menuItem -label "Red"  -c bhRedLine -radioButton off red;
-        menuItem -label "Green"  -c bhGreenLine -radioButton on grn;
-        menuItem -label "Blue"  -c bhBlueLine -radioButton off blu;
-        menuItem -label "Yellow"  -c bhYellowLine -radioButton off yel;
+    global string $gTheLayout;
+    window -toolbox 1 -rtf true -menuBar 1 bhGhost ; 
+    
+    menu -l "Color A" -to 1 optionsMenu;		
+    menuItem -divider true;
+    $colorSel =`radioMenuItemCollection`;               
+    menuItem -label "Black"  -c bhBlackLine -radioButton off blk;
+    menuItem -label "White"  -c bhWhiteLine -radioButton off wht;
+    menuItem -label "Grey"  -c bhGreyLine -radioButton off gry;
+    menuItem -label "Red"  -c bhRedLine -radioButton off red;
+    menuItem -label "Green"  -c bhGreenLine -radioButton on grn;
+    menuItem -label "Blue"  -c bhBlueLine -radioButton off blu;
+    menuItem -label "Yellow"  -c bhYellowLine -radioButton off yel;
 		
 		menu -l "Color B" -to 1 optionsMenu2;	
 		 menuItem -divider true;
-        $colorSelB =`radioMenuItemCollection`;               
-        menuItem -label "Black"  -c bhBlackLineB -radioButton off blkB;
-        menuItem -label "White"  -c bhWhiteLineB -radioButton off whtB;
-        menuItem -label "Grey"  -c bhGreyLineB -radioButton off gryB;
-        menuItem -label "Red"  -c bhRedLineB -radioButton off redB;
-        menuItem -label "Green"  -c bhGreenLineB -radioButton off grnB;
-        menuItem -label "Blue"  -c bhBlueLineB -radioButton off bluB;
-        menuItem -label "Yellow"  -c bhYellowLineB -radioButton on yelB;
+    $colorSelB =`radioMenuItemCollection`;               
+    menuItem -label "Black"  -c bhBlackLineB -radioButton off blkB;
+    menuItem -label "White"  -c bhWhiteLineB -radioButton off whtB;
+    menuItem -label "Grey"  -c bhGreyLineB -radioButton off gryB;
+    menuItem -label "Red"  -c bhRedLineB -radioButton off redB;
+    menuItem -label "Green"  -c bhGreenLineB -radioButton off grnB;
+    menuItem -label "Blue"  -c bhBlueLineB -radioButton off bluB;
+    menuItem -label "Yellow"  -c bhYellowLineB -radioButton on yelB;
       
-        menu -l "Mode" -to 1 aboutMenu;
+    menu -l "Mode" -to 1 aboutMenu;
 		
 		int $hideDef =0;
 
@@ -39,7 +41,7 @@ global proc bhGhost()
 		
 		
 		menuItem -l "Hide on Playback (2016+)" -cb $hideDef -c bhHideGhostsSetup  hideMode;
-        menuItem -l "Replace Mode" -cb 0  repMode;
+    menuItem -l "Replace Mode" -cb 0  repMode;
 		menuItem -l "Smooth (slower)" -cb 0  smoothMode;
 		menuItem -l "10x (outline thickness)" -cb 0 scaleUpMode;
 		menuItem -l "Ghost Multiples" -cb 1 ghostMults;
@@ -47,47 +49,47 @@ global proc bhGhost()
     	menu -l "Tools" -to 1 toolsMenu;
 		menuItem -l "Create Tracker"   -c bh_addGhostTracker aboutlabel7;
 		menuItem -l "Delete Trackers"   -c bh_deleteGhostTrackers aboutlabel8;
-        menuItem -l "+Shelf Button"   -c bhGhostShelf aboutlabel6;
+    menuItem -l "+Shelf Button"   -c bhGhostShelf aboutlabel6;
     	menu -l "Help" -to 1 helpMenu;
-        menuItem -l "Show Help"   -c bhHelpWin aboutlabel5;
+    menuItem -l "Show Help"   -c bhHelpWin aboutlabel5;
     	menuItem -l "bhGhost 1.32"   -c goToG9Site aboutlabel3;
     	menuItem -l "By Brian Horgan" -c goToG9Site aboutlabel;
     	menuItem -l "www.graphite9.com " -c goToG9Site aboutlabel2;
 		    
             
-        columnLayout -adj 1 mainCol;
-        string $theLayout =`frameLayout  -cc bhResizeWin -ec bhResizeWinTall -bv 1 -marginWidth 0 -collapsable 1 - collapse 1 -l "Meshes"`;
-        button -w 20 -label "Add Selected Meshes" -command bhGetMeshes but; 
+    columnLayout -adj 1 mainCol;
+    $gTheLayout = `frameLayout -borderStyle "in" -cc bhResizeWin -ec bhResizeWinTall -bv 1 -marginWidth 0 -collapsable 1 - collapse 1 -l "Meshes"`;
+    button -w 20 -label "Add Selected Meshes" -command bhGetMeshes but; 
 		//button -w 50 -label "Add all Skinned" -command bhAddAllSkinned but10;
-        button -w 50 -label "Remove Highlighted" -command bhRemoveMeshes but2;
-        button -w 50 -label "Clear All" -command bhClearTSL but9;
+    button -w 50 -label "Remove Highlighted" -command bhRemoveMeshes but2;
+    button -w 50 -label "Clear All" -command bhClearTSL but9;
 		
-        rowColumnLayout -numberOfColumns 1;
+    rowColumnLayout -numberOfColumns 1;
    
-        textScrollList -h 120 -w 160 -allowMultiSelection 1 meshTSL;
-        iconTextStaticLabel -st "textOnly"  -l " ";
-        setParent mainCol;
-        rowColumnLayout -numberOfColumns 3;
-        button -w 54 -label "Vis" -command bhToggleGhosts but6; 
-        button -w 54 -label "Bust1" -command bhBust1 but12;    
-        button -w 54 -label "BustAll" -command bhBustIt but5;
-        setParent mainCol;
-        floatSliderGrp  -field false
-              -minValue 0.01 -maxValue 1.0
-            	-fieldMinValue 0.001 -fieldMaxValue 1.0
-            	-value .1
-        		-step 0.001    		
-            	-dc "bh_LineThickness"
-            	-cc "bh_LineThickness"
-            	"line"
-            	;
+    textScrollList -h 120 -w 160 -allowMultiSelection 1 meshTSL;
+    iconTextStaticLabel -st "textOnly"  -l " ";
+    setParent mainCol;
+    rowColumnLayout -numberOfColumns 3;
+    button -w 54 -label "Vis" -command bhToggleGhosts but6; 
+    button -w 54 -label "Bust1" -command bhBust1 but12;    
+    button -w 54 -label "BustAll" -command bhBustIt but5;
+    setParent mainCol;
+    floatSliderGrp  -field false
+          -minValue 0.01 -maxValue 1.0
+        	-fieldMinValue 0.001 -fieldMaxValue 1.0
+        	-value .1
+    		-step 0.001    		
+        	-dc "bh_LineThickness"
+        	-cc "bh_LineThickness"
+        	"line"
+        	;
 				 setParent mainCol;
 				 
 				rowColumnLayout -numberOfColumns 2;
 				//rowColumnLayout -numberOfColumns 1;
 		
 			
-        button -w 160	-label "Ghost" -command bhGhostFrame but3;
+    button -w 160	-label "Ghost" -command bhGhostFrame but3;
     
     showWindow bhGhost;
      window -edit -widthHeight 168 263 bhGhost;
@@ -95,11 +97,10 @@ global proc bhGhost()
 	 string $testSel[] =`ls -sl`;// if some objects are selected add them to the mesh list
 	 if (`size $testSel` >0)
 	  {bhGetMeshes; bhResizeWin;window -edit -widthHeight 168 110 bhGhost;}
-	  else {frameLayout -e -collapse 0 $theLayout;}
+	  else {frameLayout -e -collapse 0 $gTheLayout;}
 	
   // is there already a 'HideGhosts_L' layer ? if so set the checkbox to off for it in the UI.
   
-	
 	
 	  
 }	 
@@ -702,28 +703,30 @@ if ($col==""){
    
    
    
-   ////////
-   
-   
-   
    // check what colour option is selected and run the appropriate process
    
    if ($col==""){
    
-   int $checkMenu= `menuItem -q -radioButton blk`;
-   if ($checkMenu==1) bhBlackLine;
-   int $checkMenu= `menuItem -q -radioButton wht`;
-   if ($checkMenu==1) bhWhiteLine;
-   int $checkMenu= `menuItem -q -radioButton gry`;
-   if ($checkMenu==1) bhGreyLine;
-    int $checkMenu= `menuItem -q -radioButton red`;
-   if ($checkMenu==1) bhRedLine; 
-   int $checkMenu= `menuItem -q -radioButton grn`;
-   if ($checkMenu==1) bhGreenLine;
-   int $checkMenu= `menuItem -q -radioButton blu`;
-   if ($checkMenu==1) bhBlueLine;
-   int $checkMenu= `menuItem -q -radioButton yel`;
-   if ($checkMenu==1) bhYellowLine;
+    int $checkMenuBlk = `menuItem -q -radioButton blk`;
+    if ($checkMenuBlk == 1) bhBlackLine;
+    
+    int $checkMenuWht = `menuItem -q -radioButton wht`;
+    if ($checkMenuWht == 1) bhWhiteLine;
+    
+    int $checkMenuGry = `menuItem -q -radioButton gry`;
+    if ($checkMenuGry == 1) bhGreyLine;
+    
+    int $checkMenuRed = `menuItem -q -radioButton red`;
+    if ($checkMenuRed == 1) bhRedLine; 
+    
+    int $checkMenuGrn = `menuItem -q -radioButton grn`;
+    if ($checkMenuGrn == 1) bhGreenLine;
+    
+    int $checkMenuBlu = `menuItem -q -radioButton blu`;
+    if ($checkMenuBlu == 1) bhBlueLine;
+    
+    int $checkMenuYel = `menuItem -q -radioButton yel`;
+    if ($checkMenuYel == 1) bhYellowLine;
    }
    else {
    int $checkMenu= `menuItem -q -radioButton blkB`;

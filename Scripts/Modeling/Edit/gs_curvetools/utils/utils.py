@@ -57,7 +57,9 @@ class Logger:
     """ Create logger, log and print messages"""
 
     def __init__(self):
-        logFilePath = os.path.join(mc.internalVar(usd=1), 'gs_curvetools', 'log.log')  # type: str
+        current_dir = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
+        parent_dir = os.path.dirname(current_dir)
+        logFilePath = os.path.join(parent_dir, 'log.log')  # type: str
         # Check if file already there and its size. Delete if too large.
         if os.path.exists(logFilePath):
             size = os.stat(logFilePath).st_size
@@ -662,21 +664,34 @@ Proceed?',
 
 class GetFolder:
     """ Get various folders from Maya """
+    # Get maya version
+    MAYA_VERSION = mc.about(v=1)
+    CURRENT_DIR = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
+    PARENT_DIR = os.path.dirname(CURRENT_DIR).replace('\\', '/')
 
     def scripts(self):
-        return mc.internalVar(usd=1)
+        return self.PARENT_DIR
 
     def root(self):
-        return path.join(mc.internalVar(usd=1), 'gs_curvetools', '')
+        return os.path.join(self.PARENT_DIR, 'gs_curvetools').replace('\\', '/')
 
     def fonts(self):
-        return path.join(mc.internalVar(usd=1), 'gs_curvetools', 'fonts', '')
+        fonts_path = os.path.join(self.PARENT_DIR, 'fonts').replace('\\', '/')
+        if not os.path.exists(fonts_path):
+            os.makedirs(fonts_path)
+        return fonts_path
 
     def icons(self):
-        return path.join(mc.internalVar(usd=1), 'gs_curvetools', 'icons', '')
+        icons_path = os.path.join(self.PARENT_DIR, 'icons').replace('\\', '/')
+        if not os.path.exists(icons_path):
+            os.makedirs(icons_path)
+        return icons_path
 
     def plugins(self):
-        return path.join(mc.internalVar(usd=1), 'gs_curvetools', 'plugins', '')
+        plugins_path = os.path.join(self.PARENT_DIR, self.MAYA_VERSION, 'plugins').replace('\\', '/')
+        if not os.path.exists(plugins_path):
+            os.makedirs(plugins_path)
+        return plugins_path
 
 
 getFolder = GetFolder()

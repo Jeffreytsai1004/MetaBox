@@ -1,0 +1,8 @@
+[00:29:21,972 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[00:29:21,972 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 00:29:21                 
+[00:29:22,754 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:29:24,101 | ERROR |    utils |   110]: warningInView() : Select one curve and one geometry or Select one target curve and any number of curveCards/Tubes
+[00:29:24,105 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 1359, in bind
+[00:39:44,997 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[00:39:44,997 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 00:39:44                 
+[00:39:45,779 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

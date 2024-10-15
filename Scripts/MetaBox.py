@@ -24,12 +24,13 @@ from Modeling.Edit import RoundInset
 from Modeling.Edit import CreasePlus
 importlib.reload(CreasePlus)
 from Modeling.Edit import EdgeSensei
+from Modeling.Edit import gs_curvetools
+importlib.reload(gs_curvetools)
 from Modeling.Select import EdgeLoopSmartSelect
 from Modeling.Select import SamePositionSelector
 from Modeling.Select import IntervalSelectEdge
 from Modeling.UV import UVSetEditor
 from Modeling.Display import Xray
-from Groom.Edit import ExtractCurve
 from Metahuman.Custom import BodyPrep
 from Metahuman.Custom import BatchImport
 from Metahuman.Display import XrayJoint
@@ -84,10 +85,6 @@ class MetaBox:
         modeling_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
         modeling_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=modeling_tab)
         self.create_modeling_sub_tabs(modeling_sub_tabs)
-        # Groom tab
-        groom_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
-        groom_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=groom_tab)
-        self.create_groom_sub_tabs(groom_sub_tabs)
         # Metahuman tab
         metahuman_tab = cmds.columnLayout(adjustableColumn=True, parent=tabs)
         metahuman_sub_tabs = cmds.tabLayout(innerMarginWidth=5, innerMarginHeight=5, parent=metahuman_tab)
@@ -103,7 +100,6 @@ class MetaBox:
         # Set tab labels
         cmds.tabLayout(tabs, edit=True, tabLabel=(
             (modeling_tab, "Modeling"),
-            (groom_tab, "Groom"),
             (metahuman_tab, "Metahuman"),
             (rigging_tab, "Rigging"),
             (animation_tab, "Animation")
@@ -149,6 +145,7 @@ class MetaBox:
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
+        self.create_button_row(["Extra Curve", "GS Curve Tools"], [self.run_extra_curve, self.run_gs_curve_tools])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
     
@@ -186,52 +183,6 @@ class MetaBox:
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         cmds.setParent('..')  # Close sub_tab
-
-    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Groom tab
-    
-    def create_groom_sub_tabs(self, parent):
-        self.create_groom_select_tab(parent)
-        self.create_groom_edit_tab(parent)
-        self.create_groom_display_tab(parent)
-
-    def create_groom_select_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Select")))
-        curve_frame = cmds.frameLayout(label="Curve", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=curve_frame)
-        guide_frame = cmds.frameLayout(label="Guide", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=guide_frame)
-        description_frame = cmds.frameLayout(label="Description", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=description_frame)
-
-    def create_groom_edit_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
-        curve_frame = cmds.frameLayout(label="Curve", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=curve_frame)
-        self.create_button_row(["Extra Curve"], [self.run_extra_curve])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-        guide_frame = cmds.frameLayout(label="Guide", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=guide_frame)
-        description_frame = cmds.frameLayout(label="Description", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=description_frame)
-        expression_frame = cmds.frameLayout(label="Expression", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=expression_frame)
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-
-    def create_groom_display_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Display")))
-        curve_frame = cmds.frameLayout(label="Curve", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=curve_frame)
-        guide_frame = cmds.frameLayout(label="Guide", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=guide_frame)
-        description_frame = cmds.frameLayout(label="Description", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=description_frame)
-
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Metahuman tab
@@ -443,6 +394,59 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
+    def run_extra_curve(self, *args):
+        try:
+            mel.eval('polyToCurve -form 2 -degree 3 -conformToSmoothMeshPreview 1')
+        except Exception as e:
+            error_message = f"Error occurred while running ExtractCurve: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_uv_set_editor(self, *args):
+        try:
+            UVSetEditor.show()
+        except Exception as e:
+            error_message = f"Error occurred while opening UV Set Editor: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_gs_curve_tools(self, *args):
+        try:
+            gs_curvetools_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            if gs_curvetools_path not in sys.path:
+                sys.path.insert(0, gs_curvetools_path)
+
+            # Import the sub modules
+            gs_curve_tools_subpaths = [
+                os.path.join(gs_curvetools_path, 'core').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'constants').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'ui').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'uv_editor').replace('\\', '/'),
+            ]
+            for path in gs_curve_tools_subpaths:
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+
+            # Import the main module
+            from Modeling.Edit.gs_curvetools import main as ct_main
+            # Run the main function
+            ct_main.main()
+
+            # If windows exists, refresh it
+            if cmds.pluginInfo('gs_curvetools', query=True, loaded=True):
+                from importlib import reload
+                from Modeling.Edit.gs_curvetools.utils import utils as ct_ut
+                reload(ct_ut)
+                ct_ut.resetUI()
+                print("GS Curve Tools refreshed successfully")
+
+        except Exception as e:
+            error_message = f"Error occurred while running GS Curve Tools: {str(e)}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+            print(f"Detailed error: {traceback.format_exc()}")
+
     # Select
     def run_edge_loop_smart_select(self, *args):
         try:
@@ -484,26 +488,6 @@ class MetaBox:
             error_message = f"Error occurred while running XrayJoint: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
-
-    # ****************************************************************************************************************
-    def run_uv_set_editor(self, *args):
-        try:
-            UVSetEditor.show()
-        except Exception as e:
-            error_message = f"Error occurred while opening UV Set Editor: {e}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
-
-    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    # Groom Functions
-    # ****************************************************************************************************************
-    def run_extra_curve(self, *args):
-        try:
-            ExtractCurve.run()
-        except Exception as e:
-            error_message = f"Error occurred while running ExtractCurve: {e}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Metahuman Functions

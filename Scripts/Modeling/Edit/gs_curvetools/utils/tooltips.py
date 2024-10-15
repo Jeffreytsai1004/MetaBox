@@ -22,13 +22,23 @@ Contact Email:        george.sladkovsky@gmail.com
 
 """
 import io
+import os
 
 
 def processTooltips():
     # type: () -> dict
     """ Processes the tooltips markdown file and returns a dict {"name": "tooltip", ...} """
     from . import utils
-    filePath = '{}gs_curvetools/utils/tooltips.md'.format(utils.getFolder.scripts())
+    
+    # 使用相对路径查找 tooltips.md 文件
+    current_dir = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
+    filePath = os.path.join(current_dir, 'tooltips.md').replace('\\', '/')
+    
+    # 如果文件不存在,返回空字典
+    if not os.path.exists(filePath):
+        print(f"Warning: tooltips.md file not found at {filePath}")
+        return {}
+    
     finalDict = {}
     with io.open(filePath, "r", encoding="utf-8") as f:
         lines = f.readlines()
@@ -37,7 +47,7 @@ def processTooltips():
         commentBlock = False
         for line in lines:
             line = line.strip()
-            if not line or "":
+            if not line:
                 continue
 
             # Exclude comments
