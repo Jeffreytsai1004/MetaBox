@@ -1,0 +1,201 @@
+License:
+This collection of code named GS CurveTools is a property of George Sladkovsky (Yehor Sladkovskyi) 
+and can not be copied or distributed without his written permission.
+
+GS CurveTools v1.3.1 Studio
+Copyright 2023, George Sladkovsky (Yehor Sladkovskyi)
+All Rights Reserved
+
+Autodesk Maya is a property of Autodesk, Inc.
+
+Social Media and Contact Links:
+
+Discord Server:       https://discord.gg/f4DH6HQ
+Online Store:         https://sladkovsky3d.artstation.com/store
+Online Documentation: https://gs-curvetools.readthedocs.io/
+Twitch Channel:       https://www.twitch.tv/videonomad
+YouTube Channel:      https://www.youtube.com/c/GeorgeSladkovsky
+ArtStation Portfolio: https://www.artstation.com/sladkovsky3d
+Contact Email:        george.sladkovsky@gmail.com
+
+https://www.artstation.com/marketplace-product-eula
+
+Marketplace Product & Services Agreement
+End User Agreement
+This Marketplace End User Agreement applies to all downloadable products and professional services (e.g. mentorships, personal training, portfolio reviews) sold via the ArtStation Marketplace, unless a custom agreement or license is provided by the seller.
+
+The EUA is an agreement between the buyer and the seller providing the goods or services.
+
+PLEASE READ THIS DOCUMENT CAREFULLY. IT SIGNIFICANTLY ALTERS YOUR LEGAL RIGHTS AND REMEDIES.
+
+BY CLICKING “I AGREE” OR DOWNLOADING OR USING THE DIGITAL PRODUCT OR RECEIVING THE PROFESSIONAL SERVICES TO WHICH THIS AGREEMENT RELATES YOU ACCEPT ALL OF THIS AGREEMENT’S TERMS, INCLUDING THE DISCLAIMERS OF WARRANTIES AND LIMITATIONS ON DAMAGES, USE AND TRANSFERABILITY. IF YOU DO NOT ACCEPT THIS AGREEMENT’S TERMS, DO NOT DOWNLOAD, INSTALL OR USE THE DIGITAL PRODUCT OR RECEIVE OR USE THE PROFESSIONAL SERVICES.
+
+This end-user agreement (“Agreement”) is a legally binding agreement between you, the licensee and customer (“you” or “your”), and the provider (“we” or “us” or “our”) of the digital products (“Products”) or instructional, training, mentorship or other professional service packages (“Professional Services”) that you purchase through the ArtStation Marketplace, regarding your rights and obligations regarding those Products and Professional Services.
+
+1. Your Status
+In this Agreement, “you” means the person or entity acquiring rights in the Products or purchasing Professional Services. That may be a natural person, or a corporate or business entity or organization.
+
+(a) If you are a natural person then you must be, and you confirm that you are, at least 13 years old. If you are between 13 years and the age of majority in your jurisdiction of residence, you confirm that your parent or legal guardian has reviewed and agrees to this Agreement and is happy for you to access and use the Product or receive the Professional Services.
+
+(b) If you are a corporate entity then: (i) the rights granted under this Agreement are granted to that entity; (ii) you represent and warrant that the individual completing and accepting this Agreement is an authorized your representative and has the authority to legally bind that you to the Agreement; and (iii) to the extent that one or more of your employees are granted any rights in the Product or to receive Professional Services under this Agreement, you will ensure that your employees comply with this Agreement and you will be responsible and liable for any breach of this Agreement by any employee.
+
+2. ArtStation
+ArtStation is a division of Epic Games, Inc., You acknowledge and agree that Epic is a third-party beneficiary of this Agreement and therefore will be entitled to directly enforce and rely upon any provision in this Agreement that confers a benefit on, or rights in favour of, Epic. In addition, you authorize Epic to act as your authorized representative to file a lawsuit or other formal action against a licensor in a court or with any other governmental authority if Epic knows or suspects that a licensor breached any representations or warranties under this Agreement. The foregoing authorization is nonexclusive, and Epic shall be under no obligation to pursue any claim. Epic will not initiate any such action on your behalf without first consulting with and obtaining your approval.
+
+Products
+The following sections 3 through 9 apply to any Products you acquire from us through the ArtStation Marketplace:
+
+3. Product Licence
+Subject to this Agreement’s terms and conditions, we hereby grant you a limited, non-exclusive, worldwide, non-transferable right and licence to (which will be perpetual unless the licence terminates as set out in this Agreement): (a) download the Product; and (b) copy and use the Product. We reserve all rights not expressly granted to you under this Agreement.
+
+4. Licence Scope and Restrictions
+(a) Tutorials
+You are purchasing ONE licence to create ONE copy of the Product for use by you only (or, if you are a corporate entity, for use by a single authorized employee).
+
+If this Product is bundled with a stock digital asset then you receive a limited personal use licence regarding that stock digital asset, and you may use that stock digital asset for your personal use only. You will not use that stock digital asset in any commercial manner unless you purchase a separate commercial licence.
+
+(b) Installable Tools
+You may purchase one or more licences for the Product. A single licence allows you to install the Product on a single computer at a time for use by a single authorized user. If you are a corporate entity and the authorized employee completing the transaction on your behalf purchases multiple licences, you may choose to store the Product on a single server or shared hard drive for use by a single authorized employee at a time for each licence purchased.
+
+Provided that you comply with the restrictions on users set out above, you may use the Product on an unlimited number of projects.
+
+(c) Stock Assets
+Subject to the restrictions set out in this Agreement, you may copy, use, modify, adapt, translate, distribute, publicly display, transmit, broadcast, and create derivative works from the Product in works you create (“Works”), which may include things like films, videos, multi-media projects, computer games, models, images, publications, broadcasts, documents, and presentations.
+
+If you are a corporate entity, you may make the Product available for use by your employees in accordance with this Agreement (for example, by storing the Product on a network server).
+
+You may only share the Product with external people or entities where:
+
+You are collaborating with the external parties in the creation of your Work and you need to share the Product for that purpose, provided that any external party that receives the Product may only use it in your Work and must secure and limit access to the Product for that purpose;
+You are working as a contractor for a client in the creation of a Work and need to share the Product with your client, or any external parties working with your client, provided that your client and any such external parties may use the Product only for your client’s Work, and all parties secure and limit access to the Product for that purpose.
+For any other use of the Product by any other party, that party must purchase a licence to the Product.
+
+In addition to any other restrictions in this Agreement, you will not:
+
+publish, sell, license, offer or make available for sale or licensing, or otherwise distribute the Product except as part of a Work or through a form of sharing that is authorized in this Agreement; or
+publish, distribute or make available the Product through any online clearinghouse platform.
+FURTHER SPECIFIC TERMS
+In addition to the restrictions set out above, the following terms and conditions apply to the following forms of commercial licences for the Product:
+
+Standard Commercial Licence
+If you have purchased a Standard Commercial licence then you may exercise your rights under that licence:
+
+for personal use on an unlimited number of personal projects that are not used or distributed in any commercial manner; and
+respect to one commercial Work, with up to a maximum of, as applicable, 2,000 sales of the Work or 20,000 monthly views of the Work.
+Extended Commercial Licence
+If you have purchased an Extended Commercial licence then you may exercise your rights under that licence:
+
+for personal use on an unlimited number of personal projects that are not used or distributed in any commercial manner; and
+with respect to any number of commercial Works, with no limit on sales or views.
+5. Additional Restrictions
+Except as expressly permitted under this Agreement, you will not:
+
+(a) make any copy of the Product except for archival or backup purposes;
+
+(b) circumvent or disable any access control technology, security device, procedure, protocol, or technological protection mechanism that may be included or established in or as part of the Product;
+
+(c) hack, reverse engineer, decompile, disassemble, modify or create derivative works of the Product or any part of the Product;
+
+(d) publish, sell distribute or otherwise make the Product available to others to use, download or copy;
+
+(e) transfer or sub-license the Product or any rights under this Agreement to any third party, whether voluntarily or by operation of law;
+
+(f) use the Product for any purpose that may be defamatory, threatening, abusive, harmful or invasive of anyone’s privacy, or that may otherwise violate any law or give rise to civil or other liability;
+
+(g) misrepresent yourself as the creator or owner of the Property;
+
+(h) remove or modify any proprietary notice, symbol or label in or on the Product;
+
+(i) directly or indirectly assist, facilitate or encourage any third party to carry on any activity prohibited by this Agreement.
+
+6. Proprietary Rights
+The Product is protected by copyright laws and international copyright treaties, as well as other intellectual property laws and treaties. You are licensing the Product and the right to access, install and use the Product in accordance with this Agreement, not buying the Product. As between you and us, we own all right, title and interest in and to the Product, and you are not acquiring any ownership of or rights in the Product except the limited rights granted under this Agreement.
+
+7. No Epic Support
+You acknowledge and agree that you are licensing the Product from us (the Provider), not from Epic, and that Epic has no obligation to support the Product.
+
+8. Interruptions and Errors
+Your use of the Product might be interrupted and might not be free of errors.
+
+9. Updates
+We have no obligation to update the Product.
+
+Professional Services
+The following sections 10 and 11 apply to any Professional Services you purchase from us through the ArtStation Marketplace:
+
+10. Provision of Professional Services
+We will provide the Professional Services directly to you and, subject to this Agreement, will assume all responsibility for all aspects of the Professional Services. We represent and warrant that we have the right to offer and provide the Professional Services and that we have appropriate qualifications and experience to provide the Professional Services.
+
+11. Epic is not Involved
+You acknowledge and agree that:
+
+(a) Epic is only a provider of the online ArtStation Marketplace where you purchased the Professional Services, and does not provide or exercise any control or oversight over us or the Professional Services, and is not responsible for us or the Professional Services or any shortcomings in them, including any damages, losses or legal issues caused by us or the Professional Services;
+
+(b) this Agreement (and any dispute under it) is an agreement between us and you only, and not with Epic, and Epic is not a party to this Agreement;
+
+(c) we are not Epic’s employee, agent or subcontractor;
+
+(d) Epic does not have any obligation to attempt to resolve any dispute between us and you; and
+
+(e) we will provide the Professional Services directly to you, and we (and not Epic) are solely responsible for the Professional Services, and Epic has no obligation or liability to you with respect to the Professional Services.
+
+Both Products and Services
+The following sections 12 through 25 apply to all Products or Services you purchase from us through the ArtStation Marketplace:
+
+12. Disclaimer
+ANY PRODUCTS OR PROFESSIONAL SERVICES ARE PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS, WITHOUT ANY REPRESENTATIONS, WARRANTIES OR CONDITIONS OF ANY KIND.
+
+TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW WE DISCLAIM, AND YOU WAIVE (WITH REGARD TO US AND ALSO TO EPIC, ITS AFFILIATES, AND ITS AND THEIR LICENSORS AND SERVICE PROVIDERS (COLLECTIVELY, THE “EPIC PARTIES”), ALL TERMS, CONDITIONS, GUARANTEES, REPRESENTATIONS AND WARRANTIES (EXPRESS, IMPLIED, STATUTORY AND OTHERWISE), IN RESPECT OF THE PRODUCTS AND PROFESSIONAL SERVICES, INCLUDING THOSE OF MERCHANTABILITY, NON-INFRINGEMENT, TITLE, QUALITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+NEITHER WE NOR ANY OF THE EPIC PARTIES REPRESENT OR WARRANT THAT: (A) ANY PRODUCT OR PROFESSIONAL SERVICE IS ACCURATE, COMPLETE, RELIABLE, CURRENT OR ERROR-FREE; (B) ANY PRODUCT OR PROFESSIONAL SERVICE WILL MEET YOUR REQUIREMENTS OR EXPECTATIONS; (C) ANY PRODUCT OR PROFESSIONAL SERVICES IS FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS; OR (D) ANY DEFECTS IN ANY PRODUCT OR PROFESSIONAL SERVICE WILL BE CORRECTED.
+
+13. Exclusion and Limitation of Liability
+(a) YOU DOWNLOAD, INSTALL AND OTHERWISE USE ALL PRODUCTS, AND RECEIVE AND USE ALL PROFESSIONAL SERVICES, AT YOUR OWN RISK. YOU AGREE TO, AND HEREBY DO:
+
+(i) WAIVE ANY CLAIMS THAT YOU MAY HAVE AGAINST US OR THE EPIC PARTIES OR OUR RESPECTIVE DIRECTORS, OFFICERS, EMPLOYEES, AGENTS, REPRESENTATIVES, LICENSORS, SUCCESSORS AND ASSIGNS (COLLECTIVELY THE “RELEASEES”) ARISING FROM OR RELATING TO ANY PRODUCTS OR PROFESSIONAL SERVICES, AND
+
+(ii) RELEASE THE RELEASEES FROM ANY LIABILITY FOR ANY LOSS, DAMAGE, EXPENSE OR INJURY ARISING FROM OR RELATING TO YOUR USE OF ANY PRODUCT OR PROFESSIONAL SERVICE, WHETHER ARISING IN TORT (INCLUDING NEGLIGENCE), CONTRACT OR OTHERWISE, EVEN IF THE RELEASEES ARE EXPRESSLY ADVISED OF THE POSSIBILITY OF SUCH LOSS, INJURY OR DAMAGE AND EVEN IF THAT LOSS, INJURY OR DAMAGE IS FORESEEABLE.
+
+(b) NEITHER WE NOR THE EPIC PARTIES WILL BE LIABLE FOR ANY LOSSES, DAMAGES, CLAIMS OR EXPENSES THAT CONSTITUTE: (I) LOSS OF INTEREST, PROFIT, BUSINESS, CUSTOMERS OR REVENUE; (II) BUSINESS INTERRUPTIONS; (III) COST OF REPLACEMENT PRODUCTS OR SERVICES; OR (IV) LOSS OF OR DAMAGE TO REPUTATION OR GOODWILL.
+
+(c) NEITHER WE NOR THE EPIC PARTIES WILL BE LIABLE FOR ANY LOSSES, DAMAGES, CLAIMS OR EXPENSES THAT CONSTITUTE INCIDENTAL, CONSEQUENTIAL, SPECIAL, PUNITIVE, EXEMPLARY, MULTIPLE OR INDIRECT DAMAGES, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH LOSSES, DAMAGES, CLAIMS OR EXPENSES.
+
+(d) MAXIMUM LIABILITY: IF, DESPITE THE LIMITATIONS SET OUT ABOVE, WE OR ANY EPIC PARTY BECOME LIABLE TO YOU IN RESPECT OF ANY PRODUCT OR PROFESSIONAL SERVICE OR OTHERWISE UNDER THIS AGREEMENT, THE ENTIRE CUMULATIVE LIABILITY OF US AND THE EPIC PARTIES, AND YOUR EXCLUSIVE AND CUMULATIVE REMEDY, FOR ANY DAMAGES (REGARDLESS OF THE CAUSE OR FORM OR ACTION), WILL BE LIMITED TO CAD$10.
+
+14. Indemnity
+As a condition of your use of any Product or any Professional Services, you agree to hold harmless and indemnify the Releasees from any liability for any loss or damage to any third party resulting from your access to, installation or use of the Product or your receipt and use of the Professional Services.
+
+15. Term and Termination
+This Agreement is effective until terminated. Your rights under this Agreement will terminate automatically without notice if: (a) you breach any terms of this Agreement; or (b) you do not complete payment for the Product or Professional Services, or any payment you make is refunded, reversed or cancelled for any reason. Upon this Agreement’s termination, you will cease all use of the Product and destroy all copies, full or partial, of the Product in your possession. Sections 11 through 25 will survive the termination of this Agreement.
+
+16. Compliance with Laws
+You will comply with all applicable laws when using any Product or Professional Services (including intellectual property and export control laws).
+
+17. Entire Agreement
+This Agreement supersedes all prior agreements of the parties regarding the Product or Professional Services, and constitutes the whole agreement with respect to the Product or Professional Services.
+
+18. Disputes
+If you have any concerns about the Product or Professional Services, please contact us through our ArtStation Marketplace account and we will work with you to try to resolve the issue. You acknowledge and agree that any such dispute is between you and us, and that Epic will not be involved in the dispute and has no obligation to try to resolve the dispute.
+
+19. Persons Bound
+This Agreement will enure to the benefit of and be binding upon the parties and their heirs, executors, administrators, legal representatives, lawful successors and permitted assigns.
+
+20. Assignment
+We may assign this Agreement without notice to you. You may not assign this Agreement or any of your rights under it without our prior written consent, which we will not withhold unreasonably.
+
+21. Waiver
+No waiver, delay, or failure to act by us regarding any particular default or omission will prejudice or impair any of our rights or remedies regarding that or any subsequent default or omission that are not expressly waived in writing.
+
+22. Applicable Law and Jurisdiction
+You agree that this Agreement will be deemed to have been made and executed in the State of North Carolina, U.S.A., and any dispute will be resolved in accordance with the laws of North Carolina, excluding that body of law related to choice of laws, and of the United States of America. Any action or proceeding brought to enforce the terms of this Agreement or to adjudicate any dispute must be brought in the Superior Court of Wake County, State of North Carolina or the United States District Court for the Eastern District of North Carolina. You agree to the exclusive jurisdiction and venue of these courts. You waive any claim of inconvenient forum and any right to a jury trial. The Convention on Contracts for the International Sale of Goods will not apply. Any law or regulation which provides that the language of a contract shall be construed against the drafter will not apply to this Agreement.
+
+23. Legal Effect
+This Agreement describes certain legal rights. You may have other rights under the laws of your country. This Agreement does not change your rights under the laws of your country if the laws of your country do not permit it to do so.
+
+24. Interpretation
+In this Agreement, "we", "us", and "our" refer to the licensor of the Product alone and never refer to the combination of you and that licensor (that combination is referred to as "the parties"), or the combination of you or the licensor with Epic.
+
+25. Artificial Intelligence
+For purposes of this Agreement, “Generative AI Programs” means artificial intelligence, machine learning, deep learning, neural networks, or similar technologies designed to automate the generation of or aid in the creation of new content, including but not limited to audio, visual, or text-based content.
+
+We (the licensor of the Product) represent and warrant that where the Product was created using Generative AI Programs, we have applied the “CreatedWithAI” tag. Under this Agreement, a Product is considered to be created using Generative AI Programs where a material portion of a Product is generated with Generative AI Programs, whether characters, backgrounds, or other material elements. A Product is not considered to be created using Generative AI Programs merely for use of features that solely operate on a Product (e.g., AI-based upscaling or content-aware fill).

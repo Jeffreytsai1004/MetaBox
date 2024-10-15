@@ -1,0 +1,79 @@
+Show Hide UI|import gs_curvetools.main as ct_main;ct_main.main()|Show/Hide UI|GS.GS_CurveTools.UI|python
+Reset to Defaults|import gs_curvetools.utils.utils as ct_utils;from imp import reload;reload(ct_utils);ct_utils.resetUI()|Reset the UI to Defaults|GS.GS_CurveTools.UI|python
+Stop UI|import gs_curvetools.utils.utils as ct_utils;from imp import reload;reload(ct_utils);ct_utils.stopUI()|Close the UI and Stop Scripts|GS.GS_CurveTools.UI|python
+New Card|gs_curvetools.core.create.new(0)|Create New Card|GS.GS_CurveTools.Create|python
+New Tube|gs_curvetools.core.create.new(1)|Create New Tube|GS.GS_CurveTools.Create|python
+Curve Card|gs_curvetools.core.create.multiple(0)|Convert to Card|GS.GS_CurveTools.Create|python
+Curve Tube|gs_curvetools.core.create.multiple(1)|Convert to Tube|GS.GS_CurveTools.Create|python
+Bind|gs_curvetools.core.create.bind(1)|Bind Curves or Geo|GS.GS_CurveTools.Create|python
+Bind Duplicate|gs_curvetools.core.create.bind(2)|Bind Curves or Geo with duplication|GS.GS_CurveTools.Create|python
+Unbind|gs_curvetools.core.create.unbind()|Unbind Curves|GS.GS_CurveTools.Create|python
+Add Card|gs_curvetools.core.create.populate(0,1)|Add Cards between selection|GS.GS_CurveTools.Create|python
+Add Card No Blend|gs_curvetools.core.create.populate(0,2)|Add Cards between selection without attribute blend|GS.GS_CurveTools.Create|python
+Add Tube|gs_curvetools.core.create.populate(1,1)|Add Tubes between selection|GS.GS_CurveTools.Create|python
+Add Tube No Blend|gs_curvetools.core.create.populate(1,2)|Add Tubes between selection without attribute blend|GS.GS_CurveTools.Create|python
+Fill|gs_curvetools.core.create.fill(1)|Duplicate Fill between selection|GS.GS_CurveTools.Create|python
+Fill No Blend|gs_curvetools.core.create.fill(2)|Duplicate Fill between selection without attribute blend|GS.GS_CurveTools.Create|python
+Subdivide|gs_curvetools.core.subdivideCurve(1)|Subdivide Selected Card/Tube|GS.GS_CurveTools.Create|python
+Subdivide Duplicate|gs_curvetools.core.subdivideCurve(2)|Subdivide Selected Card/Tube and Duplicate|GS.GS_CurveTools.Create|python
+Edge to Curve|gs_curvetools.core.edgeToCurve()|Convert Edges to Curves|GS.GS_CurveTools.Create|python
+Card to Curve|gs_curvetools.core.cardToCurve()|Convert Cards to Curves|GS.GS_CurveTools.Create|python
+Add Layer Collection|gs_curvetools.core.layerCollections.createLayerCollection()|Adds a New Layer Collection With the Specified Name|GS.GS_CurveTools.LayerCollections|python
+Delete Layer Collection|gs_curvetools.core.layerCollections.deleteLayerCollection()|Deletes Current Layer Collection|GS.GS_CurveTools.LayerCollections|python
+Clear Layer Collection|gs_curvetools.core.layerCollections.clear()|Deletes All The Curves from the Current Layer Collection|GS.GS_CurveTools.LayerCollections|python
+Rename Layer Collection|gs_curvetools.core.layerCollections.rename()|Renames the Current Layer Collection|GS.GS_CurveTools.LayerCollections|python
+Merge Up Layer Collection|gs_curvetools.core.layerCollections.mergeUp()|Merges the Current Layer Collection With One Above It|GS.GS_CurveTools.LayerCollections|python
+Merge Down Layer Collection|gs_curvetools.core.layerCollections.mergeDown()|Merges the Current Layer Collection With One Below It|GS.GS_CurveTools.LayerCollections|python
+Move Up Layer Collection|gs_curvetools.core.layerCollections.moveUp()|Moves the Current Layer Collection Up One Index|GS.GS_CurveTools.LayerCollections|python
+Move Down Layer Collection|gs_curvetools.core.layerCollections.moveDown()|Moves the Current Layer Collection Down One Index|GS.GS_CurveTools.LayerCollections|python
+Copy Layer Collection|gs_curvetools.core.layerCollections.copy()|Copies Curves from Current Layer Collection|GS.GS_CurveTools.LayerCollections|python
+Paste Layer Collection|gs_curvetools.core.layerCollections.paste()|Pastes Copied Curves to Current Layer Collection|GS.GS_CurveTools.LayerCollections|python
+Filter All Show|gs_curvetools.core.layersFilterToggle(True, True, hotkey=True)|Show All Layers|GS.GS_CurveTools.Layers|python
+Filter All Show All Collections|"gs_curvetools.core.layersFilterToggle(True, True, hotkey=True, mod=""Ctrl"")"|Show All Layers in All Collections|GS.GS_CurveTools.Layers|python
+Filter All Hide|gs_curvetools.core.layersFilterToggle(False, False, hotkey=True)|Hide All Layers|GS.GS_CurveTools.Layers|python
+Filter All Hide All Collections|"gs_curvetools.core.layersFilterToggle(True, True, hotkey=True, mod=""Shift+Ctrl"")"|Hide All Layers in All Collections|GS.GS_CurveTools.Layers|python
+Filter Curve|gs_curvetools.core.layersFilterToggle(True, False, hotkey=True)|Show Only Curve Component|GS.GS_CurveTools.Layers|python
+Filter Curve in All Collections|"gs_curvetools.core.layersFilterToggle(True, False, hotkey=True, mod=""Ctrl"")"|Show Only Curve Component in All Collections|GS.GS_CurveTools.Layers|python
+Toggle Always on Top|gs_curvetools.core.alwaysOnTopToggle()|Toggle Always on Top Mode for Curves|GS.GS_CurveTools.Layers|python
+Filter Geo|gs_curvetools.core.layersFilterToggle(False, True, hotkey=True)|Show Only Geo Component|GS.GS_CurveTools.Layers|python
+Filter Geo in All Collections|"gs_curvetools.core.layersFilterToggle(False, True, hotkey=True, mod=""Ctrl"")"|Show Only Geo Component in All Collections|GS.GS_CurveTools.Layers|python
+Toggle Color|gs_curvetools.core.toggleColor.toggleColorVis()|Toggle Color Mode|GS.GS_CurveTools.Layers|python
+Extract Selected|"gs_curvetools.core.extractSelectedCurves(""Shift"", hotkey=True)"|Extract Selected Geo|GS.GS_CurveTools.Layers|python
+Extract Selected Medged|gs_curvetools.core.extractSelectedCurves(hotkey=True)|Extract Selected Geo Merged|GS.GS_CurveTools.Layers|python
+Extract All|"gs_curvetools.core.extractAllCurves(""Shift"", hotkey=True)"|Extract All Geo|GS.GS_CurveTools.Layers|python
+Extract All Medged|gs_curvetools.core.extractAllCurves(hotkey=True)|Extract All Geo Merged|GS.GS_CurveTools.Layers|python
+Select Curve|gs_curvetools.core.selectPart(1)|Select Curve Component|GS.GS_CurveTools.Selection|python
+Select Geo|gs_curvetools.core.selectPart(2)|Select Geo Component|GS.GS_CurveTools.Selection|python
+Select Group|gs_curvetools.core.selectPart(0)|Select Group|GS.GS_CurveTools.Selection|python
+Group Curves|gs_curvetools.core.groupCurves()|Group Selected Curves|GS.GS_CurveTools.Selection|python
+Regroup by Layer|gs_curvetools.core.regroupByLayer()|Regroup using Layers|GS.GS_CurveTools.Selection|python
+Transfer Attr Forward|gs_curvetools.core.attributes.transferAttr(1)|Transfer Attributes Forward|GS.GS_CurveTools.Utilities|python
+Transfer Attr Backwards|gs_curvetools.core.attributes.transferAttr(2)|Transfer Attributes Backwards|GS.GS_CurveTools.Utilities|python
+Copy Attributes|gs_curvetools.core.attributes.copyAttributes()|Copy attributes from selected curves|GS.GS_CurveTools.Utilities|python
+Paste Attributes|gs_curvetools.core.attributes.pasteAttributes()|Paste attributes to selected curves|GS.GS_CurveTools.Utilities|python
+Transfer UVs Forward|gs_curvetools.core.attributes.transferUV(1)|Transfer UVs Forward|GS.GS_CurveTools.Utilities|python
+Transfer UVs Backwards|gs_curvetools.core.attributes.transferUV(2)|Transfer UVs Backwards|GS.GS_CurveTools.Utilities|python
+Copy UVs|gs_curvetools.core.attributes.copyUVs()|Copy UVs from selected curves|GS.GS_CurveTools.Utilities|python
+Paste UVs|gs_curvetools.core.attributes.pasteUVs()|Paste UVs to selected curves|GS.GS_CurveTools.Utilities|python
+Reset Pivot to Root|gs_curvetools.core.resetCurvePivotPoint(1)|Reset Pivot Point to Root|GS.GS_CurveTools.Utilities|python
+Reset Pivot to Tip|gs_curvetools.core.resetCurvePivotPoint(2)|Reset Pivot Point to Tip|GS.GS_CurveTools.Utilities|python
+Rebuild Curves|gs_curvetools.core.sliders.rebuildButtonClicked()|Rebuild Selected Curves|GS.GS_CurveTools.Utilities|python
+Duplicate|gs_curvetools.core.duplicateCurve()|Duplicate Selected Curves|GS.GS_CurveTools.Utilities|python
+Delete Curves|gs_curvetools.core.deleteSelectedCurves()|Delete selected curves and objects|GS.GS_CurveTools.Utilities|python
+Extend|gs_curvetools.core.extendCurve()|Extend Curves|GS.GS_CurveTools.Utilities|python
+Reduce|gs_curvetools.core.reduceCurve()|Reduce Curves|GS.GS_CurveTools.Utilities|python
+Smooth|gs_curvetools.core.smoothCurve()|Smooth Curves|GS.GS_CurveTools.Utilities|python
+Orient to Normal|gs_curvetools.core.orientToFaceNormals()|Orients Selected Curve to Scalp Normals|GS.GS_CurveTools.Utilities|python
+Mirror X|gs_curvetools.core.mirrorHair(0)|Mirror on X Axis|GS.GS_CurveTools.Mirror|python
+Mirror Y|gs_curvetools.core.mirrorHair(1)|Mirror on Y Axis|GS.GS_CurveTools.Mirror|python
+Mirror Z|gs_curvetools.core.mirrorHair(2)|Mirror on Z Axis|GS.GS_CurveTools.Mirror|python
+Flip X|gs_curvetools.core.mirrorHair(0,1)|Flip on X Axis|GS.GS_CurveTools.Mirror|python
+Flip Y|gs_curvetools.core.mirrorHair(1,1)|Flip on Y Axis|GS.GS_CurveTools.Mirror|python
+Flip Z|gs_curvetools.core.mirrorHair(2,1)|Flip on Z Axis|GS.GS_CurveTools.Mirror|python
+Add Control Curve|gs_curvetools.core.controlCurveCreate()|Add Control Curve|GS.GS_CurveTools.Control|python
+Apply Control Cuve|gs_curvetools.core.controlCurveApply()|Apply Control Curve|GS.GS_CurveTools.Control|python
+Curve Control Window|gs_curvetools.ui.curveControlWorkspace()|Open Curve Control Window|GS.GS_CurveTools.Control|python
+UV Editor Window|gs_curvetools.ui.uvEditorWorkspace()|Open UV Editor Window|GS.GS_CurveTools.Control|python
+AO Toggle|gs_curvetools.utils.utils.AOToggle()|Toggle Viewport AO|GS.GS_CurveTools.Misc|python
+Advanced Visibility Toggle|gs_curvetools.core.advancedVisibility.toggleCurveHighlightFromUI(True)|Toggle Advanced Visibility|GS.GS_CurveTools.Misc|python
+Geometry Highlight Toggle|gs_curvetools.core.advancedVisibility.geometryHighlightCommand()|Toggle Geometry Highlight|GS.GS_CurveTools.Misc|python
