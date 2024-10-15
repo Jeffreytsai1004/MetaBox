@@ -328,19 +328,17 @@ class MetaBox:
     def create_animation_edit_tab(self, parent):
         sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
         cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
-        tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
-        self.create_button_row(["bhGhost", "aTools"], [self.run_bhghost, self.open_aTools])
-        self.create_button_row(["Keyframe Pro","Studio Library"], [self.open_keyframe_pro, self.open_studio_library])
-        self.create_button_row(["Epic Pose Wrangler"], [self.open_epic_pose_wrangler])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-        time_frame = cmds.frameLayout(label="Time", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=time_frame)
         key_frame = cmds.frameLayout(label="Key", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=key_frame)
+        self.create_button_row(["bhGhost", "IK/FK Switch"], [self.run_bhghost, self.run_ik_fk_switch])
+        self.create_button_row(["aTools", "Keyframe Pro"], [self.open_aTools, self.open_keyframe_pro])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
         pose_frame = cmds.frameLayout(label="Pose", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=pose_frame)
+        self.create_button_row(["Studio Library", "Epic Pose Wrangler"], [self.open_studio_library, self.open_epic_pose_wrangler])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Define button functionalities
@@ -657,6 +655,19 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
             print(f"Detailed error: {traceback.format_exc()}")
+
+    def run_ik_fk_switch(self, *args):
+        try:
+            IK_FK_Switch_Path = os.path.normpath(os.path.join(current_dir, 'Animation', 'IK_FK_Switch')).replace('\\', '/')
+            if IK_FK_Switch_Path not in sys.path:
+                sys.path.insert(0, IK_FK_Switch_Path)
+            from Animation import IK_FK_Switcher
+            IK_FK_Switcher.run()
+        except Exception as e:
+            error_message = f"Error occurred while running IK/FK Switch: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def show():
