@@ -1,0 +1,27 @@
+
+AnimSchool Picker Install
+
+
+Download here (follow the link at the bottom of the page.)
+http://www.animschool.edu/DownloadOffer.aspx
+
+Information here:
+http://www.animschool.edu/pickerInfo.aspx
+
+
+There are folders with the different Maya versions. You have to use the correct 32 bit or 64 bit version, depending on what version of Maya you're running.
+
+
+Make a new shelf button
+
+loadPlugin -qt "C:/Users/yourname/Documents/AnimSchoolPicker/AnimSchoolPicker/2020 (the version of Maya you're using)/AnimSchoolPicker.mll";
+AnimSchoolPicker();
+
+You can use the PickerIcon.png image for the Maya icon.
+
+
+Mac:
+
+
+loadPlugin -qt "/Users/yourname/AnimSchoolPicker.bundle";
+AnimSchoolPicker();

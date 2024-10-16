@@ -1,0 +1,52 @@
+// when run, this script will create a button on your current shelf 
+// that when clicked, will open the picker
+//
+// you can paste the entire contents of this file in the script editor, select, 
+// and hit enter
+//
+// Copyright (c) 2013 AnimSchool
+
+global proc AnimSchoolPicker_install()
+{
+	// this script will create a shelf button for the AnimSchoolPicker
+
+	string $os = `about -os`;
+
+	string $ff = "*.so";		// this is the type for linux
+	string $ps = "/";				// this the path separator for mac and linux
+
+	if( `gmatch $os "mac"` )
+		{
+			$ff = "*.bundle";
+		}
+	else if( `gmatch $os "win"` || `gmatch $os "win64"` )
+		{
+			$ff = "*.mll";
+			$ps = "\\";
+		}
+
+	//	print ( "// filter is: " + $ff + "\n" );
+
+	string $path[] = `fileDialog2 -caption "Select the AnimSchoolPicker plugin:" -ff $ff -fileMode 1`;
+	
+	if( size( $path ) == 1 )
+		{
+			// print ( "// the path to the file is: " + $path[ 0 ] + "\n" );
+
+			string $cmd = "loadPlugin -qt " + "\"" + $path[ 0 ] + "\";\nAnimSchoolPicker();";
+			string $icon = dirname( $path[ 0 ] ) + $ps + "AnimSchoolLogoIcon.png";
+
+			global string $gShelfTopLevel;
+			setParent `shelfTabLayout -query -selectTab $gShelfTopLevel`;
+
+			if( `filetest -r $icon` )
+				{
+					shelfButton -command $cmd -image $icon;
+				}
+			else
+				{
+					shelfButton -command $cmd -imageOverlayLabel "Pickr";
+				}
+		}
+}
+AnimSchoolPicker_install();

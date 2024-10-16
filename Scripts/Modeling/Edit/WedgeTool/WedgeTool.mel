@@ -1,0 +1,252 @@
+////////////////////////// Wedge Tool v1.1 /////////////////////////////////////////////
+//     
+//   script by : Klaudio Ladavac
+//   contact: klaudio2u@gmail.com
+//
+//   last update - 08.07.2017 
+////////////////////////////////////////////////////////////////////////////////////////
+
+global string $getit[];
+global string $extrNodeW[];
+global string $getFace[];
+global string $preGetObj[];
+global string $getWedge[];
+global string $rotationTransf[];
+
+
+        // get the name of the object selected    
+        $preGetObj = `ls -hilite`;     
+
+        // store components selected from "multi" 
+        $getFace = `filterExpand -sm 34`;
+        string $getEdge[] = `filterExpand -sm 32`;
+        
+
+// Check number of edges selected - must be exactly 1, if not - warnning.
+if ( size ($getEdge) == 1) 
+{
+        
+        // get material from selection 
+        select -r $getFace[0];
+        hyperShade -smn;
+        string $getMaterialAss[] = `ls -sl`;
+        
+      
+        select -r $getEdge;
+        
+        //get the length (size) of the edge for the extrude to be appropriate length too
+        ConvertSelectionToVertices;
+        string $selVertices[] = `ls -sl -fl`;
+        vector $a = `pointPosition -w $selVertices[0]`;
+        vector $b = `pointPosition -w $selVertices[1]`;
+        vector $mathVectors = $b - $a;            
+        float $lengthBetween = `mag $mathVectors`;
+        float $lengthBetween2 = $lengthBetween * -1;
+        
+
+      // do extrude  
+      select $getEdge;    
+      $extrNodeW = `polyExtrudeEdge -constructionHistory 1 -keepFacesTogether 1 -divisions 2 -offset 0 -thickness $lengthBetween -smoothingAngle 30 -lty $lengthBetween2 $getEdge`;
+
+       // extrude expression - connecting attributes  
+       $exp = ($extrNodeW[0] + ".localTranslateY = " + $extrNodeW[0] + ".thickness * -1");
+       expression -s $exp  -n "expCusWedge" -o $extrNodeW[0] -ae 1 -uc all;
+       
+       //value for toggle the expression
+       optionVar -iv "setFixToggle" 1;
+
+        string $getEdge2[] = `filterExpand -sm 32`;
+        ConvertSelectionToFaces;
+        string $getFace2[] = `filterExpand -sm 34`;
+        
+        string $selectgrow[] = `ls -sl -fl`; 
+        GrowPolygonSelectionRegion; 
+        select -d $selectgrow;
+        
+        doDelete;
+        
+        // rotation - add transfrom
+        select -r $getFace2; 
+        $rotationTransf = `polyMoveFacet -constructionHistory 1 -random 0 $getFace2`;
+        
+        // selection ready for Wedge default
+        select -r $getFace; 
+        select -add $getFace2; 
+        select -add $getEdge2;
+        
+        WedgePolygon;
+        $getWedge = `ls -sl -tl 1`;
+        setAttr ($getWedge[0] + ".wedgeAngle") -90;
+        setAttr ($getWedge[0] + ".divisions") 6;
+        
+        select -r $preGetObj;
+        
+        SeparatePolygon;
+        $getit = `ls -sl -tr`;
+        pickWalk -d up;
+        renameSelectionList ("WedgeTool");   
+                     
+        // reassign material - can be lost sometimes             
+        select -r $getit;
+        hyperShade -a $getMaterialAss[0];
+        
+        select -r $getit[1];
+        hide;
+        select -r $getit[0];
+        //sets -e -forceElement initialShadingGroup;
+     
+        
+// START UI
+                window -t "Wedge Tool" -tlb 1 customWedgeee;
+                columnLayout -adj true;
+
+                        formLayout -h 115 -w 145 -numberOfDivisions 100 wedgeIt; 
+                            attrControlGrp -l "Angle " -attribute ($getWedge[0] + ".wedgeAngle") angleWdg;
+                            attrControlGrp -l "Offset " -attribute ($extrNodeW[0] + ".thickness") thickWdg;
+                            iconTextButton -image1 "k_FlipWedge.png" -c "flipWedge($extrNodeW, $getWedge)" buttFlips;
+                            
+                            attrControlGrp -l "Divisions " -attribute ($getWedge[0] + ".divisions") divWdg;
+                            attrFieldSliderGrp -l "Rotate " -min -90 -max 90 -cw3 50 81 0 -at ($rotationTransf[0] + ".localRotateZ") rotMovekWdg;                        
+                            
+                            attrControlGrp -l "Tweak " -attribute ($extrNodeW[0] + ".localTranslateZ") thicTwkWdg;                       
+                         formLayout -edit            
+                             -attachForm angleWdg "top" 2    -attachForm angleWdg "left" -96 
+                             -attachForm thickWdg "top" 22    -attachForm thickWdg "left" -96                               
+                             -attachForm divWdg "top" 47   -attachForm divWdg "left" -81
+                             -attachForm thicTwkWdg "top" 92    -attachForm thicTwkWdg "left" -81 
+                             -attachForm rotMovekWdg "top" 67    -attachForm rotMovekWdg "left" 8 
+                             
+                             -attachForm buttFlips "top" 3    -attachForm buttFlips "left" 119
+                         wedgeIt; 
+                         setParent ..;
+                         
+                         // Angle
+                         popupMenu -parent angleWdg;
+                         menuItem -l " 90" -c "angle90deg($getWedge)";
+                         menuItem -l " 180" -c "angle180deg($getWedge)";
+                         menuItem -divider 1;
+                         menuItem -l " -90" -c "angleM90deg($getWedge)";
+                         menuItem -l " -180" -c "angleM180deg($getWedge)";
+                         popupMenu -parent thicTwkWdg;
+                         menuItem -l " Reset Attribute" -c "localTransZ($extrNodeW)";
+                         
+                         // Rotate
+                         popupMenu -parent rotMovekWdg;
+                         menuItem -l "  0" -c "rotate0deg($rotationTransf)";
+                         menuItem -divider 1;
+                         menuItem -l "  45" -c "rotateP45deg($rotationTransf)";
+                         menuItem -l "  90" -c "rotateP90deg($rotationTransf)";
+                         menuItem -divider 1;
+                         menuItem -l " - 45" -c "rotateN45deg($rotationTransf)";                       
+                         menuItem -l " - 90" -c "rotateN90deg($rotationTransf)";
+
+
+  
+
+                separator -height 2 -style "none";
+
+                        formLayout -h 36 -w 145 -numberOfDivisions 100 wedgeIt2; 
+                            iconTextButton -image1 "k_fixWedge.png" -c "revFixExpress($extrNodeW, $getWedge)" revWdg;
+                            iconTextButton -image1 "k_applyWedge.png" -c "clearDoneWedge($getit, $getFace, $preGetObj)" revWdg2;
+                        formLayout -edit            
+                             -attachForm revWdg "top" 2   -attachForm revWdg "left" 2
+                             -attachForm revWdg2 "top" 2    -attachForm revWdg2 "left" 39
+                         wedgeIt2; 
+
+                showWindow customWedgeee;
+// END UI
+   
+   
+}
+else 
+{
+       warning -n  " -- INFO -- Select only ONE edge for Wedge direction!!";  
+}
+
+// Angle
+proc angle90deg(string $getWedge[]) { setAttr ($getWedge[0] + ".wedgeAngle") 90; }
+proc angle180deg(string $getWedge[]) { setAttr ($getWedge[0] + ".wedgeAngle") 180; }
+proc angleM90deg(string $getWedge[]) { setAttr ($getWedge[0] + ".wedgeAngle") -90; }
+proc angleM180deg(string $getWedge[]) { setAttr ($getWedge[0] + ".wedgeAngle") -180; }
+
+// Tweak
+proc localTransZ(string $extrNodeW[]) { setAttr ($extrNodeW[0] + ".localTranslateZ") 0; }
+
+// Rotate
+proc rotate0deg(string $rotationTransf[]) { setAttr ($rotationTransf[0] + ".localRotateZ") 0; }
+proc rotateP45deg(string $rotationTransf[]) { setAttr ($rotationTransf[0] + ".localRotateZ") 45; }
+proc rotateP90deg(string $rotationTransf[]) { setAttr ($rotationTransf[0] + ".localRotateZ") 90; }
+proc rotateN45deg(string $rotationTransf[]) { setAttr ($rotationTransf[0] + ".localRotateZ") -45; }
+proc rotateN90deg(string $rotationTransf[]) { setAttr ($rotationTransf[0] + ".localRotateZ") -90; }
+
+
+proc flipWedge(string $extrNodeW[], string $getWedge[])
+{
+    // get Wedge angle Value
+    float $getWedgeFlip = `getAttr ($getWedge[0] + ".wedgeAngle")`;
+        // reverse
+        float $newWedgeFlip1 = $getWedgeFlip * -1;
+        setAttr ($getWedge[0] + ".wedgeAngle") $newWedgeFlip1;  
+    
+    // get extrude Thickness value
+    float $getOffsetFlip = `getAttr ($extrNodeW[0] + ".thickness")`;
+        // reverse  
+        float $getOffsetFlip2 = $getOffsetFlip * -1;
+        setAttr ($extrNodeW[0] + ".thickness") $getOffsetFlip2;  
+          
+}
+
+// FIX 
+proc revFixExpress(string $extrNodeW[], string $getWedge[])
+{     
+       int $chkToggleVal = `optionVar -q "setFixToggle"`;
+       
+       if ($chkToggleVal == 1)
+       {
+            $exp1 = ($extrNodeW[0] + ".localTranslateY = " + $extrNodeW[0] + ".thickness * 1");
+            expression -e -s $exp1  -n "expCusWedge" -o $extrNodeW[0] -ae 1 -uc all expCusWedge;
+            
+            optionVar -iv "setFixToggle" 2;
+            
+            float $getWedgeVal = `getAttr ($getWedge[0] + ".wedgeAngle")`;
+            float $newWedgeVal = $getWedgeVal * -1;
+            setAttr ($getWedge[0] + ".wedgeAngle") $newWedgeVal;
+       }
+       
+       if ($chkToggleVal == 2)
+       {
+            $exp2 = ($extrNodeW[0] + ".localTranslateY = " + $extrNodeW[0] + ".thickness * -1");
+            expression -e -s $exp2  -n "expCusWedge" -o $extrNodeW[0] -ae 1 -uc all expCusWedge;
+           
+            optionVar -iv "setFixToggle" 1; 
+            
+
+       }
+   
+}
+
+// Apply
+proc clearDoneWedge(string $getit[], string $getFace[], string $preGetObj[])
+{
+        // clear expressison node
+        delete "expCusWedge";
+        
+        select -r $getit[0];
+        string $getGroup[] = `pickWalk -d up`;
+        
+        select -r $getit[0];
+        parent -w;
+        DeleteHistory;
+        
+        select -r $getGroup;
+        doDelete;
+        
+        select -r $getit[0];
+        rename $getit[0] $preGetObj[0];
+        //setSelectMode components Components; selectType -smp 0 -sme 0 -smf 1 -smu 0 -pv 0 -pe 0 -pf 1 -puv 0;
+        doMenuComponentSelection($preGetObj[0], "facet");
+        select -r $getFace;
+        
+        evalDeferred "deleteUI -window customWedgeee";
+       
+}

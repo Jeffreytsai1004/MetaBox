@@ -33,7 +33,6 @@ from Modeling.UV import UVSetEditor
 from Metahuman.Custom import BodyPrep
 from Metahuman.Custom import BatchImport
 from Metahuman.Blendshape import MorphShape
-from Animation import AdvancedSkeleton
 import sys
 import os
 
@@ -140,15 +139,10 @@ class MetaBox:
         tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
-        self.create_button_row(["GS Curve Tools"], [self.run_gs_curve_tools])
+        self.create_button_row(["GS Curve Tools", "Wedge Tools"], [self.run_gs_curve_tools, self.run_wedge_tools])
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-    
-        edit_frame = cmds.frameLayout(label="Edit", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=edit_frame)
         self.create_button_row(["Extra Curve","Instant Drag", "Un Bevel"], [self.run_extra_curve, self.run_instant_drag, self.run_unbevel])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
@@ -200,6 +194,7 @@ class MetaBox:
         cmds.columnLayout(adjustableColumn=True, parent=export_frame)
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
+        cmds.setParent('..')  # Close sub_tab
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Rigging tab
@@ -223,6 +218,7 @@ class MetaBox:
         cmds.columnLayout(adjustableColumn=True, parent=select_frame)
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
+        cmds.setParent('..')  # Close sub_tab
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Animation tab
@@ -236,6 +232,7 @@ class MetaBox:
         cmds.columnLayout(adjustableColumn=True, parent=key_frame)
         self.create_button_row(["bhGhost", "IK/FK Switch"], [self.run_bhghost, self.run_ik_fk_switch])
         self.create_button_row(["aTools", "Keyframe Pro"], [self.open_aTools, self.open_keyframe_pro])
+        self.create_button_row(["Anim School Picker"], [self.run_anim_school_picker])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         pose_frame = cmds.frameLayout(label="Pose", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
@@ -243,6 +240,7 @@ class MetaBox:
         self.create_button_row(["Studio Library", "Epic Pose Wrangler"], [self.open_studio_library, self.open_epic_pose_wrangler])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
+        cmds.setParent('..')  # Close sub_tab
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Define button functionalities
@@ -265,7 +263,8 @@ class MetaBox:
         try:
             crease_plus_dir = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'CreasePlus')).replace('\\', '/')
             print(f"CreasePlus directory: {crease_plus_dir}")
-            sys.path.append(crease_plus_dir)
+            if crease_plus_dir not in sys.path:
+                sys.path.append(crease_plus_dir)
             from Modeling.Edit.CreasePlus import CreasePlusMain
             CreasePlusMain.start()
             print("CreasePlus loaded successfully")
@@ -400,6 +399,21 @@ class MetaBox:
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
             print(f"Detailed error: {traceback.format_exc()}")
 
+    def run_wedge_tools(self, *args):
+        try:
+            # Added the path to the WedgeTool.mel file
+            wedge_tools_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'WedgeTool')).replace('\\', '/')
+            if wedge_tools_path not in sys.path:
+                sys.path.insert(0, wedge_tools_path)
+            # Added the path to the WedgeTool.mel file
+            wedge_tools_mel = os.path.join(wedge_tools_path, 'WedgeTool.mel').replace('\\', '/')
+            mel.eval(f'source "{wedge_tools_mel}";')
+            print(f"Wedge Tool loaded successfully from {wedge_tools_mel}")
+        except Exception as e:
+            error_message = f"Error occurred while running Wedge Tool: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
     # Select
     def run_edge_loop_smart_select(self, *args):
         try:
@@ -451,14 +465,14 @@ class MetaBox:
     def run_advanced_skeleton(self, *args):
         try:
             adv_sub_path = [
-                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton'),
-                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'AdvancedSkeleton5Files')
+                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton').replace('\\', '/'),
+                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'AdvancedSkeleton5Files').replace('\\', '/')
             ]
             for path in adv_sub_path:
                 if path not in sys.path:
                     sys.path.insert(0, path)
             # If advancedSkeleton5Files does not exist, run the adv_install.py and the launch.py, else run the adv_launch.py directly
-            if not os.path.exists(os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'adv_install.py')):
+            if not os.path.exists(os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'adv_install.py').replace('\\', '/')):
                 from Animation.AdvancedSkeleton import adv_install
                 adv_install.install()
             from Animation.AdvancedSkeleton import adv_launch
@@ -505,7 +519,7 @@ class MetaBox:
     def open_epic_pose_wrangler(self, *args):
         try:
             # Add Epic Pose Wrangler path
-            epic_pose_wrangler_path = os.path.join(current_dir, 'Animation', 'epic_pose_wrangler')
+            epic_pose_wrangler_path = os.path.join(current_dir, 'Animation', 'epic_pose_wrangler').replace('\\', '/')
             sys.path.append(epic_pose_wrangler_path)
             print(epic_pose_wrangler_path)
             print(f"Attempting to import Epic Pose Wrangler from: {epic_pose_wrangler_path}")            
@@ -577,24 +591,26 @@ class MetaBox:
 
     def open_studio_library(self, *args):
         try:
-            studiolibrary_paths = [
-                os.path.join(current_dir, 'Animation', 'studiolibrary'),
-                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src'),
-                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiolibrary'),
-                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiolibrarymaya'),
-                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studioqt'),
-                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'mutils'),
-                os.path.join(current_dir, 'Animation', 'studiolibrary', 'src', 'studiovendor')
+            studiolibrary_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'studiolibrary')).replace('\\', '/')
+            studiolibrary_sub_paths = [
+                os.path.join(studiolibrary_path, 'src'),
+                os.path.join(studiolibrary_path, 'src', 'studiolibrary'),
+                os.path.join(studiolibrary_path, 'src', 'studiolibrarymaya'),
+                os.path.join(studiolibrary_path, 'src', 'studioqt'),
+                os.path.join(studiolibrary_path, 'src', 'mutils'),
+                os.path.join(studiolibrary_path, 'src', 'studiovendor')
             ]
+            # Added the main path to sys.path
+            if studiolibrary_path not in sys.path:
+                sys.path.insert(0, studiolibrary_path)
             # Added the sub path to sys.path
-            for path in studiolibrary_paths:
+            for path in studiolibrary_sub_paths:
                 if path not in sys.path:
                     sys.path.insert(0, path.replace('\\', '/'))
             for path in sys.path:
                 print("Added the studiolibrary submoudle path: ", path)
-            # Import studiolibrary
-            import studiolibrary
-            # Reload studiolibrary
+            # Import studiolibrary from the studiolibrary_path with importlib
+            studiolibrary = importlib.import_module('studiolibrary')
             importlib.reload(studiolibrary)
             # Run studiolibrary
             studiolibrary.main()
@@ -603,6 +619,22 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
+    def run_anim_school_picker(self, *args):
+        try:
+            # Added the path to the AnimSchoolPicker.mel file
+            anim_school_picker_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'AnimSchoolPicker')).replace('\\', '/')
+            if anim_school_picker_path not in sys.path:
+                sys.path.insert(0, anim_school_picker_path)
+            # Added the path to the AnimSchoolPicker.mel file
+            anim_school_picker_mel = os.path.join(anim_school_picker_path, 'AnimSchoolPicker_install.mel').replace('\\', '/')
+            print(anim_school_picker_mel)
+            mel.eval(f'source "{anim_school_picker_mel}";')
+            print(f"Anim School Picker loaded successfully from {anim_school_picker_mel}")
+        except Exception as e:
+            error_message = f"Error occurred while running Anim School Picker: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+    
     def run_bhghost(self, *args):
         try:
             bhghost_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'bhGhost')).replace('\\', '/')

@@ -21,3 +21,11 @@
 [20:45:08,653 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [20:45:08,653 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 20:45:08                 
 [20:45:09,434 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[01:15:01,809 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[01:15:01,809 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 01:15:01                 
+[01:15:02,494 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[01:22:19,132 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[01:22:19,132 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 01:22:19                 
+[01:22:19,848 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[01:23:59,953 | ERROR |    utils |   110]: warningInView() : Select at least one compatible card or tube curve.
+[01:23:59,957 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4447, in subdivideCurve
