@@ -26,13 +26,15 @@ importlib.reload(CreasePlus)
 from Modeling.Edit import EdgeSensei
 from Modeling.Edit import gs_curvetools
 importlib.reload(gs_curvetools)
+from Modeling.Edit import AlignEdge
 from Modeling.Select import EdgeLoopSmartSelect
 from Modeling.Select import SamePositionSelector
 from Modeling.Select import IntervalSelectEdge
 from Modeling.UV import UVSetEditor
 from Metahuman.Custom import BodyPrep
 from Metahuman.Custom import BatchImport
-from Metahuman.Blendshape import MorphShape
+from Animation.Blendshape import MorphShape
+from Animation import UniversalRigAdapter
 import sys
 import os
 
@@ -115,19 +117,16 @@ class MetaBox:
         cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close sub_tab
-
         display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=display_frame)
         self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
-
         manage_frame = cmds.frameLayout(label="Manage", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=manage_frame)
         self.create_button_row(["Rename", "Batch Import"], [self.run_rename, self.run_batch_import])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
-
         selector_frame = cmds.frameLayout(label="Selector", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=selector_frame)
         self.create_button_row(["Interval Select Edge"], [self.run_select_edge])
@@ -135,21 +134,21 @@ class MetaBox:
         self.create_button_row(["Edge Loop Smart Select"], [self.run_edge_loop_smart_select])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
-
         tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
-        self.create_button_row(["GS Curve Tools", "Wedge Tools"], [self.run_gs_curve_tools, self.run_wedge_tools])
+        self.create_button_row(["Extra Curve","GS Curve Tools"], [self.run_extra_curve,self.run_gs_curve_tools])
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
-        self.create_button_row(["Extra Curve","Instant Drag", "Un Bevel"], [self.run_extra_curve, self.run_instant_drag, self.run_unbevel])
+        self.create_button_row(["Instant Drag", "Un Bevel"], [ self.run_instant_drag, self.run_unbevel])
+        self.create_button_row(["Align Edge"], [self.run_align_edge])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
-
         uv_frame = cmds.frameLayout(label="UV", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=uv_frame)
-        self.create_button_row(["UV Set Editor"], [self.run_uv_set_editor])
+        self.create_button_row(["UV Set Editor", "UVDeluxe"], [self.run_uv_set_editor, self.run_uvdeluxe])
+        self.create_button_row(["RizomUV Bridge"], [self.run_rizom_uv_bridge])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         cmds.setParent('..')  # Close sub_tab
@@ -167,6 +166,10 @@ class MetaBox:
         self.create_button_row(["Xray","Joint Xray"], [self.run_xray, self.run_joint_xray])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
+        select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=select_frame)
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
         preparation_frame = cmds.frameLayout(label="Preparation", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=preparation_frame)
         self.create_button_row(["Body Prepare"], [self.run_body_prepare])
@@ -179,17 +182,12 @@ class MetaBox:
         cmds.setParent('..')  # Close frameLayout
         custom_mesh_frame = cmds.frameLayout(label="Custom Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=custom_mesh_frame)
-        rigging_frame = cmds.frameLayout(label="Rigging", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=rigging_frame)
-        select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=select_frame)
-        blendshape_frame = cmds.frameLayout(label="Blendshape", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=blendshape_frame)
-        self.create_button_row(["Morph Shape"], [self.run_morph_shape])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         dna_frame = cmds.frameLayout(label="DNA", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=dna_frame)
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
         export_frame = cmds.frameLayout(label="Export", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=export_frame)
         cmds.setParent('..')  # Close columnLayout
@@ -209,13 +207,13 @@ class MetaBox:
         self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
+        select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=select_frame)
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
         setup_frame = cmds.frameLayout(label="Setup", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=setup_frame)
         self.create_button_row(["Advanced Skeleton"], [self.run_advanced_skeleton])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-        select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=select_frame)
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         cmds.setParent('..')  # Close sub_tab
@@ -228,16 +226,32 @@ class MetaBox:
     def create_animation_edit_tab(self, parent):
         sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
         cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Edit")))
+        display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=display_frame)
+        self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=select_frame)
+        self.create_button_row(["Anim School Picker"], [self.run_anim_school_picker])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
         key_frame = cmds.frameLayout(label="Key", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=key_frame)
         self.create_button_row(["bhGhost", "IK/FK Switch"], [self.run_bhghost, self.run_ik_fk_switch])
         self.create_button_row(["aTools", "Keyframe Pro"], [self.open_aTools, self.open_keyframe_pro])
-        self.create_button_row(["Anim School Picker"], [self.run_anim_school_picker])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         pose_frame = cmds.frameLayout(label="Pose", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=pose_frame)
-        self.create_button_row(["Studio Library", "Epic Pose Wrangler"], [self.open_studio_library, self.open_epic_pose_wrangler])
+        self.create_button_row(["Studio Library"], [self.open_studio_library])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+        blendshape_frame = cmds.frameLayout(label="Blendshape", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=blendshape_frame)
+        self.create_button_row(["Epic Pose Wrangler"], [self.open_epic_pose_wrangler])
+        self.create_button_row(["Morph Shape"], [self.run_morph_shape])
+        self.create_button_row(["Universal Rig Adapter"], [self.run_universal_rig_adapter])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         cmds.setParent('..')  # Close sub_tab
@@ -248,7 +262,26 @@ class MetaBox:
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Modeling Functions
     # ****************************************************************************************************************
+    # Display
+    def run_xray(self, *args):
+        try:
+            result = cmds.modelEditor('modelPanel4', q=True, xr=True)
+            cmds.modelEditor('modelPanel4', e=True, xr=not result)
+        except Exception as e:
+            error_message = f"Error occurred while running Xray: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
+    
+    def run_joint_xray(self, *args):
+        try:
+            result = cmds.modelEditor('modelPanel4', q=True, jx=True)
+            cmds.modelEditor('modelPanel4', e=True, jx=not result)
+        except Exception as e:
+            error_message = f"Error occurred while running XrayJoint: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
 
+    # Manage
     def run_rename(self, *args):
         try:
             Rename_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Manage', 'Rename.py')).replace('\\', '/')
@@ -259,6 +292,15 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
+    def run_batch_import(self, *args):
+        try:
+            BatchImport.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Batch Import: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # Edit
     def run_crease_plus(self, *args):
         try:
             crease_plus_dir = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'CreasePlus')).replace('\\', '/')
@@ -281,6 +323,43 @@ class MetaBox:
             error_message = f"Error occurred while running Speed Cut: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_gs_curve_tools(self, *args):
+        try:
+            gs_curvetools_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            if gs_curvetools_path not in sys.path:
+                sys.path.insert(0, gs_curvetools_path)
+
+            # Import the sub modules
+            gs_curve_tools_subpaths = [
+                os.path.join(gs_curvetools_path, 'core').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'constants').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'ui').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'uv_editor').replace('\\', '/'),
+            ]
+            for path in gs_curve_tools_subpaths:
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+
+            # Import the main module
+            from Modeling.Edit.gs_curvetools import main as ct_main
+            # Run the main function
+            ct_main.main()
+
+            # If windows exists, refresh it
+            if cmds.pluginInfo('gs_curvetools', query=True, loaded=True):
+                from importlib import reload
+                from Modeling.Edit.gs_curvetools.utils import utils as ct_ut
+                reload(ct_ut)
+                ct_ut.resetUI()
+                print("GS Curve Tools refreshed successfully")
+
+        except Exception as e:
+            error_message = f"Error occurred while running GS Curve Tools: {str(e)}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+            print(f"Detailed error: {traceback.format_exc()}")
 
     def run_edge_sensei(self, *args):
         try:
@@ -354,66 +433,6 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
-    def run_uv_set_editor(self, *args):
-        try:
-            UVSetEditor.show()
-        except Exception as e:
-            error_message = f"Error occurred while opening UV Set Editor: {e}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
-
-    def run_gs_curve_tools(self, *args):
-        try:
-            gs_curvetools_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
-            if gs_curvetools_path not in sys.path:
-                sys.path.insert(0, gs_curvetools_path)
-
-            # Import the sub modules
-            gs_curve_tools_subpaths = [
-                os.path.join(gs_curvetools_path, 'core').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'constants').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'utils').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'ui').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'uv_editor').replace('\\', '/'),
-            ]
-            for path in gs_curve_tools_subpaths:
-                if path not in sys.path:
-                    sys.path.insert(0, path)
-
-            # Import the main module
-            from Modeling.Edit.gs_curvetools import main as ct_main
-            # Run the main function
-            ct_main.main()
-
-            # If windows exists, refresh it
-            if cmds.pluginInfo('gs_curvetools', query=True, loaded=True):
-                from importlib import reload
-                from Modeling.Edit.gs_curvetools.utils import utils as ct_ut
-                reload(ct_ut)
-                ct_ut.resetUI()
-                print("GS Curve Tools refreshed successfully")
-
-        except Exception as e:
-            error_message = f"Error occurred while running GS Curve Tools: {str(e)}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
-            print(f"Detailed error: {traceback.format_exc()}")
-
-    def run_wedge_tools(self, *args):
-        try:
-            # Added the path to the WedgeTool.mel file
-            wedge_tools_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'WedgeTool')).replace('\\', '/')
-            if wedge_tools_path not in sys.path:
-                sys.path.insert(0, wedge_tools_path)
-            # Added the path to the WedgeTool.mel file
-            wedge_tools_mel = os.path.join(wedge_tools_path, 'WedgeTool.mel').replace('\\', '/')
-            mel.eval(f'source "{wedge_tools_mel}";')
-            print(f"Wedge Tool loaded successfully from {wedge_tools_mel}")
-        except Exception as e:
-            error_message = f"Error occurred while running Wedge Tool: {e}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
-
     # Select
     def run_edge_loop_smart_select(self, *args):
         try:
@@ -439,24 +458,46 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
-    # Display
-    def run_xray(self, *args):
+    def run_align_edge(self, *args):
         try:
-            result = cmds.modelEditor('modelPanel4', q=True, xr=True)
-            cmds.modelEditor('modelPanel4', e=True, xr=not result)
+            AlignEdge.run()
         except Exception as e:
-            error_message = f"Error occurred while running Xray: {e}"
+            error_message = f"Error occurred while running Align Edge: {e}"
             cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
-    
-    def run_joint_xray(self, *args):
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # UV
+    def run_uv_set_editor(self, *args):
         try:
-            result = cmds.modelEditor('modelPanel4', q=True, jx=True)
-            cmds.modelEditor('modelPanel4', e=True, jx=not result)
+            UVSetEditor.show()
         except Exception as e:
-            error_message = f"Error occurred while running XrayJoint: {e}"
+            error_message = f"Error occurred while opening UV Set Editor: {e}"
             cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_uvdeluxe(self, *args):
+        try:
+            from Modeling.UV.UVDeluxe import uvdeluxe
+            uvdeluxe.createUI()
+        except Exception as e:
+            error_message = f"Error occurred while opening UVDeluxe: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_rizom_uv_bridge(self, *args):
+        try:
+            rizomuvbridge_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'UV', 'RizomUVBridge')).replace('\\', '/')
+            if rizomuvbridge_Path not in sys.path:
+                sys.path.insert(0, rizomuvbridge_Path)
+            rizomuvbridge_lua_path = os.path.join(rizomuvbridge_Path, 'RizomUVBridge.lua').replace('\\', '/')
+            if rizomuvbridge_lua_path not in sys.path:
+                sys.path.insert(0, rizomuvbridge_lua_path)
+            from Modeling.UV.RizomBridge import RizomUVBridge
+            RizomUVBridge.run()
+        except Exception as e:
+            error_message = f"Error occurred while running RizomUV Bridge: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -494,58 +535,11 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
-    # Import
-    def run_batch_import(self, *args):
-        try:
-            BatchImport.run()
-        except Exception as e:
-            error_message = f"Error occurred while running Batch Import: {e}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
-    
-    # Blendshape
-    def run_morph_shape(self, *args):
-        try:
-            MorphShape.show()
-        except Exception as e:
-            error_message = f"Error occurred while running MorphShape: {e}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Animation Functions
     # ****************************************************************************************************************
     # Pose
-    def open_epic_pose_wrangler(self, *args):
-        try:
-            # Add Epic Pose Wrangler path
-            epic_pose_wrangler_path = os.path.join(current_dir, 'Animation', 'epic_pose_wrangler').replace('\\', '/')
-            sys.path.append(epic_pose_wrangler_path)
-            print(epic_pose_wrangler_path)
-            print(f"Attempting to import Epic Pose Wrangler from: {epic_pose_wrangler_path}")            
-            # Get current Maya version
-            maya_version = cmds.about(version=True).split()[0]            
-            # Load necessary plugins
-            plugin_dir = os.path.join(epic_pose_wrangler_path, 'plugins', 'Windows', maya_version)
-            for plugin in ['embeddedRL4.mll', f'MayaUE4RBFPlugin{maya_version}.mll', 'MayaUERBFPlugin.mll']:
-                plugin_path = os.path.join(plugin_dir, plugin)
-                if os.path.exists(plugin_path):
-                    if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
-                        cmds.loadPlugin(plugin_path)
-                else:
-                    print(f"Warning: Plugin file does not exist: {plugin_path}")
-
-            # Import and run Epic Pose Wrangler
-            sys.path.insert(0, os.path.dirname(epic_pose_wrangler_path))
-            from Animation.epic_pose_wrangler import main
-            pose_wrangler = main.PoseWrangler()
-            
-            cmds.inViewMessage(amg='Epic Pose Wrangler loaded successfully', pos='midCenter', fade=True)
-        except Exception as e:
-            error_message = f"Error occurred while running Epic Pose Wrangler: {e}"
-            cmds.warning(error_message)
-            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
-
     def open_aTools(self, *args):
         try:
             # Get aTools path
@@ -622,14 +616,23 @@ class MetaBox:
     def run_anim_school_picker(self, *args):
         try:
             # Added the path to the AnimSchoolPicker.mel file
-            anim_school_picker_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'AnimSchoolPicker')).replace('\\', '/')
-            if anim_school_picker_path not in sys.path:
-                sys.path.insert(0, anim_school_picker_path)
-            # Added the path to the AnimSchoolPicker.mel file
-            anim_school_picker_mel = os.path.join(anim_school_picker_path, 'AnimSchoolPicker_install.mel').replace('\\', '/')
-            print(anim_school_picker_mel)
-            mel.eval(f'source "{anim_school_picker_mel}";')
-            print(f"Anim School Picker loaded successfully from {anim_school_picker_mel}")
+            animpicker_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'AnimSchoolPicker')).replace('\\', '/')
+            if animpicker_path not in sys.path:
+                sys.path.insert(0, animpicker_path)
+
+            # Get Maya Version
+            maya_version = cmds.about(version=True).split()[0]
+
+            # Set plugin path
+            animpicker_plugin_path = os.path.join(animpicker_path, maya_version).replace('\\', '/')
+            # Added the plugin path to MAYA_PLUG_IN_PATH
+            os.environ['MAYA_PLUG_IN_PATH'] = animpicker_plugin_path
+
+            # load the plugin
+            animpicker_mll = os.path.join(animpicker_plugin_path, 'AnimSchoolPicker.mll').replace('\\', '/')
+            cmds.loadPlugin(animpicker_mll, quiet=True)
+            cmds.AnimSchoolPicker()
+            print(f"Anim School Picker loaded successfully from {animpicker_mll}")
         except Exception as e:
             error_message = f"Error occurred while running Anim School Picker: {e}"
             cmds.warning(error_message)
@@ -660,6 +663,53 @@ class MetaBox:
             IK_FK_Switcher.run()
         except Exception as e:
             error_message = f"Error occurred while running IK/FK Switch: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    # Blendshape
+    def open_epic_pose_wrangler(self, *args):
+        try:
+            # Add Epic Pose Wrangler path
+            epic_pose_wrangler_path = os.path.join(current_dir, 'Animation', 'epic_pose_wrangler').replace('\\', '/')
+            sys.path.append(epic_pose_wrangler_path)
+            print(epic_pose_wrangler_path)
+            print(f"Attempting to import Epic Pose Wrangler from: {epic_pose_wrangler_path}")            
+            # Get current Maya version
+            maya_version = cmds.about(version=True).split()[0]            
+            # Load necessary plugins
+            plugin_dir = os.path.join(epic_pose_wrangler_path, 'plugins', 'Windows', maya_version)
+            for plugin in ['embeddedRL4.mll', f'MayaUE4RBFPlugin{maya_version}.mll', 'MayaUERBFPlugin.mll']:
+                plugin_path = os.path.join(plugin_dir, plugin)
+                if os.path.exists(plugin_path):
+                    if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
+                        cmds.loadPlugin(plugin_path)
+                else:
+                    print(f"Warning: Plugin file does not exist: {plugin_path}")
+
+            # Import and run Epic Pose Wrangler
+            sys.path.insert(0, os.path.dirname(epic_pose_wrangler_path))
+            from Animation.epic_pose_wrangler import main
+            pose_wrangler = main.PoseWrangler()
+            
+            cmds.inViewMessage(amg='Epic Pose Wrangler loaded successfully', pos='midCenter', fade=True)
+        except Exception as e:
+            error_message = f"Error occurred while running Epic Pose Wrangler: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_universal_rig_adapter(self, *args):
+        try:
+            UniversalRigAdapter.run()
+        except Exception as e:
+            error_message = f"Error occurred while running Universal Rig Adapter: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+    
+    def run_morph_shape(self, *args):
+        try:
+            MorphShape.show()
+        except Exception as e:
+            error_message = f"Error occurred while running MorphShape: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 

@@ -1,0 +1,2 @@
+# Edit this list when adding new scripts to the lua_script folder
+scripts = [("box_algorithm.lua", "Box"), ("mosaic_algorithm.lua", "Mosaic"), ("pelt_algorithm.lua", "Pelt"), ("sharp_edge_algorithm.lua", "Sharp Edge")]

@@ -29,3 +29,57 @@
 [01:22:19,848 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
 [01:23:59,953 | ERROR |    utils |   110]: warningInView() : Select at least one compatible card or tube curve.
 [01:23:59,957 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4447, in subdivideCurve
+[02:34:49,947 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[02:34:49,947 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 02:34:49                 
+[02:34:50,652 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[02:34:53,204 | ERROR |    utils |   218]: wrapper() : 'NoneType' object is not iterable
+Traceback (most recent call last):
+  File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\utils\utils.py", line 209, in wrapper
+    rv = func(*args, **kwargs)
+  File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5464, in extractAllCurves
+    parentGrps = set(mc.listRelatives(allGeo, p=1))
+TypeError: 'NoneType' object is not iterable
+[03:23:13,056 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[03:23:13,056 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 03:23:13                 
+[03:23:13,807 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[03:50:36,765 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[03:50:36,766 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 03:50:36                 
+[03:50:37,479 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[04:12:37,267 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[04:12:37,267 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 04:12:37                 
+[04:12:37,980 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[04:12:40,778 |  INFO |     core |  4046]: saveOptions() : Saving options
+[04:12:53,200 |  INFO |     core |  4046]: saveOptions() : Saving options
+[04:12:58,915 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
+[04:12:58,917 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
+[04:12:58,917 | ERROR |    utils |   110]: warningInView() : Select at least two curves
+[04:12:58,918 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
+[04:13:01,958 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
+[04:13:01,958 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
+[04:13:01,959 | ERROR |    utils |   110]: warningInView() : Select at least two curves
+[04:13:01,959 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
+[04:13:24,033 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
+[04:13:24,034 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
+[04:13:24,034 | ERROR |    utils |   110]: warningInView() : Select at least two curves
+[04:13:24,035 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
+[04:13:25,792 |  INFO |     core |  4046]: saveOptions() : Saving options
+[04:13:27,234 |  INFO |     core |  4046]: saveOptions() : Saving options
+[04:13:28,198 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
+[04:13:28,199 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
+[04:13:28,199 | ERROR |    utils |   110]: warningInView() : Select at least two curves
+[04:13:28,200 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
+[04:13:32,534 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
+[04:13:32,535 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
+[04:13:32,535 | ERROR |    utils |   110]: warningInView() : Select at least two curves
+[04:13:32,536 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
+[04:13:34,020 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
+[04:13:34,021 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
+[04:13:47,269 |  INFO |     core |  4046]: saveOptions() : Saving options
+[04:13:48,518 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
+[04:13:48,518 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
+[04:14:13,015 |  INFO |     core |  4046]: saveOptions() : Saving options
+[04:14:13,016 | ERROR |       ui |  1465]: updateColors() : eval() arg 1 must be a string, bytes or code object
+Traceback (most recent call last):
+  File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\ui.py", line 1456, in updateColors
+    eval(mc.optionVar(q="GSCT_UVEditorBGColor")),
+TypeError: eval() arg 1 must be a string, bytes or code object
