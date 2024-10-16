@@ -30,13 +30,12 @@ from Modeling.Select import EdgeLoopSmartSelect
 from Modeling.Select import SamePositionSelector
 from Modeling.Select import IntervalSelectEdge
 from Modeling.UV import UVSetEditor
-from Modeling.Display import Xray
 from Metahuman.Custom import BodyPrep
 from Metahuman.Custom import BatchImport
-from Metahuman.Display import XrayJoint
 from Metahuman.Blendshape import MorphShape
 import sys
 import os
+# from Animation.AdvancedSkeleton.AdvancedSkeleton5 import launch as launch_advanced_skeleton
 
 class MetaBox:
     def __init__(self):
@@ -110,22 +109,7 @@ class MetaBox:
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Modeling tab
     def create_modeling_sub_tabs(self, parent):
-        self.create_modeling_select_tab(parent)
         self.create_modeling_edit_tab(parent)
-        self.create_modeling_display_tab(parent)
-        self.create_modeling_check_tab(parent)
-
-    def create_modeling_select_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Select")))
-        selector_frame = cmds.frameLayout(label="Selector", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=selector_frame)
-        self.create_button_row(["Interval Select Edge"], [self.run_select_edge])
-        self.create_button_row(["Same Position Selector"], [self.run_same_position_selector])
-        self.create_button_row(["Edge Loop Smart Select"], [self.run_edge_loop_smart_select])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-        cmds.setParent('..')  # Close sub_tab
 
     def create_modeling_edit_tab(self, parent):
         sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
@@ -139,19 +123,27 @@ class MetaBox:
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
 
+        selector_frame = cmds.frameLayout(label="Selector", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=selector_frame)
+        self.create_button_row(["Interval Select Edge"], [self.run_select_edge])
+        self.create_button_row(["Same Position Selector"], [self.run_same_position_selector])
+        self.create_button_row(["Edge Loop Smart Select"], [self.run_edge_loop_smart_select])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
         tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
+        self.create_button_row(["GS Curve Tools"], [self.run_gs_curve_tools])
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
-        self.create_button_row(["Extra Curve", "GS Curve Tools"], [self.run_extra_curve, self.run_gs_curve_tools])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
     
         edit_frame = cmds.frameLayout(label="Edit", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=edit_frame)
-        self.create_button_row(["Instant Drag", "Un Bevel"], [self.run_instant_drag, self.run_unbevel])
+        self.create_button_row(["Extra Curve","Instant Drag", "Un Bevel"], [self.run_extra_curve, self.run_instant_drag, self.run_unbevel])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
 
@@ -161,25 +153,9 @@ class MetaBox:
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
 
-    def create_modeling_display_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Display")))
-
-        mesh_frame = cmds.frameLayout(label="Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=mesh_frame)
-        self.create_button_row(["Xray"], [self.run_xray])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-
-        joint_frame = cmds.frameLayout(label="Joint", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=joint_frame)
-        self.create_button_row(["Joint Xray"], [self.run_joint_xray])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-
-    def create_modeling_check_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Check")))
+        display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=display_frame)
+        self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         cmds.setParent('..')  # Close sub_tab
@@ -188,12 +164,15 @@ class MetaBox:
     # Metahuman tab
     def create_metahuman_sub_tabs(self, parent):
         self.create_metahuman_custom_tab(parent)
-        self.create_metahuman_display_tab(parent)
-        self.create_metahuman_select_tab(parent)
 
     def create_metahuman_custom_tab(self, parent):
         sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
         cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Custom")))
+        display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=display_frame)
+        self.create_button_row(["Xray","Joint Xray"], [self.run_xray, self.run_joint_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
         preparation_frame = cmds.frameLayout(label="Preparation", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=preparation_frame)
         self.create_button_row(["Body Prepare"], [self.run_body_prepare])
@@ -222,54 +201,28 @@ class MetaBox:
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
 
-    def create_metahuman_display_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Display")))
-        mesh_frame = cmds.frameLayout(label="Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=mesh_frame)
-        self.create_button_row(["Xray"], [self.run_xray])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-        joint_frame = cmds.frameLayout(label="Joint", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=joint_frame)
-        self.create_button_row(["Joint Xray"], [self.run_joint_xray])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-
-    def create_metahuman_select_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Select")))
-        mesh_frame = cmds.frameLayout(label="Mesh", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=mesh_frame)
-        skeleton_frame = cmds.frameLayout(label="Skeleton", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=skeleton_frame)
-        controller_frame = cmds.frameLayout(label="Controller", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=controller_frame)
-
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Rigging tab
     def create_rigging_sub_tabs(self, parent):
-        self.create_rigging_skeleton_tab(parent)
-        self.create_rigging_skin_tab(parent)
+        self.create_rigging_setup_tab(parent)
 
-    def create_rigging_skeleton_tab(self, parent):
+    def create_rigging_setup_tab(self, parent):
         sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Skeleton")))
+        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Setup")))
         display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=display_frame)
         self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
+        setup_frame = cmds.frameLayout(label="Setup", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=setup_frame)
+        # self.create_button_row(["Advanced Skeleton"], [self.run_advanced_skeleton])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
         select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=select_frame)
-
-    def create_rigging_skin_tab(self, parent):
-        sub_tab = cmds.columnLayout(adjustableColumn=True, parent=parent)
-        cmds.tabLayout(parent, edit=True, tabLabel=((sub_tab, "Skin")))
-        skin_frame = cmds.frameLayout(label="Skin", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=skin_frame)
-        constraint_frame = cmds.frameLayout(label="Constraint", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=constraint_frame)
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
 
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Animation tab
@@ -475,7 +428,8 @@ class MetaBox:
     # Display
     def run_xray(self, *args):
         try:
-            Xray.Xray()
+            result = cmds.modelEditor('modelPanel4', q=True, xr=True)
+            cmds.modelEditor('modelPanel4', e=True, xr=not result)
         except Exception as e:
             error_message = f"Error occurred while running Xray: {e}"
             cmds.warning(error_message)
@@ -483,12 +437,25 @@ class MetaBox:
     
     def run_joint_xray(self, *args):
         try:
-            XrayJoint.XrayJoint()
+            result = cmds.modelEditor('modelPanel4', q=True, jx=True)
+            cmds.modelEditor('modelPanel4', e=True, jx=not result)
         except Exception as e:
             error_message = f"Error occurred while running XrayJoint: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
 
+
+    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Rigging Functions
+    # ****************************************************************************************************************
+    # def run_advanced_skeleton(self, *args):
+    #     try:
+    #         launch_advanced_skeleton()
+    #     except Exception as e:
+    #         error_message = f"Error occurred while running Advanced Skeleton: {e}"
+    #         cmds.warning(error_message)
+    #         cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+    #         print(f"Detailed error: {traceback.format_exc()}")
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Metahuman Functions
     # ****************************************************************************************************************
