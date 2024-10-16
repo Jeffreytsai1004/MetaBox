@@ -33,9 +33,9 @@ from Modeling.UV import UVSetEditor
 from Metahuman.Custom import BodyPrep
 from Metahuman.Custom import BatchImport
 from Metahuman.Blendshape import MorphShape
+from Animation import AdvancedSkeleton
 import sys
 import os
-# from Animation.AdvancedSkeleton.AdvancedSkeleton5 import launch as launch_advanced_skeleton
 
 class MetaBox:
     def __init__(self):
@@ -117,6 +117,12 @@ class MetaBox:
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close sub_tab
 
+        display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
+        cmds.columnLayout(adjustableColumn=True, parent=display_frame)
+        self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
+        cmds.setParent('..')  # Close columnLayout
+        cmds.setParent('..')  # Close frameLayout
+
         manage_frame = cmds.frameLayout(label="Manage", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=manage_frame)
         self.create_button_row(["Rename", "Batch Import"], [self.run_rename, self.run_batch_import])
@@ -150,12 +156,6 @@ class MetaBox:
         uv_frame = cmds.frameLayout(label="UV", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=uv_frame)
         self.create_button_row(["UV Set Editor"], [self.run_uv_set_editor])
-        cmds.setParent('..')  # Close columnLayout
-        cmds.setParent('..')  # Close frameLayout
-
-        display_frame = cmds.frameLayout(label="Display", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
-        cmds.columnLayout(adjustableColumn=True, parent=display_frame)
-        self.create_button_row(["Xray", "Xray Joint"], [self.run_xray, self.run_joint_xray])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         cmds.setParent('..')  # Close sub_tab
@@ -216,7 +216,7 @@ class MetaBox:
         cmds.setParent('..')  # Close frameLayout
         setup_frame = cmds.frameLayout(label="Setup", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=setup_frame)
-        # self.create_button_row(["Advanced Skeleton"], [self.run_advanced_skeleton])
+        self.create_button_row(["Advanced Skeleton"], [self.run_advanced_skeleton])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         select_frame = cmds.frameLayout(label="Select", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
@@ -448,14 +448,26 @@ class MetaBox:
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Rigging Functions
     # ****************************************************************************************************************
-    # def run_advanced_skeleton(self, *args):
-    #     try:
-    #         launch_advanced_skeleton()
-    #     except Exception as e:
-    #         error_message = f"Error occurred while running Advanced Skeleton: {e}"
-    #         cmds.warning(error_message)
-    #         cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
-    #         print(f"Detailed error: {traceback.format_exc()}")
+    def run_advanced_skeleton(self, *args):
+        try:
+            adv_sub_path = [
+                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton'),
+                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'AdvancedSkeleton5Files')
+            ]
+            for path in adv_sub_path:
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+            # If advancedSkeleton5Files does not exist, run the adv_install.py and the launch.py, else run the adv_launch.py directly
+            if not os.path.exists(os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'adv_install.py')):
+                from Animation.AdvancedSkeleton import adv_install
+                adv_install.install()
+            from Animation.AdvancedSkeleton import adv_launch
+            adv_launch.launch()
+        except Exception as e:
+            error_message = f"Error occurred while running Advanced Skeleton: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+            print(f"Detailed error: {traceback.format_exc()}")
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     # Metahuman Functions
     # ****************************************************************************************************************

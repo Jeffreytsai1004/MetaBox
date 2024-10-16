@@ -15,3 +15,9 @@
 [18:04:19,264 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [18:04:19,265 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 18:04:19                 
 [18:04:20,032 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[18:11:08,557 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[18:11:08,558 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 18:11:08                 
+[18:11:09,340 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[20:45:08,653 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[20:45:08,653 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 20:45:08                 
+[20:45:09,434 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

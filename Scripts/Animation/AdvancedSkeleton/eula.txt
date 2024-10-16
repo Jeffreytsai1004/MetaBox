@@ -1,0 +1,31 @@
+AdvancedSkeleton 最终用户许可协议（EULA）
+
+这是您与 AnimationStudios 之间关于您使用 AdvancedSkeleton（“软件”）的法律协议。
+
+1) AdvancedSkeleton 是免费软件，但仅供私人非商业用途（即在家中使用）。
+   如果您打算在商业场所或用于商业目的使用 AdvancedSkeleton，请购买许可。
+   请通过电子邮件联系 Animationstudios 了解价格、折扣和付款方式。
+
+2) 如果您希望在任何商业项目中使用 AdvancedSkeleton 的示例角色，需获得 AdvancedSkeleton 许可。
+   对于非商业项目，如学生作业，请在制作人员名单中添加“由 AdvancedSkeleton 提供角色”，
+   如果该项目将在网上观看，请通过电子邮件提供链接。
+
+3) AdvancedSkeleton 软件由 AnimationStudios 拥有，并受版权法和国际条约规定保护。
+   因此，您必须像对待其他受版权保护的材料一样对待该软件。
+
+4) 未经 AnimationStudios 事先书面同意，您不得分发、出租、转让或以其他方式向他人提供软件或文档或其副本，
+   除非在本许可证中明确允许。在授权转让的情况下，受让方必须同意遵守本许可协议的条款和条件。
+
+5) 您不得移除软件或文档上的任何专有通知、标签、商标。您不得修改、反编译、反汇编或逆向工程软件。
+
+6) 有限保修：AdvancedSkeleton 工具、角色和文档均按其实际情况提供，没有任何关于其性能、适销性或特定用途适用性的保证。
+   执照持有人对软件的质量和性能承担全部风险。
+   在任何情况下，AnimationStudios 或任何参与此软件创建、开发、生产或交付的人员均不对因使用此软件而导致的任何直接、附带或间接损害承担责任，
+   例如但不限于因使用此软件而导致的预期利润、利益、使用或数据丧失，或因违反保证而产生的任何损害。
+
+版权所有（C） 2021 年由 AnimationStudios，挪威奥斯陆。
+
+网址：http://www.animationstudios.com.au
+电子邮件：support@animationstudios.com.au
+
+保留所有权利。
