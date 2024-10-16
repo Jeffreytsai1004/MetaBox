@@ -3911,9 +3911,20 @@ def updateMainUI(clearLayerCollections=False):
 
     # --- Change Layer number ---
     num = 20
-    checkbox = WIDGETS['layerRowsActionGroup'].checkedAction().objName
-    checkboxNum = re.findall(r'\d+', checkbox)[0]
-    num = int(checkboxNum) * 10
+    action = WIDGETS['layerRowsActionGroup'].checkedAction()
+    if action is not None:
+        checkbox = action.objName
+    else:
+        print("Warning: No action is checked in layerRowsActionGroup.")
+        checkbox = None
+
+    if checkbox is not None:
+        checkboxNum = re.findall(r'\d+', checkbox)[0]
+        num = int(checkboxNum) * 10
+    else:
+        print("Warning: checkbox is None, cannot extract number.")
+        return
+
     active = set(range(int(checkboxNum)))
     allLayers = set(range(8))
     for a in active:

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import maya.cmds as cmds # type: ignore
+import maya.cmds as cmds
 import math
 import re
-import maya.mel as mel # type: ignore
-import maya.OpenMaya as OpenMaya # type: ignore
+import maya.mel as mel
+import maya.OpenMaya as OpenMaya
 
 def run():
     cmd = 'source dagMenuProc;'
@@ -33,10 +33,10 @@ def run():
     cmds.columnLayout(adj=1)
     cmds.rowColumnLayout(nc=2, cw=[(1, 270), (2, 20)] )
     cmds.floatSliderGrp('rInsetV', en = 0, cw3=[60,40,0], label='Offset   ', field=True,v=0.01, min= -1, max= 1, step=0.001)
-    cmds.button('rInsetVMax',l='+', c='slipderMax("rInsetV")', en = 1,bgc=[0.28,0.28,0.28])
+    cmds.button('rInsetVMax',l='+', c=lambda *args: slipderMax("rInsetV"), en = 1,bgc=[0.28,0.28,0.28])
     cmds.floatSliderGrp('rBevelRound', en = 0, cw3=[60,40,0], label='Round   ', field=True, v=0 , min=-1, max= 1 ,step=0.001)
-    cmds.button('rBevelRoundMax',l='+', c='slipderMax("rBevelRound")', en = 1,bgc=[0.28,0.28,0.28])
-    cmds.floatSliderGrp('rBevelAngle', en = 0, cw3=[60,40,0], cc='rBevelAngleUpdate()', dc='rBevelAngleUpdate()', label='Angle   ', field=True, v=80, min=60, max= 90, fmn = 0, fmx = 180, step=0.1)
+    cmds.button('rBevelRoundMax',l='+', c=lambda *args: slipderMax("rBevelRound"), en = 1,bgc=[0.28,0.28,0.28])
+    cmds.floatSliderGrp('rBevelAngle', en = 0, cw3=[60,40,0], cc=lambda *args: rBevelAngleUpdate(), dc=lambda *args: rBevelAngleUpdate(), label='Angle   ', field=True, v=80, min=60, max= 90, fmn = 0, fmx = 180, step=0.1)
     #cmds.button('rBevelLengthMax',l='+',  c='slipderMax("rBevelLength")', en = 1,bgc=[0.28,0.28,0.28])
     cmds.setParent( '..' )
     cmds.setParent( '..' )
@@ -44,11 +44,11 @@ def run():
     cmds.text(l='')
     cmds.rowColumnLayout(nc=6, cw=[(1, 10),(2, 60),(3, 60),(4, 60),(5, 60),(6, 60)] )
     cmds.text(l='')
-    cmds.button('InsetButton',          l='Inset',  en=1, c='roundInsetRun()', bgc=[0.18,0.48,0.18])
-    cmds.button('reFineButton',         l='Refine', en=0, c='reFineSwtich()', bgc=[0.18,0.18,0.18])
-    cmds.button('InnerCornerEvenButton',l='Even',   en=0, c='evenInnerCorner()', bgc=[0.18,0.18,0.18])
-    cmds.button('InsetRemoveButton',    l='Remove', en=0, c='roundInsetRemove()',bgc=[0.18,0.18,0.18])
-    cmds.button('InsetCleaneButton',    l='Done',   en=1, c='roundInsetClean()', bgc=[0.48,0.18,0.18])
+    cmds.button('InsetButton',          l='Inset',  en=1, c=lambda *args: roundInsetRun(), bgc=[0.18,0.48,0.18])
+    cmds.button('reFineButton',         l='Refine', en=0, c=lambda *args: reFineSwtich(), bgc=[0.18,0.18,0.18])
+    cmds.button('InnerCornerEvenButton',l='Even',   en=0, c=lambda *args: evenInnerCorner(), bgc=[0.18,0.18,0.18])
+    cmds.button('InsetRemoveButton',    l='Remove', en=0, c=lambda *args: roundInsetRemove(),bgc=[0.18,0.18,0.18])
+    cmds.button('InsetCleaneButton',    l='Done',   en=1, c=lambda *args: roundInsetClean(), bgc=[0.48,0.18,0.18])
     cmds.setParent( '..' )
     cmds.text(l='')
     cmds.showWindow(RoundInsetUI)
@@ -675,7 +675,7 @@ def reFineSwtich():
     cmds.floatSliderGrp('rBevelAngle',e=1, en = 1)
     cmds.floatSliderGrp('rInsetV',e=1, en = 0)
     cmds.button('InsetButton',            e=1, en=0, bgc=[0.18,0.18,0.18])
-    cmds.button('reFineButton',l='update',e=1, en=1, bgc=[0.18,0.48,0.18], c='reFineMySelect()')
+    cmds.button('reFineButton',l='update',e=1, en=1, bgc=[0.18,0.48,0.18], c=lambda *args: reFineMySelect())
     cmds.button('InnerCornerEvenButton',  e=1, en=0, bgc=[0.18,0.18,0.18])
     cmds.button('InsetRemoveButton',      e=1, en=0, bgc=[0.18,0.18,0.18])
     cmds.button('InsetCleaneButton',      e=1, en=1, bgc=[0.48,0.18,0.18])
@@ -807,7 +807,7 @@ def reFineMySelect():
     cmds.select(insetFace,add=1)
     cmds.setToolTo('selectSuperContext')
     cmds.button('InsetButton',e=1, en = 0, bgc=[0.18,0.18,0.18])
-    cmds.button('reFineButton',l='Refine',e=1, en = 1,c='reFineSwtich()',bgc=[0.28,0.18,0.38])
+    cmds.button('reFineButton',l='Refine',e=1, en = 1,c=lambda *args: reFineSwtich(),bgc=[0.28,0.18,0.38])
     cmds.button('InsetRemoveButton',e=1, en = 1,bgc=[0.28,0.18,0.38])
     cmds.button('InsetCleaneButton',e=1, en = 1)
     cmds.button('InnerCornerEvenButton',e=1, en = 1,bgc=[0.28,0.18,0.38])
