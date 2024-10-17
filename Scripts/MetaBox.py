@@ -137,7 +137,7 @@ class MetaBox:
         tools_frame = cmds.frameLayout(label="Tools", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
-        self.create_button_row(["ModIt"], [self.run_modit])
+        self.create_button_row(["ModIt", "PlugIt"], [self.run_modit, self.run_plugit])
         self.create_button_row(["Extra Curve","GS Curve Tools"], [self.run_extra_curve,self.run_gs_curve_tools])
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
@@ -366,26 +366,51 @@ class MetaBox:
         try:
             modit_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'ModIt')).replace('\\', '/')
             modlit_sub_paths = [
-                os.path.join(modit_path, 'script'),
-                os.path.join(modit_path, 'script', 'Icons'),
-                os.path.join(modit_path, 'script', 'Mesh'),
-                os.path.join(modit_path, 'script', 'Preferences'),
-                os.path.join(modit_path, 'script', 'Shaders'),
-                os.path.join(modit_path, 'script', 'Tools')
+                os.path.join(modit_path, 'Classes'),
+                os.path.join(modit_path, 'Icons'),
+                os.path.join(modit_path, 'Mesh'),
+                os.path.join(modit_path, 'Preferences'),
+                os.path.join(modit_path, 'Shaders'),
+                os.path.join(modit_path, 'Tools')
             ]
             for path in modlit_sub_paths:
                 if path not in sys.path:
                     sys.path.append(path)
             # Add modit_icon_paths to MAYA_PLUG_IN_PATH
             os.environ['MAYA_PLUG_IN_PATH'] = os.pathsep.join(modlit_sub_paths)
-            ModIt_LAUNCH_PATH = os.path.join(modit_path, 'script', 'ModIt_LAUNCH.py').replace('\\', '/')
-            if ModIt_LAUNCH_PATH not in sys.path:
-                sys.path.append(os.path.dirname(ModIt_LAUNCH_PATH))
+            modit_ui_path = os.path.join(modit_path, 'ModIt_UI.py').replace('\\', '/')
+            if modit_ui_path not in sys.path:
+                sys.path.append(os.path.dirname(modit_ui_path))
             from Modeling.Edit.ModIt import ModIt_UI
             importlib.reload(ModIt_UI)
             ModIt_UI
         except Exception as e:
             error_message = f"Error occurred while running ModIt: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
+    def run_plugit(self, *args):
+        try:
+            PlugIt_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'PlugIt')).replace('\\', '/')
+            plugIt_sub_paths = [
+                os.path.join(PlugIt_Path, 'Icons'),
+                os.path.join(PlugIt_Path, 'LIBRARY'),
+                os.path.join(PlugIt_Path, 'PlugIt_Creation'),
+                os.path.join(PlugIt_Path, 'Preferences'),
+                os.path.join(PlugIt_Path, 'Tools'),
+            ]
+            for path in plugIt_sub_paths:
+                if path not in sys.path:
+                    sys.path.append(path)
+            os.environ['MAYA_PLUG_IN_PATH'] = os.pathsep.join(plugIt_sub_paths)
+            plugIt_ui_path = os.path.join(PlugIt_Path, 'PlugIt_UI.py').replace('\\', '/')
+            if plugIt_ui_path not in sys.path:
+                sys.path.append(os.path.dirname(plugIt_ui_path))
+            from Modeling.Edit.PlugIt import PlugIt_UI
+            importlib.reload(PlugIt_UI)
+            PlugIt_UI.showUI()
+        except Exception as e:
+            error_message = f"Error occurred while running PlugIt: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 

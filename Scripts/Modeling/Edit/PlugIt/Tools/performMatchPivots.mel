@@ -1,0 +1,128 @@
+// ===========================================================================
+// Copyright 2022 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+proc setOptionVars(int $forceFactorySettings)
+{
+	optionVar -init $forceFactorySettings -category "Modify.Match Pivots"
+		-iv matchRotPivot 1
+		-iv matchScalePivot 1
+		-iv matchPivotOrient 1 // Default is off (for backcomp)
+		;
+}
+
+global proc performMatchPivotsSetup(string $parent, int $forceFactorySettings)
+{
+	setOptionVars ($forceFactorySettings);
+	setParent $parent;
+
+	int $rot   = `optionVar -q matchRotPivot`;
+	int $scale = `optionVar -q matchScalePivot`;
+	int $ori   = `optionVar -q matchPivotOrient`;
+	checkBoxGrp -e -v1 $rot -v2 $scale -v3 $ori matchPivotsCheckBoxGrp;
+}
+
+global proc performMatchPivotsCallback(string $parent, int $doIt)
+{
+	setParent $parent;
+
+	optionVar -iv matchRotPivot `checkBoxGrp -q -v1 matchPivotsCheckBoxGrp`;
+	optionVar -iv matchScalePivot `checkBoxGrp -q -v2 matchPivotsCheckBoxGrp`;
+	optionVar -iv matchPivotOrient `checkBoxGrp -q -v3 matchPivotsCheckBoxGrp`;
+
+	if ($doIt) {
+		performMatchPivots 0; 
+		addToRecentCommandQueue "performMatchPivots 0" "MatchPivots";
+	}
+}
+
+proc performMatchPivotsOptions()
+{
+	string $commandName = "performMatchPivots";
+	string $callback = ($commandName + "Callback");
+	string $setup = ($commandName + "Setup");
+
+	string $layout = getOptionBox();
+	setParent $layout;
+	setUITemplate -pushTemplate DefaultTemplate;
+	waitCursor -state 1;
+	tabLayout -tabsVisible 0 -scrollable 1;
+	
+	string $parent = `columnLayout -adjustableColumn 1`;
+
+	checkBoxGrp  -label (uiRes("m_performMatchPivots.kPivots"))
+		-ncb 3 -vertical
+		-label1 (uiRes("m_performMatchPivots.kRotate"))
+		-label2 (uiRes("m_performMatchPivots.kScale"))
+		-label3 (uiRes("m_performMatchPivots.kOrient"))
+		matchPivotsCheckBoxGrp;
+
+	waitCursor -state 0;
+	setUITemplate -popTemplate;
+
+	button -edit
+		-label `runTimeCommand -q -label MatchPivots`
+		-command ($callback + " " + $parent + " " + 1)
+		`getOptionBoxApplyBtn`;
+
+	button -edit 
+		-command ($callback + " " + $parent + " " + 0 + "; hideOptionBox")
+		`getOptionBoxSaveBtn`;
+
+	button -edit
+		-command ($setup + " " + $parent + " " + 1)
+		`getOptionBoxResetBtn`;
+
+	setOptionBoxTitle `runTimeCommand -q -ann MatchPivotsOptions`;
+	setOptionBoxHelpTag("MatchPivots");
+
+	eval (($setup + " " + $parent + " " + 0));
+	showOptionBox();
+}
+
+proc string assembleCmd()
+{
+	setOptionVars(false);
+	int $rot   = 1;
+	int $scale = 1;
+	int $ori   = 1;
+
+	string $cmd = "";
+	if ($rot || $scale) {
+		$cmd = "matchTransform";
+		if ($rot && $scale) {
+			$cmd += " -piv";
+		} else if ($scale) {
+			$cmd += " -sp";
+		} else /*if ($rot)*/ {
+			$cmd += " -rp";
+		}
+	}
+	if ($ori) {
+		if ($cmd != "") $cmd += "; ";
+		$cmd += "matchPivotOrient";
+	}
+	return $cmd;
+}
+
+global proc string performMatchPivots(int $action)
+{
+	string $cmd = "";
+	switch ($action) {
+	case 0: // Execute command
+		$cmd = `assembleCmd`;
+		if ($cmd != "") eval($cmd);
+		break;
+	case 1: // Options
+		performMatchPivotsOptions;
+		break;
+	case 2: // Command string
+		$cmd = `assembleCmd`;
+		break;
+	}
+	return $cmd;
+}
+performMatchPivots(0);

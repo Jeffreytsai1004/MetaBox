@@ -1,0 +1,85 @@
+//This is a paid script pack and is not free to use. Please purchase a copy and download the script pack here https://gumroad.com/malcolm341
+
+//Thanks very much for your support! Each purchase helps maintain the ad free Youtube channel found here https://www.youtube.com/malcolm341
+
+
+//Error if any xforms selected
+string $checkForXformsSelected[] = `ls -sl -exactType transform`;
+$sizecheckForXformsSelected = `size $checkForXformsSelected`;
+if ($sizecheckForXformsSelected >= 1)
+{
+	error "Please select faces only";
+}
+
+$selected_Faces = `ls -sl`;
+toggleSelMode;
+toggleSelMode;
+selectMode -object;
+$errorSelectedObjs = `ls -sl`;
+
+//Error if faces selected on more than one object
+$countObjs = `ls -sl`;
+$size_countObjs = `size $countObjs`;
+if ($size_countObjs > 1)
+{
+	select $selected_Faces;
+	select -add $errorSelectedObjs;
+	toggleSelMode;
+	error "Please select faces on one object only";
+}
+
+
+$recordName_1 = `ls -sl`;
+selectMode -object;
+
+DeleteHistory;
+$selected_Obj_1 = `ls -sl`;
+duplicate -rr;
+$selected_Obj_2 = `ls -sl`;
+
+select $selected_Obj_1;
+changeSelectMode -component;
+//CenterPivot;
+//makeIdentity -apply true -t 1 -r 1 -s 1 -n 0 -pn 1;
+select $selected_Faces;
+
+
+//polyChipOff;
+//rename "polyChipOff1" "m341_CleanDupeFace";
+InvertSelection;
+Delete;
+changeSelectMode -object;
+
+select $selected_Obj_1;
+rename duplicated_01;
+CenterPivot;
+makeIdentity -apply true -t 1 -r 1 -s 1 -n 0 -pn 1;
+
+$recordObj = `ls -sl`;
+select $selected_Obj_2;
+rename $recordName_1;
+select $recordObj;
+//select -add m341_CleanDupeFace;
+
+//Check if object had children and run special clean up
+$childrenObj = `ls -sl`;
+string $checkForChildren[] = `listRelatives -fullPath -type transform`;
+$size_checkForChildren = `size $checkForChildren`;
+if ($size_checkForChildren > 0)
+{
+	select $checkForChildren;
+	delete;
+	select $childrenObj;
+	CenterPivot;
+	makeIdentity -apply true -t 1 -r 1 -s 1 -n 0 -pn 1;
+}
+
+
+
+
+
+
+
+
+
+
