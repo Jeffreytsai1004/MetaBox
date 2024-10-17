@@ -1,0 +1,33 @@
+from maya import cmds as mc
+import maya.mel as mel
+import maya.mel as mel
+
+##____BEVEL VERTEX______________________________________
+
+###_________Selection
+VertexInitSelection = mc.ls(sl= True)
+mc.ConvertSelectionToFaces()
+mc.ConvertSelectionToContainedEdges()
+BorderAll = mc.sets(n = "Border_Set")
+
+mc.select(VertexInitSelection)
+mc.ConvertSelectionToEdges()
+BorderToVerif = mc.sets(n = "ToVerif_Set")
+
+# Return the union of two sets
+Verif = mc.sets( "Border_Set", sub="ToVerif_Set" )
+mc.select(Verif)
+EdgeSel = mc.ls(sl= True)
+
+mc.delete("Border_Set")
+mc.delete("ToVerif_Set")
+
+mc.polyExtrudeEdge( EdgeSel, kft=True, pvx= 0, pvy= 0, pvz= 0, divisions= 1, twist= 0, taper= 1, offset= 0, thickness= 0)
+
+mc.ConvertSelectionToFaces()
+extrudeFaces = mc.ls(sl= True)
+#mc.ToggleVisibilityAndKeepSelection()
+mc.ConvertSelectionToContainedEdges()
+edgeToBevel = mc.ls(sl= True)
+
+mel.eval('dR_DoCmd("bevelPress")')

@@ -83,3 +83,12 @@ Traceback (most recent call last):
   File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\ui.py", line 1456, in updateColors
     eval(mc.optionVar(q="GSCT_UVEditorBGColor")),
 TypeError: eval() arg 1 must be a string, bytes or code object
+[11:31:58,097 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[11:31:58,097 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 11:31:58                 
+[11:31:58,873 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[15:56:12,030 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[15:56:12,030 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 15:56:12                 
+[15:56:12,833 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[19:22:20,312 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[19:22:20,312 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 19:22:20                 
+[19:22:21,115 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

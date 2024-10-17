@@ -1,0 +1,74 @@
+$maCleanCombineAllSelected = `ls -sl`;
+$maCleanCombineLastSelected = `ls -sl -tl 1`;
+select $maCleanCombineLastSelected;
+string $maCheckIfObjectInDisplayLayer[] = `listConnections -type "displayLayer"`;
+$maObjectsDisplayLayer = `listConnections -type "displayLayer"`;
+	if(size(listRelatives("-parent")))
+	{
+		if (size($maCheckIfObjectInDisplayLayer) <1)
+		{
+			select $maCleanCombineAllSelected;
+			pickWalk -d up;
+			$maTopGroupName = `ls -sl -tl 1`;
+			select $maCleanCombineAllSelected;
+			convertInstanceToObject;
+			select $maCleanCombineAllSelected;
+			polyUnite -ch 1 -mergeUVSets 1 -objectPivot -name ma_clean_combine_unique_name_1001;
+			$maCombinedName = `ls -sl`;
+			parent $maCombinedName $maTopGroupName;
+			DeleteHistory;
+			rename $maCleanCombineLastSelected;
+			MoveTool;
+			
+		}
+		
+		else
+		{
+			select $maCleanCombineAllSelected;
+			pickWalk -d up;
+			$maTopGroupName = `ls -sl -tl 1`;
+			select $maCleanCombineAllSelected;
+			convertInstanceToObject;
+			select $maCleanCombineAllSelected;
+			polyUnite -ch 1 -mergeUVSets 1 -objectPivot -name ma_clean_combine_unique_name_1001;
+			$maCombinedName = `ls -sl`;
+			parent $maCombinedName $maTopGroupName;
+			DeleteHistory;
+			rename $maCleanCombineLastSelected;
+			MoveTool;
+			layerEditorAddObjects "$maObjectsDisplayLayer";
+			
+		}
+		
+	}
+	
+	else
+	{
+		if (size($maCheckIfObjectInDisplayLayer) <1)
+		{
+			select $maCleanCombineAllSelected;
+			$maCleanCombineLastSelected = `ls -sl -tl 1`;
+			select $maCleanCombineAllSelected;
+			convertInstanceToObject;
+			select $maCleanCombineAllSelected;
+			polyUnite -ch 0 -mergeUVSets 1 -objectPivot -name ma_clean_combine_1001;
+			DeleteHistory;
+			rename $maCleanCombineLastSelected;
+			MoveTool;
+			
+		}
+		
+		else
+		{
+			select 	$maCleanCombineAllSelected;
+			convertInstanceToObject;
+			select $maCleanCombineAllSelected;
+			polyUnite -ch 0 -mergeUVSets 1 -objectPivot -name ma_clean_combine_1001;
+			DeleteHistory;
+			rename $maCleanCombineLastSelected;
+			MoveTool;
+			layerEditorAddObjects "$maObjectsDisplayLayer";
+			
+		}
+	}
+

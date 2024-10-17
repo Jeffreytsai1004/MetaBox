@@ -3911,11 +3911,13 @@ def updateMainUI(clearLayerCollections=False):
 
     # --- Change Layer number ---
     num = 20
-    action = WIDGETS['layerRowsActionGroup'].checkedAction()
-    if action is not None:
-        checkbox = action.objName
+    if 'layerRowsActionGroup' in WIDGETS:
+        action = WIDGETS['layerRowsActionGroup'].checkedAction()
+        if action is not None:
+            checkbox = action.objName
+            num = int(checkbox.replace('layerRows', ''))
     else:
-        print("Warning: No action is checked in layerRowsActionGroup.")
+        print("Warning: 'layerRowsActionGroup' not found in WIDGETS")
         checkbox = None
 
     if checkbox is not None:
@@ -4021,7 +4023,7 @@ def onSceneOpenedUpdateLayerCount():
         layersIDs.append(layerID)
     maxLayerID = max(layersIDs)
     # Check currently active layer count on the interface
-    checkbox = WIDGETS['layerRowsActionGroup'].checkedAction().objName
+    checkbox = WIDGETS['layerRowsActionGroup'] = layerRowsActionGroup
     checkboxNum = re.findall(r'\d+', checkbox)[0]
     activeID = int(checkboxNum) * 10
     # Check the required layer count

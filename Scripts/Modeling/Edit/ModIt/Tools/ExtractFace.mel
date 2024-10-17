@@ -1,0 +1,55 @@
+global proc detachSeparate() 
+{
+string $nameSplitSkip[];
+string $faceNum[];
+string $temp[];
+string $newObj[];
+string $newFaceSel[];
+
+string $origFaceSel[] = `filterExpand -ex 1 -sm 34`;
+string $origObjShape[] = `listRelatives -p $origFaceSel`;
+string $origObj[] = `listRelatives -p $origObjShape`;
+//Get my selected face numbers into $faceNum
+for ($step = 0, $skip = 0; $step < size($origFaceSel); $step++, $skip++)
+{
+tokenize $origFaceSel[$step] "." $temp;
+$nameSplitSkip[$skip] = $temp[0];
+$skip++;
+$nameSplitSkip[$skip] = $temp[1];
+clear $temp;
+}
+for ($step2 = 0, $skip2 = 1; $step2 < (size($nameSplitSkip)/2); $step2++, $skip2 = $skip2 + 2)
+{
+$faceNum[$step2] = $nameSplitSkip[$skip2]; //every other value 
+}
+//Dupe original object
+$newObj = `duplicate -un $origObj[0]`;
+delete -ch $newObj[0];
+string $newAllFaces[] = `ls ($newObj[0] + ".f[*]")`;
+//Make new array for face selection on $newObj
+for ($step3 = 0; $step3 < size($faceNum); $step3++)
+{
+$newFaceSel[$step3] = ($newObj[0] + "." + $faceNum[$step3]);
+}
+//Delete original face selection
+delete $origFaceSel;
+//Delete inverse face selection on duplicate
+select -r $newAllFaces;
+select -d $newFaceSel;
+delete;
+select -r $newObj[0];
+CenterPivot;
+}
+detachSeparate;
+dR_movePress;
+dR_DoCmd("movePress");
+getPanel -wf;
+// Result: modelPanel4 // 
+dR_buildTransformMM("move");
+dR_moveRelease;
+dR_DoCmd("moveRelease");
+getPanel -wf;
+// Result: modelPanel4 // 
+MarkingMenuPopDown;
+if (`popupMenu -exists tempMM`) { deleteUI tempMM; }if (`popupMenu -exists tempMM2`) { deleteUI tempMM2; };
+
