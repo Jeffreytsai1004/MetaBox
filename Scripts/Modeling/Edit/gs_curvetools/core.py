@@ -1193,7 +1193,7 @@ class Create:
         {2}.rx = {1}.Orientation + {1}.rx;
         {0}.rotation = 360 * (1 - {1}.Magnitude);
         {0}.twistRotation = 720 * {1}.Magnitude;
-        '''.format(self.curveWarp, self.pathCurve, self.lattice[1])
+        '''.format(self.curveWarp, self.pathCurve, self.profileInst)
         self.magnExpr = mc.expression(ae=0, s=ex, n='twistOrienCalc#')
 
         self.addRefine(True)
@@ -3915,18 +3915,14 @@ def updateMainUI(clearLayerCollections=False):
         action = WIDGETS['layerRowsActionGroup'].checkedAction()
         if action is not None:
             checkbox = action.objName
-            num = int(checkbox.replace('layerRows', ''))
+            checkboxNum = re.findall(r'\d+', checkbox)[0]
+            num = int(checkboxNum) * 10
+        else:
+            print("Warning: 'layerRowsActionGroup' checkedAction is None.")
+            return
     else:
         print("Warning: 'layerRowsActionGroup' not found in WIDGETS")
-        checkbox = None
-
-    if checkbox is not None:
-        checkboxNum = re.findall(r'\d+', checkbox)[0]
-        num = int(checkboxNum) * 10
-    else:
-        print("Warning: checkbox is None, cannot extract number.")
         return
-
     active = set(range(int(checkboxNum)))
     allLayers = set(range(8))
     for a in active:
@@ -4022,10 +4018,21 @@ def onSceneOpenedUpdateLayerCount():
             continue
         layersIDs.append(layerID)
     maxLayerID = max(layersIDs)
+
     # Check currently active layer count on the interface
-    checkbox = WIDGETS['layerRowsActionGroup'] = layerRowsActionGroup
-    checkboxNum = re.findall(r'\d+', checkbox)[0]
-    activeID = int(checkboxNum) * 10
+    if 'layerRowsActionGroup' in WIDGETS:
+        action = WIDGETS['layerRowsActionGroup'].checkedAction()
+        if action is not None:
+            checkbox = action.objName
+            checkboxNum = re.findall(r'\d+', checkbox)[0]
+            activeID = int(checkboxNum) * 10
+        else:
+            print("Warning: 'layerRowsActionGroup' checkedAction is None.")
+            return
+    else:
+        print("Warning: 'layerRowsActionGroup' not found in WIDGETS")
+        return
+
     # Check the required layer count
     availableIDs = [20, 30, 40, 60, 80]
     availableIDs.append(maxLayerID + 1)
