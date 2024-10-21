@@ -8,9 +8,10 @@ import os
 import importlib
 import traceback
 
-current_dir = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
-sys.path.append(current_dir)
-print(f"Current directory: {current_dir}")
+metabox_path = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
+sys.path.append(metabox_path)
+print(f"Current directory: {metabox_path}")
+
 
 from Modeling.Manage import Rename
 from Modeling.Edit import SpeedCut
@@ -138,12 +139,16 @@ class MetaBox:
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
         self.create_button_row(["ModIt", "PlugIt"], [self.run_modit, self.run_plugit])
+<<<<<<< HEAD
         self.create_button_row(["Extra Curve","GS Curve Tools"], [self.run_extra_curve,self.run_gs_curve_tools])
+=======
+>>>>>>> 7863e4b (Updated Grooms Tools)
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
         self.create_button_row(["Instant Drag", "Un Bevel"], [ self.run_instant_drag, self.run_unbevel])
-        self.create_button_row(["Align Edge"], [self.run_align_edge])
+        self.create_button_row(["Align Edge", "Extra Curve"], [self.run_align_edge, self.run_extra_curve])
+        self.create_button_row(["GS Curve Tools", "Groomer`s Tool"], [self.run_gs_curve_tools, self.run_xgtools])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         uv_frame = cmds.frameLayout(label="UV", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
@@ -285,7 +290,7 @@ class MetaBox:
     # Manage
     def run_rename(self, *args):
         try:
-            Rename_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Manage', 'Rename.py')).replace('\\', '/')
+            Rename_Path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Manage', 'Rename.py')).replace('\\', '/')
             sys.path.append(Rename_Path)
             Rename.UI()
         except Exception as e:
@@ -304,7 +309,7 @@ class MetaBox:
     # Edit
     def run_crease_plus(self, *args):
         try:
-            crease_plus_dir = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'CreasePlus')).replace('\\', '/')
+            crease_plus_dir = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Edit', 'CreasePlus')).replace('\\', '/')
             print(f"CreasePlus directory: {crease_plus_dir}")
             if crease_plus_dir not in sys.path:
                 sys.path.append(crease_plus_dir)
@@ -327,7 +332,7 @@ class MetaBox:
 
     def run_gs_curve_tools(self, *args):
         try:
-            gs_curvetools_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            gs_curvetools_path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
             if gs_curvetools_path not in sys.path:
                 sys.path.insert(0, gs_curvetools_path)
 
@@ -364,7 +369,7 @@ class MetaBox:
 
     def run_modit(self, *args):
         try:
-            modit_path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'ModIt')).replace('\\', '/')
+            modit_path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Edit', 'ModIt')).replace('\\', '/')
             modlit_sub_paths = [
                 os.path.join(modit_path, 'Classes'),
                 os.path.join(modit_path, 'Icons'),
@@ -391,7 +396,11 @@ class MetaBox:
 
     def run_plugit(self, *args):
         try:
+<<<<<<< HEAD
             PlugIt_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'PlugIt')).replace('\\', '/')
+=======
+            PlugIt_Path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Edit', 'PlugIt')).replace('\\', '/')
+>>>>>>> 7863e4b (Updated Grooms Tools)
             plugIt_sub_paths = [
                 os.path.join(PlugIt_Path, 'Icons'),
                 os.path.join(PlugIt_Path, 'LIBRARY'),
@@ -414,6 +423,49 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
+<<<<<<< HEAD
+=======
+    def run_xgtools(self, *args):
+        try:
+
+            import maya.cmds as cmds
+            print("Successfully imported maya.cmds")
+            
+            import sys
+            import os
+            import traceback
+
+            xgtc_parent_dir = os.path.join(metabox_path, 'Modeling', 'Edit')
+            if xgtc_parent_dir not in sys.path:
+                sys.path.insert(0, xgtc_parent_dir)
+
+            xgtc_path = os.path.join(xgtc_parent_dir, 'xgtc').replace('\\', '/')
+            if xgtc_path not in sys.path:
+                sys.path.insert(0, xgtc_path)
+
+            xgtc_scripts_path = os.path.join(xgtc_path, 'scripts').replace('\\', '/')
+            if xgtc_scripts_path not in sys.path:
+                sys.path.insert(0, xgtc_scripts_path)
+
+            xgtc_icons_path = os.path.join(xgtc_path, 'icons').replace('\\', '/')
+            if xgtc_icons_path not in sys.path:
+                sys.path.insert(0, xgtc_icons_path)
+
+            from Modeling.Edit.xgtc.scripts import xgToolsUI_user_sub
+            print("Successfully imported XGTools modules")
+
+            xgToolsUI_user_sub.xgToolsUI()
+
+        except ImportError as e:
+            error_message = f"Error importing modules for XGTools: {str(e)}"
+            print(error_message)
+            cmds.warning(error_message)
+        except Exception as e:
+            error_message = f"Error occurred while running XGTools: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
+
+>>>>>>> 7863e4b (Updated Grooms Tools)
     def run_edge_sensei(self, *args):
         try:
             EdgeSensei.run()
@@ -539,7 +591,7 @@ class MetaBox:
 
     def run_rizom_uv_bridge(self, *args):
         try:
-            rizomuvbridge_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'UV', 'RizomUVBridge')).replace('\\', '/')
+            rizomuvbridge_Path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'UV', 'RizomUVBridge')).replace('\\', '/')
             if rizomuvbridge_Path not in sys.path:
                 sys.path.insert(0, rizomuvbridge_Path)
             rizomuvbridge_lua_path = os.path.join(rizomuvbridge_Path, 'RizomUVBridge.lua').replace('\\', '/')
@@ -559,14 +611,14 @@ class MetaBox:
     def run_advanced_skeleton(self, *args):
         try:
             adv_sub_path = [
-                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton').replace('\\', '/'),
-                os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'AdvancedSkeleton5Files').replace('\\', '/')
+                os.path.join(metabox_path, 'Animation', 'AdvancedSkeleton').replace('\\', '/'),
+                os.path.join(metabox_path, 'Animation', 'AdvancedSkeleton', 'AdvancedSkeleton5Files').replace('\\', '/')
             ]
             for path in adv_sub_path:
                 if path not in sys.path:
                     sys.path.insert(0, path)
             # If advancedSkeleton5Files does not exist, run the adv_install.py and the launch.py, else run the adv_launch.py directly
-            if not os.path.exists(os.path.join(current_dir, 'Animation', 'AdvancedSkeleton', 'adv_install.py').replace('\\', '/')):
+            if not os.path.exists(os.path.join(metabox_path, 'Animation', 'AdvancedSkeleton', 'adv_install.py').replace('\\', '/')):
                 from Animation.AdvancedSkeleton import adv_install
                 adv_install.install()
             from Animation.AdvancedSkeleton import adv_launch
@@ -596,7 +648,7 @@ class MetaBox:
     def open_aTools(self, *args):
         try:
             # Get aTools path
-            aTools_Path = os.path.normpath(os.path.join(current_dir, 'Animation', 'aTools')).replace('\\', '/')
+            aTools_Path = os.path.normpath(os.path.join(metabox_path, 'Animation', 'aTools')).replace('\\', '/')
             if aTools_Path not in sys.path:
                 sys.path.insert(0, aTools_Path)
             parent_dir = os.path.dirname(aTools_Path)
@@ -620,9 +672,9 @@ class MetaBox:
     def open_keyframe_pro(self, *args):
         try:
             keyframe_pro_paths = [
-                os.path.join(current_dir, 'Animation', 'keyframe_pro'),
-                os.path.join(current_dir, 'Animation', 'keyframe_pro', 'keyframe_pro'),
-                os.path.join(current_dir, 'Animation', 'keyframe_pro', 'keyframe_pro_maya')
+                os.path.join(metabox_path, 'Animation', 'keyframe_pro'),
+                os.path.join(metabox_path, 'Animation', 'keyframe_pro', 'keyframe_pro'),
+                os.path.join(metabox_path, 'Animation', 'keyframe_pro', 'keyframe_pro_maya')
             ]
             for path in keyframe_pro_paths:
                 if path not in sys.path:
@@ -638,7 +690,7 @@ class MetaBox:
 
     def open_studio_library(self, *args):
         try:
-            studiolibrary_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'studiolibrary')).replace('\\', '/')
+            studiolibrary_path = os.path.normpath(os.path.join(metabox_path, 'Animation', 'studiolibrary')).replace('\\', '/')
             studiolibrary_sub_paths = [
                 os.path.join(studiolibrary_path, 'src'),
                 os.path.join(studiolibrary_path, 'src', 'studiolibrary'),
@@ -669,7 +721,7 @@ class MetaBox:
     def run_anim_school_picker(self, *args):
         try:
             # Added the path to the AnimSchoolPicker.mel file
-            animpicker_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'AnimSchoolPicker')).replace('\\', '/')
+            animpicker_path = os.path.normpath(os.path.join(metabox_path, 'Animation', 'AnimSchoolPicker')).replace('\\', '/')
             if animpicker_path not in sys.path:
                 sys.path.insert(0, animpicker_path)
 
@@ -693,7 +745,7 @@ class MetaBox:
     
     def run_bhghost(self, *args):
         try:
-            bhghost_path = os.path.normpath(os.path.join(current_dir, 'Animation', 'bhGhost')).replace('\\', '/')
+            bhghost_path = os.path.normpath(os.path.join(metabox_path, 'Animation', 'bhGhost')).replace('\\', '/')
             print(bhghost_path)
             if bhghost_path not in sys.path:
                 sys.path.insert(0, bhghost_path)
@@ -709,7 +761,7 @@ class MetaBox:
 
     def run_ik_fk_switch(self, *args):
         try:
-            IK_FK_Switch_Path = os.path.normpath(os.path.join(current_dir, 'Animation', 'IK_FK_Switch')).replace('\\', '/')
+            IK_FK_Switch_Path = os.path.normpath(os.path.join(metabox_path, 'Animation', 'IK_FK_Switch')).replace('\\', '/')
             if IK_FK_Switch_Path not in sys.path:
                 sys.path.insert(0, IK_FK_Switch_Path)
             from Animation import IK_FK_Switcher
@@ -723,7 +775,7 @@ class MetaBox:
     def open_epic_pose_wrangler(self, *args):
         try:
             # Add Epic Pose Wrangler path
-            epic_pose_wrangler_path = os.path.join(current_dir, 'Animation', 'epic_pose_wrangler').replace('\\', '/')
+            epic_pose_wrangler_path = os.path.join(metabox_path, 'Animation', 'epic_pose_wrangler').replace('\\', '/')
             sys.path.append(epic_pose_wrangler_path)
             print(epic_pose_wrangler_path)
             print(f"Attempting to import Epic Pose Wrangler from: {epic_pose_wrangler_path}")            

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import maya.cmds as mc
 import maya.mel as mel
 import maya.OpenMaya as om

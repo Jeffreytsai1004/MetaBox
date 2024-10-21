@@ -89,6 +89,7 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [15:56:12,030 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [15:56:12,030 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 15:56:12                 
 [15:56:12,833 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+<<<<<<< HEAD
 [19:22:20,312 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [19:22:20,312 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 19:22:20                 
 [19:22:21,115 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
@@ -234,3 +235,20 @@ TypeError: 'NoneType' object is not iterable
 [03:24:53,882 | DEBUG |    utils |   112]: warningInView() : File "H:/Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
 [03:25:00,799 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
 [03:25:00,802 | DEBUG |    utils |   105]: warning() : File "H:/Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4131, in getScaleFactor
+=======
+[14:34:57,855 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[14:34:57,855 | DEBUG |     main |    58]: <module>() :                  21/10/2024, 14:34:57                 
+[14:34:58,672 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[14:42:06,978 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[14:42:06,979 | DEBUG |     main |    58]: <module>() :                  21/10/2024, 14:42:06                 
+[14:42:07,764 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[14:57:40,174 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[14:57:40,175 | DEBUG |     main |    58]: <module>() :                  21/10/2024, 14:57:40                 
+[14:57:40,972 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[15:30:09,640 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[15:30:09,640 | DEBUG |     main |    58]: <module>() :                  21/10/2024, 15:30:09                 
+[15:30:10,427 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[15:59:32,895 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[15:59:32,896 | DEBUG |     main |    58]: <module>() :                  21/10/2024, 15:59:32                 
+[15:59:33,700 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+>>>>>>> 7863e4b (Updated Grooms Tools)

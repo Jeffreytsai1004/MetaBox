@@ -4028,7 +4028,11 @@ def onSceneOpenedUpdateLayerCount():
             activeID = int(checkboxNum) * 10
         else:
             print("Warning: 'layerRowsActionGroup' checkedAction is None.")
+<<<<<<< HEAD
             return
+=======
+            activeID = 0
+>>>>>>> 7863e4b (Updated Grooms Tools)
     else:
         print("Warning: 'layerRowsActionGroup' not found in WIDGETS")
         return

@@ -26,7 +26,11 @@ PlugInsPath = os.path.join(PLUGIT_PATH+'/Tools/')
 PrefIcons = os.path.join(PLUGIT_PATH+'/Icons/')
 ToolsPath = os.path.join(PLUGIT_PATH+'/Tools/')
 
+<<<<<<< HEAD
 PlugItTitle = "PlugIt 3.0.6"
+=======
+PlugItTitle = "PlugIt"
+>>>>>>> 7863e4b (Updated Grooms Tools)
 
 ##_____________________________________________PREFERENCES
 LIBRARY_PATH = os.path.join(PLUGIT_PATH+'/LIBRARY')
