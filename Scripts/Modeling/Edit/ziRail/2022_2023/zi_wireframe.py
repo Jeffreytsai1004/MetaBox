@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # //
 # //                          AUTHOR
 # .-.   .-.-..--.-..-..-..-..-.-..--.-.  .-.-..-..-.-.   .-.-..-. .-..--.
@@ -38,11 +41,11 @@ __version__ = 0.97
 __tool__ = "ziWireframe"
 __author = "VERTEXTURE"
 
-kDoublesWire = {"Surface Alpha": 'ziCutSa',
-                "Line Width": 'ziCutLw',
-                "Depth Priority": 'ziCutDp',
-                "Point Size": 'ziCutPs',
-                "Mesh Display Limit": "ziCutLimit",
+kDoublesWire = {u"表面Alpha": 'ziCutSa',
+                u"线条宽度": 'ziCutLw',
+                u"深度优先级": 'ziCutDp',
+                u"点大小": 'ziCutPs',
+                u"网格显示限制": "ziCutLimit",
                 }
 
 kDoublesCut = {
@@ -54,16 +57,16 @@ kDoublesCut = {
 kDoubles = dict(kDoublesWire)
 kDoubles.update(kDoublesCut)
 
-kColors = {"Surface Color": ['ziCutSurfCr', 'ziCutSurfCg', 'ziCutSurfCb'],
-           "Line Color": ["ziCutLineCr", "ziCutLineCg", "ziCutLineCb"],
-           "Point Color": ["ziCutPtCr", "ziCutPtCg", "ziCutPtCb"],
-           "Backface Color": ["ziCutBackCr", "ziCutBackCg", "ziCutBackCb"]
+kColors = {u"表面颜色": ['ziCutSurfCr', 'ziCutSurfCg', 'ziCutSurfCb'],
+           u"线条颜色": ["ziCutLineCr", "ziCutLineCg", "ziCutLineCb"],
+           u"点颜色": ["ziCutPtCr", "ziCutPtCg", "ziCutPtCb"],
+           u"背面颜色": ["ziCutBackCr", "ziCutBackCg", "ziCutBackCb"]
            }
 
-kChecks = {"Override Shading": 'ziCutShading',
-           "Backface Culling": 'ziCutBackf',
-           "Force Refresh": 'ziCutUpdate',
-           "Backface Colour": 'ziCutBackfc',
+kChecks = {u"覆盖着色": 'ziCutShading',
+           u"背面消隐": 'ziCutBackf',
+           u"强制刷新": 'ziCutUpdate',
+           u"背面颜色": 'ziCutBackfc',
            }
 
 attrContinuity = "ziCutContinuity"
@@ -93,19 +96,19 @@ class OptVar(object):
 
         for key, values in kColors.items():
 
-            if key == "Backface Color":
+            if key == u"背面颜色":
                 widget = obj.findWidget(key, "_color")
                 obj.setColor(widget, self.backfColor)
 
-            if key == "Surface Color":
+            if key == u"表面颜色":
                 widget = obj.findWidget(key, "_color")
                 obj.setColor(widget, self.surfColor)
 
-            if key == "Line Color":
+            if key == u"线条颜色":
                 widget = obj.findWidget(key, "_color")
                 obj.setColor(widget, self.lineColor)
 
-            if key == "Point Color":
+            if key == u"点颜色":
                 widget = obj.findWidget(key, "_color")
                 obj.setColor(widget, self.pointColor)
 
@@ -131,28 +134,28 @@ class OptVar(object):
 
     @property
     def lineWidth(self):
-        return self.getValue(kDoubles["Line Width"], 2.0)
+        return self.getValue(kDoubles[u"线条宽度"], 2.0)
 
     @property
     def surfaceAlpha(self):
-        return self.getValue(kDoubles["Surface Alpha"], 0.3)
+        return self.getValue(kDoubles[u"表面Alpha"], 0.3)
 
     @property
     def pointSize(self):
-        return self.getValue(kDoubles["Point Size"], 5.0)
+        return self.getValue(kDoubles[u"点大小"], 5.0)
 
     @property
     def refresh(self):
-        return self.getValue(kDoubles["Point Size"], 5.0)
+        return self.getValue(kDoubles[u"点大小"], 5.0)
 
     @property
     def backface(self):
-        attr = kChecks["Backface Culling"]
+        attr = kChecks[u"背面消隐"]
         return cmds.optionVar(q=attr) if cmds.optionVar(ex=attr) else True
 
     @property
     def depth(self):
-        return self.getValue(kDoubles["Depth Priority"], 900)
+        return self.getValue(kDoubles[u"深度优先级"], 900)
 
     @property
     def spiltT(self):
@@ -168,7 +171,7 @@ class OptVar(object):
 
     @property
     def dispLimit(self):
-        return self.getValue(kDoubles["Mesh Display Limit"], 150000)
+        return self.getValue(kDoubles[u"网格显示限制"], 150000)
 
     @property
     def surfColor(self):
@@ -255,19 +258,19 @@ class Win(zi_Widget.zi_Windows.Frameless):
         self.setGeometry(x, y, geo.width(), geo.height())
 
         if not cmds.objExists(self.var.meshName):
-            self.findWidget("Backface Culling", "_check").setChecked(True)
+            self.findWidget(u"背面消隐", "_check").setChecked(True)
             return
 
         attr = "%s.overrideShading" % self.var.meshName
 
-        self.findWidget("Override Shading", "_check").setChecked(
+        self.findWidget(u"覆盖着色", "_check").setChecked(
             cmds.getAttr(attr))
 
         attr = "%s.backfaceCulling" % self.var.meshName
 
         if self.isMesh():
             value = True if cmds.getAttr(attr) == 3 else False
-            self.findWidget("Backface Culling", "_check").setChecked(value)
+            self.findWidget(u"背面消隐", "_check").setChecked(value)
 
         self.restoreGeo()
 
@@ -418,7 +421,7 @@ class Win(zi_Widget.zi_Windows.Frameless):
         for item in itemsNames:
             cmds.sets(item, edit=True, forceElement=setname)
 
-        self.tree.setHeaderLabel("Meshes Display")
+        self.tree.setHeaderLabel(u"网格显示")
 
     def createSet(self):
         """Description
@@ -442,30 +445,30 @@ class Win(zi_Widget.zi_Windows.Frameless):
     def reset(self):
         """Description
         """
-        self.setWidgetcolor("Surface Color", [0.014, 0.014, 0.17])
-        self.setWidgetcolor("Backface Color", [0.17, 0.014, 0.014])
-        self.setWidgetcolor("Line Color", [0.005, 0.005, 0.01])
-        self.setWidgetcolor("Point Color", [0.61, 0.61, 0.13])
+        self.setWidgetcolor(u"表面颜色", [0.014, 0.014, 0.17])
+        self.setWidgetcolor(u"背面颜色", [0.17, 0.014, 0.014])
+        self.setWidgetcolor(u"线条颜色", [0.005, 0.005, 0.01])
+        self.setWidgetcolor(u"点颜色", [0.61, 0.61, 0.13])
 
-        self.setWidgetLine("Depth Priority", 990.0)
-        self.setWidgetLine("Surface Alpha", 0.5)
-        self.setWidgetLine("Line Width", 2.0)
-        self.setWidgetLine("Point Size", 5)
-        self.setWidgetLine("Mesh Display Limit", 150000)
+        self.setWidgetLine(u"深度优先级", 990.0)
+        self.setWidgetLine(u"表面Alpha", 0.5)
+        self.setWidgetLine(u"线条宽度", 2.0)
+        self.setWidgetLine(u"点大小", 5)
+        self.setWidgetLine(u"网格显示限制", 150000)
 
-        self.setWidgetCheck("Backface Culling", True)
-        self.setWidgetCheck("Backface Colour", False)
-        self.setWidgetCheck("Force Refresh", True)
+        self.setWidgetCheck(u"背面消隐", True)
+        self.setWidgetCheck(u"背面颜色", False)
+        self.setWidgetCheck(u"强制刷新", True)
 
         for geo in self.shapeToProcess():
 
             if not cmds.objExists(geo):
                 continue
 
-            self.findWidget("Backface Culling", "_check").setChecked(True)
+            self.findWidget(u"背面消隐", "_check").setChecked(True)
             cmds.setAttr("%s.backfaceCulling" % geo, 3)
 
-            self.findWidget("Override Shading", "_check").setChecked(False)
+            self.findWidget(u"覆盖着色", "_check").setChecked(False)
             cmds.setAttr("%s.overrideShading" % geo, False)
             cmds.setAttr("%s.overrideEnabled" % geo, True)
 
@@ -643,13 +646,13 @@ class Win(zi_Widget.zi_Windows.Frameless):
         slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         slider.setObjectName("%s_slider" % txt)
 
-        if txt == "Surface Alpha":
+        if txt == u"表面Alpha":
             slider.setMaximum(1.0 * kIncrement)
 
-        if txt == "Line Width":
+        if txt == u"线条宽度":
             slider.setMaximum(6.0 * kIncrement)
 
-        if txt == "Depth Priority":
+        if txt == u"深度优先级":
             slider.setMaximum(2000 * kIncrement)
 
         if txt == "Split Threshold":
@@ -658,10 +661,10 @@ class Win(zi_Widget.zi_Windows.Frameless):
         if txt == "Angle Limit":
             slider.setMaximum(200 * kIncrement)
 
-        if txt == "Point Size":
+        if txt == u"点大小":
             slider.setMaximum(20 * kIncrement)
 
-        if txt == "Mesh Display Limit":
+        if txt == u"网格显示限制":
             slider.setMaximum(500000 * kIncrement)
 
         return slider
@@ -700,16 +703,16 @@ class Win(zi_Widget.zi_Windows.Frameless):
         if typ == float:
             func = widget.setValue
 
-        if "Point Size" in name:
+        if u"点大小" in name:
             func(typ(self.var.pointSize * kIncrement))
 
-        if "Surface Alpha" in name:
+        if u"表面Alpha" in name:
             func(typ(self.var.surfaceAlpha * kIncrement))
 
-        if "Line Width" in name:
+        if u"线条宽度" in name:
             func(typ(self.var.lineWidth * kIncrement))
 
-        if "Depth Priority" in name:
+        if u"深度优先级" in name:
             func(typ(self.var.depth * kIncrement))
 
         if "Split Threshold" in name:
@@ -718,7 +721,7 @@ class Win(zi_Widget.zi_Windows.Frameless):
         if "Angle Limit" in name:
             func(typ(self.var.angleL * kIncrement))
 
-        if "Mesh Display Limit" in name:
+        if u"网格显示限制" in name:
             func(typ(self.var.dispLimit * kIncrement))
 
     def findWidget(self, name, suffix):
@@ -842,12 +845,12 @@ class Win(zi_Widget.zi_Windows.Frameless):
 
             if cmds.nodeType(shapes[0]) == "mesh":
                 value = cmds.getAttr("%s.overrideShading" % shapes[0])
-                self.findWidget("Override Shading", "_check").setChecked(value)
+                self.findWidget(u"覆盖着色", "_check").setChecked(value)
 
                 value = cmds.getAttr("%s.backfaceCulling" % self.shapes[0])
                 value = True if value == 3 else False
 
-                self.findWidget("Backface Culling", "_check").setChecked(value)
+                self.findWidget(u"背面消隐", "_check").setChecked(value)
 
     def setWinLayout(self):
         """Description
@@ -886,7 +889,7 @@ class Win(zi_Widget.zi_Windows.Frameless):
 
         self.createSeparator(mLayout)
 
-        self.createTitle(mLayout, "Wireframe Properties")
+        self.createTitle(mLayout, u"线框属性")
 
         for label in kDoublesWire.keys():
 
@@ -902,7 +905,7 @@ class Win(zi_Widget.zi_Windows.Frameless):
                 mLayout.addLayout(hlayout)
 
         hlay = QtWidgets.QHBoxLayout()
-        lineLab = QtWidgets.QLabel("Line Style ")
+        lineLab = QtWidgets.QLabel(u"线条样式 ")
         lineslid = QtWidgets.QSlider()
         lineslid.setMaximum(19)
         lineslid.setOrientation(QtCore.Qt.Horizontal)
@@ -930,7 +933,7 @@ class Win(zi_Widget.zi_Windows.Frameless):
 
         self.createButton(mLayout,
                           mLayout,
-                          "all views display",
+                          u"显示所有视图",
                           self.allViews,
                           1)
 
@@ -945,7 +948,7 @@ class Win(zi_Widget.zi_Windows.Frameless):
 
         self.tree = QtWidgets.QTreeWidget(treeFrame)
         self.tree.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
-        self.tree.setHeaderLabel("Meshes Display")
+        self.tree.setHeaderLabel(u"网格显示")
 
         # self.tree = QtWidgets.QAbstractScrollArea(treeFrame)
         # self.tree.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
@@ -956,15 +959,15 @@ class Win(zi_Widget.zi_Windows.Frameless):
         Vlayout.setMargin(1)
 
         hlayoutTree = QtWidgets.QHBoxLayout()
-        self.createButton(None, hlayoutTree, "add", self.addItems)
-        self.createButton(None, hlayoutTree, "remove", self.removeItems)
-        self.createButton(None, hlayoutTree, "clear", self.clearItems)
+        self.createButton(None, hlayoutTree, u"添加", self.addItems)
+        self.createButton(None, hlayoutTree, u"移除", self.removeItems)
+        self.createButton(None, hlayoutTree, u"关闭", self.clearItems)
 
         Vlayout.addLayout(hlayoutTree)
         mLayout.addWidget(treeFrame)
 
         hlayout = QtWidgets.QHBoxLayout()
-        self.createButton(mLayout, hlayout, "reset", self.reset)
+        self.createButton(mLayout, hlayout, u"重置", self.reset)
 
         wid.setLayout(mLayout)
         self.mainWin.setCentralWidget(wid)
