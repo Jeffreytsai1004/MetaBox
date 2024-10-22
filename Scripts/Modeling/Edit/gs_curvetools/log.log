@@ -185,3 +185,8 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [00:45:24,786 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
 [00:45:51,483 |  INFO |     core |  4055]: saveOptions() : Saving options
 [00:46:14,391 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[02:47:56,382 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[02:47:56,382 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 02:47:56                 
+[02:47:57,058 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[02:47:57,683 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[02:47:58,326 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

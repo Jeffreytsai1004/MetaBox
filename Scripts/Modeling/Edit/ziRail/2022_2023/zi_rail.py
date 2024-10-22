@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 #                      __                  __
 # ___  __ ____________/  |_  ____ ___  ___/  |_ __ _________  ____
 # \  \/ _/ __ \_  __ \   ___/ __ \\  \/  \   __|  |  \_  __ _/ __ \
@@ -450,10 +448,10 @@ class Win(zi_Widget.zi_Windows.Frameless,
         optvars = zi_wireframe.OptVar()
         self.wirefr.close()
 
-        self.backColor = self.wirefr.createColor(u"背面")
-        self.surfColor = self.wirefr.createColor(u"表面")
-        self.pointColor = self.wirefr.createColor(u"点")
-        self.lineColor = self.wirefr.createColor(u"线")
+        self.backColor = self.wirefr.createColor("BackFace")
+        self.surfColor = self.wirefr.createColor("Surface")
+        self.pointColor = self.wirefr.createColor("Point")
+        self.lineColor = self.wirefr.createColor("Line")
 
         QtWidgets.QPushButton()
 
@@ -2267,7 +2265,7 @@ Example of available standard keys:
 
             i += 1
 
-        resetBtn = QtWidgets.QPushButton(u"重置")
+        resetBtn = QtWidgets.QPushButton("Reset")
         qbox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok |
                                           QtWidgets.QDialogButtonBox.Cancel,
                                           QtCore.Qt.Horizontal)
