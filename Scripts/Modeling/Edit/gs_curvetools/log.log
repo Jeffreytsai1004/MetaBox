@@ -139,3 +139,26 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [13:35:17,938 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
 [13:35:18,749 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
 [13:35:23,636 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:14:41,909 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[16:14:41,910 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 16:14:41                 
+[16:14:42,707 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:14:43,508 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[16:14:44,310 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:14:47,981 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:14:48,846 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[16:14:49,630 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:17:48,478 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:17:49,161 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[16:17:49,976 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:17:52,989 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[16:17:53,789 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:17:59,369 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:57:24,684 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[16:57:24,781 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[16:57:24,782 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 16:57:24                 
+[16:57:25,565 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[17:13:42,047 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[17:13:42,047 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 17:13:42                 
+[17:13:42,837 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[17:13:46,689 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[17:13:47,466 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

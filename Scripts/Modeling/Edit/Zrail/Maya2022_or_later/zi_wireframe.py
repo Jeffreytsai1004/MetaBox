@@ -1224,7 +1224,7 @@ class ColorButt(QtWidgets.QWidget, QtCore.QObject):
     def text(self):
 
         if int(cmds.about(version=True)) < 2020:
-            return unicode(self._text)
+            return str(self._text)
 
         return self._text
 

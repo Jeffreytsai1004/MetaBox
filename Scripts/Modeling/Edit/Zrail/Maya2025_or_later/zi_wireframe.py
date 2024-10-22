@@ -23,7 +23,7 @@
 #         |______|
 #
 # ////////////////////////////////////////////////////////////////////////////////////*/
-from PySide2 import QtWidgets, QtCore, QtGui
+from PySide6 import QtWidgets, QtCore, QtGui
 import zi_Widget.zi_Windows
 import zi_UI.ziRessources_rc
 
@@ -730,7 +730,7 @@ class Win(zi_Widget.zi_Windows.Frameless):
     def findWidget(self, name, suffix):
         """Description
         """
-        reg = QtCore.QRegExp(r'%s%s' % (name, suffix))
+        reg = QtCore.QRegularExpression(r'%s%s' % (name, suffix))
         widget = self.findChildren(QtWidgets.QWidget, reg)
 
         return widget[0] or None
@@ -1059,7 +1059,7 @@ class ZiUnlockSlider(QtWidgets.QWidget, QtCore.QObject):
     def paintEvent(self, event):
 
         painter = QtGui.QPainter(self)
-        painter.setRenderHint(QtGui.QPainter.HighQualityAntialiasing)
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
 
         buttsize = self.size().width() * .5
 
@@ -1224,7 +1224,7 @@ class ColorButt(QtWidgets.QWidget, QtCore.QObject):
     def text(self):
 
         if int(cmds.about(version=True)) < 2020:
-            return unicode(self._text)
+            return str(self._text)
 
         return self._text
 
@@ -1284,4 +1284,4 @@ def main(dockable=True, show=True):
 
     return ziWireframeObj
 
-# -- Vtx python version 2
+# -- Vtx python version 3, PySide6

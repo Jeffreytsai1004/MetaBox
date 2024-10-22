@@ -667,15 +667,18 @@ else:
 
     def u(s, encoding="unicode_escape"):
 
-        if not isinstance(s, basestring):
+        if not isinstance(s, (str, bytes)):
             s = unicode(s, encoding)
 
         s = s.replace(r'\\', r'\\\\')
-        if isinstance(s, unicode):
-            return s
+        if PY3:
+            return str(s)
         else:
-            return unicode(s, encoding)
-    unichr = unichr
+            return unicode(s, "unicode_escape")
+    if PY3:
+        unichr = chr
+    else:
+        unichr = unichr
     int2byte = chr
 
     def byte2int(bs):
@@ -684,8 +687,8 @@ else:
     def indexbytes(buf, i):
         return ord(buf[i])
     iterbytes = functools.partial(itertools.imap, ord)
-    import StringIO
-    StringIO = BytesIO = StringIO.StringIO
+    from io import StringIO
+    StringIO = BytesIO = StringIO 
     _assertCountEqual = "assertItemsEqual"
     _assertRaisesRegex = "assertRaisesRegexp"
     _assertRegex = "assertRegexpMatches"
@@ -770,12 +773,12 @@ if print_ is None:
             return
 
         def write(data):
-            if not isinstance(data, basestring):
+            if not isinstance(data, (str, bytes)):
                 data = str(data)
             # If the file has an encoding, encode unicode with it.
-            if (isinstance(fp, file) and
-                    isinstance(data, unicode) and
-                    fp.encoding is not None):
+            if (isinstance(fp, (io.IOBase)) and
+                    isinstance(data, str) and
+                    hasattr(fp, 'encoding') and fp.encoding is not None):
                 errors = getattr(fp, "errors", None)
                 if errors is None:
                     errors = "strict"
@@ -784,13 +787,13 @@ if print_ is None:
         want_unicode = False
         sep = kwargs.pop("sep", None)
         if sep is not None:
-            if isinstance(sep, unicode):
+            if isinstance(sep, str):
                 want_unicode = True
             elif not isinstance(sep, str):
                 raise TypeError("sep must be None or a string")
         end = kwargs.pop("end", None)
         if end is not None:
-            if isinstance(end, unicode):
+            if isinstance(end, str):
                 want_unicode = True
             elif not isinstance(end, str):
                 raise TypeError("end must be None or a string")
@@ -798,12 +801,12 @@ if print_ is None:
             raise TypeError("invalid keyword arguments to print()")
         if not want_unicode:
             for arg in args:
-                if isinstance(arg, unicode):
+                if isinstance(arg, str):
                     want_unicode = True
                     break
         if want_unicode:
-            newline = unicode("\n")
-            space = unicode(" ")
+            newline = str("\n")
+            space = str(" ")
         else:
             newline = "\n"
             space = " "

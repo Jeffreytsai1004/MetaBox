@@ -697,7 +697,7 @@ def _wrapinstance(ptr, base=None):
         if Qt.IsPyQt4 or Qt.IsPyQt5:
             base = Qt.QtCore.QObject
         else:
-            q_object = func(long(ptr), Qt.QtCore.QObject)
+            q_object = func(int(ptr), Qt.QtCore.QObject)
             meta_object = q_object.metaObject()
 
             while True:
@@ -714,7 +714,7 @@ def _wrapinstance(ptr, base=None):
 
                 break
 
-    return func(long(ptr), base)
+    return func(int(ptr), base)
 
 
 def _isvalid(object):

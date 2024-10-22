@@ -519,14 +519,36 @@ class MetaBox:
             # if Maya version is 2025, set zrail path to Scripts\Modeling\Edit\Zrail\2025 and zrail plugin path to Scripts\Modeling\Edit\Zrail\2025\plug-ins
             # Else, print the error message
             if maya_version == '2019' or maya_version == '2020':
-                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2020').replace('\\', '/')
-                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2020', 'plug-ins').replace('\\', '/')
+                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2020_or_earlier').replace('\\', '/')
+                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2020_or_earlier', 'plug-ins').replace('\\', '/')
+                for plugin in [f'ziRail_{maya_version}.mll', f'ziWireframeViewport_{maya_version}.mll']:
+                    plugin_path = os.path.join(zrail_plugin_path, plugin)
+                    if os.path.exists(plugin_path):
+                        if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
+                            cmds.loadPlugin(plugin_path)
+                    else:
+                        print(f"Warning: Plugin file does not exist: {plugin_path}")
+
             elif maya_version == '2022' or maya_version == '2023' or maya_version == '2024':
-                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2022_2024').replace('\\', '/')
-                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2022_2024', 'plug-ins').replace('\\', '/')
+                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2022_or_later').replace('\\', '/')
+                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2022_or_later', 'plug-ins').replace('\\', '/')
+                for plugin in [f'ziRail_{maya_version}.mll', f'ziWireframeViewport_{maya_version}.mll']:
+                    plugin_path = os.path.join(zrail_plugin_path, plugin)
+                    if os.path.exists(plugin_path):
+                        if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
+                            cmds.loadPlugin(plugin_path)
+                    else:
+                        print(f"Warning: Plugin file does not exist: {plugin_path}")
             elif maya_version == '2025':
-                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2025').replace('\\', '/')
-                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2025', 'plug-ins').replace('\\', '/')
+                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2025_or_later').replace('\\', '/')
+                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2025_or_later', 'plug-ins').replace('\\', '/')
+                for plugin in [f'ziRail_{maya_version}.mll', f'ziWireframeViewport_{maya_version}.mll']:
+                    plugin_path = os.path.join(zrail_plugin_path, plugin)
+                    if os.path.exists(plugin_path):
+                        if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
+                            cmds.loadPlugin(plugin_path)
+                    else:
+                        print(f"Warning: Plugin file does not exist: {plugin_path}")
             else:
                 error_message = f"Error occurred while running Zrail: Maya version {maya_version} is not supported"
                 cmds.warning(error_message)

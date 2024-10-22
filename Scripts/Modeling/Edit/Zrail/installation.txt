@@ -1,3 +1,4 @@
+
   _    _
   |   /
 --|--/-----__---)__--_/_----__---|--_/_----------)__----__-
@@ -7,61 +8,63 @@ __|/____(___ _/_____(_ __(___ __/|_(_ __(___(__/_____(___ _
 ___________________________________________________________
 
 
-自动：
-执行 zi_rail-win64.msi。
-完成！
+Automatic:
+execute the zi_rail-win64.msi.
+done!
 
 
-如果您之前手动安装了插件，请确保删除所有相关文件以避免任何冲突。
+if you have installed the plug-in manually before please make sure to delete all the related files to avoid any conflict.
 
 --------------------------------------------------
-手动：
+Manualy:
 
-请随时观看以下视频以了解安装过程：
+Feel free to watch the following video for the installation process:
 https://www.youtube.com/watch?v=_YstFQBaG9U
 
 
-插件由以下组成：
-	- 插件文件 (*.mll 或 *.so)，根据您的操作系统（Windows 或 Linux）在“plug-ins”文件夹中。
-	- 脚本文件 (*.py 或 *.mel)，也可以包含图像（如 *.png）。
+The plugin is composed of:
+	-PLUGIN files (*.mll or *.so) depending on your operating system (Windows or Linux) in the "plug-ins" folder.
+	-SCRIPT files (*.py or *.mel), images like (*.png) can be included also.
 
-Maya 需要这些文件放在正确的位置，以便它们能够被考虑在内。
-
-
------ ----- ----- ----- 版本说明 ----- ----- ----- -----
-压缩文件包含两个主要不同的文件夹：
-	- Maya2020_or_earlier
-	- Maya2022_or_later
-	- Maya2025_or_later
-
-我们做了明确的区分，因为 Maya2022 使用 Python3.x（之前是 Python 2.x）。
-Python 文件已被修改以正常工作。
+Maya needs these files to be in the correct places so they can be taken in consideration.
 
 
------ ----- ----- ----- 插件安装 ----- ----- ----- -----
-要检索 <plugin> 路径，只需在 Maya 的脚本编辑器中输入（作为 Mel）：
+----- ----- ----- ----- VERSIONING Meaning ----- ----- ----- -----
+The zip file contains two main different folders:
+	-Maya2020_or_earlier
+	-Maya2022_or_later
+	-Maya2025_or_later
+
+We made a clear distinction since Maya2022 uses Python3.x (Python 2.x before).
+The python files have been modified to work properly.
+
+
+
+----- ----- ----- ----- PLUGINS Installation ----- ----- ----- -----
+To retrieve the <plugin> path, just type in the Script Editor in Maya (as Mel):
 getenv MAYA_PLUG_IN_PATH
 
-控制台将显示几个用逗号分隔的路径。您可以使用其中任何一个，但为了方便，默认路径看起来像：
+The console will display several paths separated with commas. You can use any of these but for the sake of the convention the default one will look like:
 C:/Users/<USERNAME>/Documents/maya/<VERSION>/plug-ins
 
-打开压缩文件，然后从“plug-in”文件夹中复制插件：
+Open the zip file, then copy the plugin(s) from the "plug-in" folder:
 	- ziRail_<VERSION>.mll
 	- ziWireframeViewport_<VERSION>.mll
 
-到：
+to:
 C:/Users/<USERNAME>/Documents/maya/<VERSION>/plug-ins
 
 
------ ----- ----- ----- 脚本安装 ----- ----- ----- -----
-要检索 <script> 路径，只需在脚本编辑器中输入（作为 Mel）：
+
+----- ----- ----- ----- SCRIPTS Installation ----- ----- ----- -----
+To retrieve the <script> path, just type in the Script Editor (as Mel):
 getenv MAYA_SCRIPT_PATH
 
-这次您应该再次找到一系列路径，约定路径可能是：
+This time again you should find a serie of paths, the convention path may be like:
 C:/Users/<USERNAME>/Documents/maya/<VERSION>/scripts
 
-从压缩文件中，复制以下内容：
-确保保留文件夹和层次结构。
+From the zip file, copy the following:
+Make sure to preserve the folders and hierachy.
 
 	- zi_Windows.py 
 	- zi_wireframe.py 
@@ -71,14 +74,25 @@ C:/Users/<USERNAME>/Documents/maya/<VERSION>/scripts
 	- zi_RailUI.py 
 	- zi_ClosestUI.py 
 
-到：
+to:
 C:/Users/<USERNAME>/Documents/maya/<VERSION>/scripts
 
 
------ ----- ----- ----- 执行工具 ----- ----- ----- -----
-重启 Maya，然后在 Python 控制台中输入：
+
+----- ----- ----- ----- Execute the Tool----- ----- ----- -----
+Restart Maya and then type in the python console:
 import zi_rail
 zi_rail.main()
 
 
-请随意使用架子按钮和/或快捷键
+
+
+
+Feel free to use a shelf button and/or shortcuts
+
+We do updates for free, if you feel like it deserves it, please rate us on Gumroad. *****
+It will be very much appreciated!
+
+Further details could be find there:
+www.vertexture.org
+zi_rail_0.97 07/09/2024(13.04:32)
