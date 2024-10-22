@@ -7,6 +7,7 @@ import sys
 import os
 import importlib
 import traceback
+import subprocess
 
 metabox_path = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
 sys.path.append(metabox_path)
@@ -139,9 +140,8 @@ class MetaBox:
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
         self.create_button_row(["ModIt", "PlugIt"], [self.run_modit, self.run_plugit])
-        self.create_button_row([ "Groomer`s Tool"], [self.run_xgtools])
+        self.create_button_row(["Zirail", "Groomer`s Tool"], [self.run_zirail, self.run_xgtools])
         self.create_button_row(["GS Curve Tools", "Reset", "Close"], [self.run_gs_curve_tools, self.reset_gs_curve_tools, self.stop_gs_curve_tools])
-        self.create_button_row(["Zrail"], [self.run_zrail])
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
@@ -501,81 +501,65 @@ class MetaBox:
             error_message = f"Error occurred while running XGTools: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
-
-    def run_zrail(self, *args):
+    
+    def run_zirail(self, *args):
         try:
-            # Run Scripts\Modeling\Edit\Zrail\zi_rail-win64.msi
-            zrail_msi = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'zi_rail-win64.msi').replace('\\', '/')
-            # If zrail_msi not installed, run it
-            if not os.path.exists(zrail_msi):
-                if zrail_msi not in sys.path:
-                    sys.path.insert(0, os.path.dirname(zrail_msi))
-                    self.run_msi(zrail_msi)
-                return
             # Get Maya version
             maya_version = cmds.about(version=True).split()[0]
-            # If Maya version is 2019~2020，set zrail path to Scripts\Modeling\Edit\Zrail\2020 and zrail plugin path to Scripts\Modeling\Edit\Zrail\2020,
-            # if Maya version is 2022~2024, set zrail path to Scripts\Modeling\Edit\Zrail\2022_2024 and zrail plugin path to Scripts\Modeling\Edit\Zrail\2022_2024\plug-ins
-            # if Maya version is 2025, set zrail path to Scripts\Modeling\Edit\Zrail\2025 and zrail plugin path to Scripts\Modeling\Edit\Zrail\2025\plug-ins
+            # If Maya version is 2018~2020，set ziRail path to Scripts\Modeling\Edit\ziRail\2018_2020 and ziRail plugin path to Scripts\Modeling\Edit\ziRail\2018_2020\plug-ins
+            # if Maya version is 2022~2023, set ziRail path to Scripts\Modeling\Edit\ziRail\2022_2023 and ziRail plugin path to Scripts\Modeling\Edit\ziRail\2022_2023\plug-ins
             # Else, print the error message
-            if maya_version == '2019' or maya_version == '2020':
-                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2020_or_earlier').replace('\\', '/')
-                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2020_or_earlier', 'plug-ins').replace('\\', '/')
+            if maya_version == '2018' or maya_version == '2019' or maya_version == '2020':
+                ziRail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'ziRail', '2018_2020').replace('\\', '/')
+                ziRail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'ziRail', '2018_2020', 'plug-ins').replace('\\', '/')
                 for plugin in [f'ziRail_{maya_version}.mll', f'ziWireframeViewport_{maya_version}.mll']:
-                    plugin_path = os.path.join(zrail_plugin_path, plugin)
+                    plugin_path = os.path.join(ziRail_plugin_path, plugin)
                     if os.path.exists(plugin_path):
                         if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
                             cmds.loadPlugin(plugin_path)
                     else:
                         print(f"Warning: Plugin file does not exist: {plugin_path}")
 
-            elif maya_version == '2022' or maya_version == '2023' or maya_version == '2024':
-                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2022_or_later').replace('\\', '/')
-                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2022_or_later', 'plug-ins').replace('\\', '/')
+            elif maya_version == '2022' or maya_version == '2023':
+                ziRail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'ziRail', '2022_2023').replace('\\', '/')
+                ziRail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'ziRail', '2022_2023', 'plug-ins').replace('\\', '/')
                 for plugin in [f'ziRail_{maya_version}.mll', f'ziWireframeViewport_{maya_version}.mll']:
-                    plugin_path = os.path.join(zrail_plugin_path, plugin)
+                    plugin_path = os.path.join(ziRail_plugin_path, plugin)
                     if os.path.exists(plugin_path):
                         if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
                             cmds.loadPlugin(plugin_path)
                     else:
                         print(f"Warning: Plugin file does not exist: {plugin_path}")
-            elif maya_version == '2025':
-                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2025_or_later').replace('\\', '/')
-                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'Maya2025_or_later', 'plug-ins').replace('\\', '/')
-                for plugin in [f'ziRail_{maya_version}.mll', f'ziWireframeViewport_{maya_version}.mll']:
-                    plugin_path = os.path.join(zrail_plugin_path, plugin)
-                    if os.path.exists(plugin_path):
-                        if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
-                            cmds.loadPlugin(plugin_path)
-                    else:
-                        print(f"Warning: Plugin file does not exist: {plugin_path}")
+                if os.path.exists(ziRail_plugin_path):
+                    os.environ['MAYA_PLUG_IN_PATH'] = os.pathsep.join([os.environ.get('MAYA_PLUG_IN_PATH', ''), ziRail_plugin_path])
             else:
-                error_message = f"Error occurred while running Zrail: Maya version {maya_version} is not supported"
+                error_message = f"Error occurred while running ziRail: Maya version {maya_version} is not supported"
                 cmds.warning(error_message)
                 cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
                 return
             
-            # Check if zrail_path exists before adding to sys.path
-            if os.path.exists(zrail_path) and zrail_path not in sys.path:
-                sys.path.insert(0, zrail_path)
+            # Check if ziRail_path exists before adding to sys.path
+            if os.path.exists(ziRail_path) and ziRail_path not in sys.path:
+                sys.path.insert(0, ziRail_path)
 
-            # Import and run the appropriate zrail module
-            if maya_version in ['2019', '2020']:
-                import zi_rail
-            elif maya_version in ['2022', '2023', '2024']:
-                import zi_rail
-            elif maya_version == '2025':
-                import zi_rail
+            # Import and run the appropriate ziRail module
+            if maya_version in ['2018', '2019', '2020']:
+                zi_rail = importlib.import_module(f'Modeling.Edit.ziRail.2018_2020.zi_rail')
+            elif maya_version in ['2022', '2023']:
+                zi_rail = importlib.import_module(f'Modeling.Edit.ziRail.2022_2023.zi_rail')
+            else:
+                error_message = f"Error occurred while running ziRail: Maya version {maya_version} is not supported"
+                cmds.warning(error_message)
+                cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+                return
+            importlib.reload(zi_rail)
 
             zi_rail.main()
-            
-            # Add zrail plugin path to os.environ['MAYA_PLUG_IN_PATH']
-            if os.path.exists(zrail_plugin_path):
-                os.environ['MAYA_PLUG_IN_PATH'] = os.pathsep.join([os.environ.get('MAYA_PLUG_IN_PATH', ''), zrail_plugin_path])
         except Exception as e:
-            error_message = f"Error occurred while running Zrail: {e}"
+            error_message = f"Error occurred while running ziRail: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+
 
     def run_edge_sensei(self, *args):
         try:

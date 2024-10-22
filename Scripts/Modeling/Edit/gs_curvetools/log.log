@@ -170,3 +170,18 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [19:05:33,175 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
 [19:05:34,960 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
 [19:05:35,729 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:06:27,387 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[00:06:27,387 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 00:06:27                 
+[00:06:28,043 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:06:29,134 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[00:06:29,762 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:06:32,788 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:07:07,752 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[00:07:08,390 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:07:20,560 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[00:07:21,197 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:45:24,117 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[00:45:24,118 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 00:45:24                 
+[00:45:24,786 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[00:45:51,483 |  INFO |     core |  4055]: saveOptions() : Saving options
+[00:46:14,391 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
