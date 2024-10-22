@@ -456,7 +456,7 @@ def resetUI():
         stopUI(True)
 
     # Reload all files
-    from importlib import import_module
+    import importlib
     files = [
         '.constants',
         '.core',
@@ -471,9 +471,9 @@ def resetUI():
     ]
     modules = {}
     for file in files:
-        modules[file] = import_module(file, 'gs_curvetools')
+        modules[file] = importlib.import_module(file, 'gs_curvetools')
     for module in modules:
-        reload(modules[module])
+        importlib.reload(modules[module])
 
     # Run main function
     if '.main' in modules:

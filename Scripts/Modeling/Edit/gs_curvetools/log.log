@@ -89,9 +89,53 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [15:56:12,030 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [15:56:12,030 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 15:56:12                 
 [15:56:12,833 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[19:22:20,312 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[19:22:20,312 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 19:22:20                 
-[19:22:21,115 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:44:14,950 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[00:44:14,950 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 00:44:14                 
-[00:44:15,754 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:03:19,677 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[11:03:19,678 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:03:19                 
+[11:03:20,692 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:03:25,397 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:03:30,481 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:03:38,756 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:04:43,485 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:04:46,594 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:04:48,590 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:27:56,165 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[11:27:56,165 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:27:56                 
+[11:27:56,967 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:27:57,942 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:30:33,321 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[11:30:33,322 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:30:33                 
+[11:30:34,138 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:30:35,408 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:30:49,534 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:30:50,788 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:33:58,015 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[11:33:58,015 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:33:58                 
+[11:33:58,877 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:34:00,254 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:35:17,746 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:35:24,001 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:50:47,169 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[11:50:47,169 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:50:47                 
+[11:50:48,027 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:50:49,486 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[11:53:08,689 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[11:53:08,689 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:53:08                 
+[11:53:09,533 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[11:53:10,327 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[12:09:31,257 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[12:09:31,257 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 12:09:31                 
+[12:09:32,088 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[12:09:32,878 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[12:09:33,676 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[12:09:37,059 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[12:09:37,847 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[12:09:40,011 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[12:09:40,536 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[12:09:41,319 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[12:09:44,283 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[13:35:16,179 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[13:35:16,179 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 13:35:16                 
+[13:35:17,005 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[13:35:17,938 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[13:35:18,749 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[13:35:23,636 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

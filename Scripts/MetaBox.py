@@ -139,12 +139,14 @@ class MetaBox:
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
         self.create_button_row(["ModIt", "PlugIt"], [self.run_modit, self.run_plugit])
+        self.create_button_row([ "Groomer`s Tool"], [self.run_xgtools])
+        self.create_button_row(["GS Curve Tools", "Reset", "Close"], [self.run_gs_curve_tools, self.reset_gs_curve_tools, self.stop_gs_curve_tools])
+        self.create_button_row(["Zrail"], [self.run_zrail])
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
         self.create_button_row(["Instant Drag", "Un Bevel"], [ self.run_instant_drag, self.run_unbevel])
         self.create_button_row(["Align Edge", "Extra Curve"], [self.run_align_edge, self.run_extra_curve])
-        self.create_button_row(["GS Curve Tools", "Groomer`s Tool"], [self.run_gs_curve_tools, self.run_xgtools])
         cmds.setParent('..')  # Close columnLayout
         cmds.setParent('..')  # Close frameLayout
         uv_frame = cmds.frameLayout(label="UV", collapsable=True, parent=sub_tab, backgroundColor=(0.15,0.15,0.15))
@@ -332,36 +334,80 @@ class MetaBox:
             if gs_curvetools_path not in sys.path:
                 sys.path.insert(0, gs_curvetools_path)
 
-            # Import the sub modules
-            gs_curve_tools_subpaths = [
-                os.path.join(gs_curvetools_path, 'core').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'constants').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'utils').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'ui').replace('\\', '/'),
-                os.path.join(gs_curvetools_path, 'uv_editor').replace('\\', '/'),
-            ]
-            for path in gs_curve_tools_subpaths:
-                if path not in sys.path:
-                    sys.path.insert(0, path)
-
-            # Import the main module
             from Modeling.Edit.gs_curvetools import main as ct_main
             # Run the main function
             ct_main.main()
-
-            # If windows exists, refresh it
-            if cmds.pluginInfo('gs_curvetools', query=True, loaded=True):
-                from importlib import reload
-                from Modeling.Edit.gs_curvetools.utils import utils as ct_ut
-                reload(ct_ut)
-                ct_ut.resetUI()
-                print("GS Curve Tools refreshed successfully")
 
         except Exception as e:
             error_message = f"Error occurred while running GS Curve Tools: {str(e)}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
             print(f"Detailed error: {traceback.format_exc()}")
+
+    def stop_gs_curve_tools(self, *args):
+        try:
+            gs_curvetools_path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            if gs_curvetools_path not in sys.path:
+                sys.path.insert(0, gs_curvetools_path)
+
+            from Modeling.Edit.gs_curvetools.utils import utils as ct_ut
+            # Run the main function
+            ct_ut.stopUI()
+
+        except Exception as e:
+            error_message = f"Error occurred while running GS Curve Tools: {str(e)}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+            print(f"Detailed error: {traceback.format_exc()}")
+
+    def reset_gs_curve_tools(self, *args):
+        try:
+            gs_curvetools_path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            if gs_curvetools_path not in sys.path:
+                sys.path.insert(0, gs_curvetools_path)
+
+            from Modeling.Edit.gs_curvetools.utils import utils as ct_ut
+
+            ct_ut.resetOptionVars()
+
+            def __getMayaOS():
+                """Get Maya version and parent OS"""
+                maya = str(cmds.about(api=1))[:4]
+                os = str(cmds.about(os=1))
+                return [int(maya), os]
+            logger = ct_ut.Logger()
+            MAYA_VER = __getMayaOS()[0]
+            LOGGER = logger.logger
+            if MAYA_VER >= 2018:
+                ct_ut.stopUI(True)
+            
+            # Reload all files
+            gs_curvetools_subpaths = [
+                os.path.join(gs_curvetools_path, 'constants').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'core').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'main').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'ui').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'uv_editor').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils', 'gs_math').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils', 'style').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils', 'tooltips').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils', 'utils').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils', 'wrap').replace('\\', '/')
+            ]
+            for subpath in gs_curvetools_subpaths:
+                if subpath not in sys.path:
+                    sys.path.insert(0, subpath)
+            from Modeling.Edit.gs_curvetools import main as ct_main
+            # Run the main function
+            ct_main.main()
+
+        except Exception as e:
+            error_message = f"Error occurred while running GS Curve Tools: {str(e)}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+            print(f"Detailed error: {traceback.format_exc()}")
+
 
     def run_modit(self, *args):
         try:
@@ -455,6 +501,59 @@ class MetaBox:
             error_message = f"Error occurred while running XGTools: {e}"
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
+
+    def run_zrail(self, *args):
+        try:
+            # Run Scripts\Modeling\Edit\Zrail\zi_rail-win64.msi
+            zrail_msi = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', 'zi_rail-win64.msi').replace('\\', '/')
+            # If zrail_msi not installed, run it
+            if not os.path.exists(zrail_msi):
+                if zrail_msi not in sys.path:
+                    sys.path.insert(0, os.path.dirname(zrail_msi))
+                    self.run_msi(zrail_msi)
+                return
+            # Get Maya version
+            maya_version = cmds.about(version=True).split()[0]
+            # If Maya version is 2019~2020，set zrail path to Scripts\Modeling\Edit\Zrail\2020 and zrail plugin path to Scripts\Modeling\Edit\Zrail\2020,
+            # if Maya version is 2022~2024, set zrail path to Scripts\Modeling\Edit\Zrail\2022_2024 and zrail plugin path to Scripts\Modeling\Edit\Zrail\2022_2024\plug-ins
+            # if Maya version is 2025, set zrail path to Scripts\Modeling\Edit\Zrail\2025 and zrail plugin path to Scripts\Modeling\Edit\Zrail\2025\plug-ins
+            # Else, print the error message
+            if maya_version == '2019' or maya_version == '2020':
+                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2020').replace('\\', '/')
+                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2020', 'plug-ins').replace('\\', '/')
+            elif maya_version == '2022' or maya_version == '2023' or maya_version == '2024':
+                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2022_2024').replace('\\', '/')
+                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2022_2024', 'plug-ins').replace('\\', '/')
+            elif maya_version == '2025':
+                zrail_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2025').replace('\\', '/')
+                zrail_plugin_path = os.path.join(metabox_path, 'Modeling', 'Edit', 'Zrail', '2025', 'plug-ins').replace('\\', '/')
+            else:
+                error_message = f"Error occurred while running Zrail: Maya version {maya_version} is not supported"
+                cmds.warning(error_message)
+                cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
+                return
+            
+            # Check if zrail_path exists before adding to sys.path
+            if os.path.exists(zrail_path) and zrail_path not in sys.path:
+                sys.path.insert(0, zrail_path)
+
+            # Import and run the appropriate zrail module
+            if maya_version in ['2019', '2020']:
+                import zi_rail
+            elif maya_version in ['2022', '2023', '2024']:
+                import zi_rail
+            elif maya_version == '2025':
+                import zi_rail
+
+            zi_rail.main()
+            
+            # Add zrail plugin path to os.environ['MAYA_PLUG_IN_PATH']
+            if os.path.exists(zrail_plugin_path):
+                os.environ['MAYA_PLUG_IN_PATH'] = os.pathsep.join([os.environ.get('MAYA_PLUG_IN_PATH', ''), zrail_plugin_path])
+        except Exception as e:
+            error_message = f"Error occurred while running Zrail: {e}"
+            cmds.warning(error_message)
+            cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
     def run_edge_sensei(self, *args):
         try:
