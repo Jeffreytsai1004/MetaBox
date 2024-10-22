@@ -139,10 +139,6 @@ class MetaBox:
         cmds.columnLayout(adjustableColumn=True, parent=tools_frame)
         self.create_button_row(["Crease Plus", "Speed Cut"], [self.run_crease_plus, self.run_speed_cut])
         self.create_button_row(["ModIt", "PlugIt"], [self.run_modit, self.run_plugit])
-<<<<<<< HEAD
-        self.create_button_row(["Extra Curve","GS Curve Tools"], [self.run_extra_curve,self.run_gs_curve_tools])
-=======
->>>>>>> 7863e4b (Updated Grooms Tools)
         self.create_button_row(["Edge Sensei", "Even Edge Loop"], [self.run_edge_sensei, self.run_even_edge_loop])
         self.create_button_row(["Speed Bend", "Poly Fold"], [self.run_speed_bend, self.run_poly_fold])
         self.create_button_row(["Round Inset", "Arc Deformer"], [self.run_round_inset, self.run_arc_deformer])
@@ -396,11 +392,8 @@ class MetaBox:
 
     def run_plugit(self, *args):
         try:
-<<<<<<< HEAD
-            PlugIt_Path = os.path.normpath(os.path.join(current_dir, 'Modeling', 'Edit', 'PlugIt')).replace('\\', '/')
-=======
             PlugIt_Path = os.path.normpath(os.path.join(metabox_path, 'Modeling', 'Edit', 'PlugIt')).replace('\\', '/')
->>>>>>> 7863e4b (Updated Grooms Tools)
+
             plugIt_sub_paths = [
                 os.path.join(PlugIt_Path, 'Icons'),
                 os.path.join(PlugIt_Path, 'LIBRARY'),
@@ -423,8 +416,6 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK')
 
-<<<<<<< HEAD
-=======
     def run_xgtools(self, *args):
         try:
 
@@ -465,7 +456,6 @@ class MetaBox:
             cmds.warning(error_message)
             cmds.confirmDialog(title='Error', message=error_message, button=['OK'], defaultButton='OK') 
 
->>>>>>> 7863e4b (Updated Grooms Tools)
     def run_edge_sensei(self, *args):
         try:
             EdgeSensei.run()
