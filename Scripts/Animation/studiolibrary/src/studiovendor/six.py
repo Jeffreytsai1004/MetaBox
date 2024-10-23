@@ -776,7 +776,7 @@ if print_ is None:
             if not isinstance(data, (str, bytes)):
                 data = str(data)
             # If the file has an encoding, encode unicode with it.
-            if (isinstance(fp, (io.IOBase)) and
+            if (isinstance(fp, (file, io.IOBase)) and
                     isinstance(data, str) and
                     hasattr(fp, 'encoding') and fp.encoding is not None):
                 errors = getattr(fp, "errors", None)
