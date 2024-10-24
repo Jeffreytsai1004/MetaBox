@@ -5,7 +5,6 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 from shiboken2 import wrapInstance
 from maya import OpenMayaUI as omui
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 import maya.cmds as cmds # type: ignore
 import maya.mel as mel # type: ignore
 import sys
@@ -163,6 +162,7 @@ LANG = {
         "Advanced Skeleton": "Advanced Skeleton",
         "Select": "Select",
         "Anim School Picker": "Anim School Picker",
+        "DWPicker": "DWPicker",
         "Tools": "Tools",
         "bhGhost": "bhGhost",   
         "IK/FK Switch": "IK/FK Switch",
@@ -223,7 +223,8 @@ LANG = {
         "Setup": "设置",
         "Advanced Skeleton": "高级骨骼",
         "Select": "选择",
-        "Anim School Picker": "动画学校选择器",
+        "Anim School Picker": "动画学校拾取器",
+        "DWPicker": "DW拾取器",
         "Tools": "工具",
         "bhGhost": "bhGhost",   
         "IK/FK Switch": "IK/FK 切换",
@@ -353,6 +354,7 @@ class MetaBox(QtWidgets.QWidget):
         # Animation group widgets
         self.animation_select_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Select"])
         self.animation_animschool_picker_btn = RoundedButton(LANG[CURRENT_LANG]["Anim School Picker"])
+        self.animation_dwpicker_btn = RoundedButton(LANG[CURRENT_LANG]["DWPicker"])
         self.animation_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Tools"])
         self.animation_bhghost_btn = RoundedButton(LANG[CURRENT_LANG]["bhGhost"])
         self.animation_ikfk_switch_btn = RoundedButton(LANG[CURRENT_LANG]["IK/FK Switch"])
@@ -438,6 +440,7 @@ class MetaBox(QtWidgets.QWidget):
         animation_layout.addWidget(self.animation_select_group)
         animation_select_layout = QtWidgets.QVBoxLayout(self.animation_select_group)
         animation_select_layout.addWidget(self.animation_animschool_picker_btn)
+        animation_select_layout.addWidget(self.animation_dwpicker_btn)
         animation_layout.addWidget(self.animation_tools_group)
         animation_tools_layout = QtWidgets.QGridLayout(self.animation_tools_group)
         animation_tools_layout.addWidget(self.animation_bhghost_btn, 0, 0)
@@ -518,6 +521,7 @@ class MetaBox(QtWidgets.QWidget):
         self.rigging_advanced_skeleton_btn.clicked.connect(self.run_advanced_skeleton)
         # Animation tab connections
         self.animation_animschool_picker_btn.clicked.connect(self.run_anim_school_picker)
+        self.animation_dwpicker_btn.clicked.connect(self.run_dwpicker)
         self.animation_bhghost_btn.clicked.connect(self.run_bhghost)
         self.animation_ikfk_switch_btn.clicked.connect(self.run_ik_fk_switch)
         self.animation_atools_btn.clicked.connect(self.open_aTools)
@@ -1056,6 +1060,27 @@ class MetaBox(QtWidgets.QWidget):
             cmds.warning(ERROR_MESSAGE)
             cmds.confirmDialog(title='Error', message=ERROR_MESSAGE, button=['OK'], defaultButton='OK')
 
+    def run_dwpicker(self, *args):
+        try:
+            DWPICKER_PATH = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'dwpicker')).replace('\\', '/')
+            if DWPICKER_PATH not in sys.path:
+                sys.path.insert(0, DWPICKER_PATH)
+            DWPICKER_SUB_PATHS = [
+                os.path.join(DWPICKER_PATH, 'scripts'),
+                os.path.join(DWPICKER_PATH, 'dwpicker')
+            ]
+            for path in DWPICKER_SUB_PATHS:
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+            for path in sys.path:
+                print("Added the dwpicker submoudle path: ", path)
+            from Animation.dwpicker import dwpicker
+            dwpicker.show()
+        except Exception as e:
+            ERROR_MESSAGE = f"Error occurred while running dwpicker: {e}"
+            cmds.warning(ERROR_MESSAGE)
+            cmds.confirmDialog(title='Error', message=ERROR_MESSAGE, button=['OK'], defaultButton='OK')
+
     def open_studio_library(self, *args):
         try:
             STUDIOLIBRARY_PATH = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'studiolibrary')).replace('\\', '/')
@@ -1300,6 +1325,8 @@ class MetaBox(QtWidgets.QWidget):
         self.animation_select_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
         self.animation_animschool_picker_btn.setText(LANG[CURRENT_LANG]["Anim School Picker"])
         self.animation_animschool_picker_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_dwpicker_btn.setText(LANG[CURRENT_LANG]["DWPicker"])
+        self.animation_dwpicker_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
         self.animation_tools_group.setTitle(LANG[CURRENT_LANG]["Tools"])
         self.animation_tools_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
         self.animation_bhghost_btn.setText(LANG[CURRENT_LANG]["bhGhost"])

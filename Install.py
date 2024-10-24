@@ -337,13 +337,13 @@ except ImportError as e:
         result = msg_box.exec_()
         if result == QtWidgets.QMessageBox.Yes:
             # Proceed with installation
-            # 创建安装成功的提示窗口
+            # Create installation successful message box
             msg_box = QtWidgets.QMessageBox()
             msg_box.setWindowTitle("Installation Successful")
             msg_box.setText(f"{TOOLBOX_NAME} has been successfully installed!")
             msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
 
-            # 设置按钮样式
+            # Set button style for successful message box
             for button in msg_box.buttons():
                 button.setStyleSheet(button_style)
 
@@ -370,6 +370,9 @@ except ImportError as e:
                 print("Already on "+TOOLBOX_NAME+" shelf")
         except Exception as e:
             print(f"Error switching to {TOOLBOX_NAME} shelf: {e}")
+
+        # Save shelf
+        mel.eval('saveNewShelf "shelf_MetaBox.mel"')
 
     def uninstall_metabox(self):
         # Show confirmation dialog before uninstallation

@@ -1,63 +1,56 @@
-
 # Dreamwall Picker
 
-Animation picker for Audodesk Maya 2017 (or higher)
+适用于 Autodesk Maya 2017（或更高版本）的动画选择器
 
-Authors: Lionel Brouyère, Olivier Evers
-> This tool is a fork of Hotbox Designer (Lionel Brouyère).
-> A menus, markmenu and hotbox designer cross DCC.
+作者：Lionel Brouyère, Olivier Evers
+> 该工具是 Hotbox Designer（Lionel Brouyère）的一个分支。
+> 一个跨 DCC 的菜单、标记菜单和热盒设计器。
 > https://github.com/luckylyk/hotbox_designer
 
+### 功能
+- 简单快速的选择器创建。
+- 导入 2022 年之前完成的 AnimSchool 选择器。
+- 将选择器存储在 Maya 场景中。
+- 高级选择器编辑器。
+- 执行 AnimSchool 选择器的所有功能以及更多功能...
+<center><img src="https://raw.githubusercontent.com/DreamWall-Animation/dwpicker/main/screenshots/picker.gif" alt="drawing" align="center" width="250"/> <img src="https://s10.gifyu.com/images/createbuttons.gif" alt="drawing" align="center" width="400"/>
+<img src="https://raw.githubusercontent.com/DreamWall-Animation/dwpicker/main/screenshots/editor.gif" alt="drawing" align="center" width="370"/>
 
-### Features
-- Easy and fast picker creation.
-- Import AnimSchool pickers done before 2022.
-- Store picker in maya scene.
-- Advanced picker editor.
-- Does whatever AnimSchool picker does and many more ...
-<center><img  src="https://raw.githubusercontent.com/DreamWall-Animation/dwpicker/main/screenshots/picker.gif"  alt="drawing"  align="center"  width="250"/> <img  src="https://s10.gifyu.com/images/createbuttons.gif"  alt="drawing"  align="center"  width="400"/>
-<img  src="https://raw.githubusercontent.com/DreamWall-Animation/dwpicker/main/screenshots/editor.gif"  alt="drawing"  align="center"  width="370"/>
+### 安装
+将名为 "dwpicker" 的文件夹（不是 dwpicker-main）放入 Maya 脚本文件夹中
 
-
-### Installation
-place the folder named "dwpicker" (not dwpicker-main) into the maya script folder
-
-| os       | path                                                  |
+| 操作系统 | 路径                                                  |
 | ------   | ------                                                |
-| linux    | ~/<username>/maya/scripts                             |
-| windows  | \Users\<username>\Documents\maya\scripts              |
-| mac os x | ~<username>/Library/Preferences/Autodesk/maya/scripts |
+| Linux    | ~/<用户名>/maya/scripts                               |
+| Windows  | \Users\<用户名>\Documents\maya\scripts                |
+| Mac OS X | ~<用户名>/Library/Preferences/Autodesk/maya/scripts   |
 
-
-### How to run
+### 如何运行
 
 ```python
 import dwpicker
 dwpicker.show()
 ```
 
+### 常见问题
 
-### FAQ
+#### 它能在 Maya 2025 上运行吗？
+可以！（自版本 0.11.2 起）
 
-#### Does it runs with Maya 2025 ?
-Yes ! (since version 0.11.2)
+#### 我的绑定包含多个命名空间或嵌套命名空间。
+此功能当前不支持。选择器旨在提供单级命名空间的灵活性，允许一个选择器在场景中为同一绑定的多个实例服务。切换选择器的命名空间很简单。然而，尽管我们努力保持这种灵活性，但我们尚未找到支持嵌套命名空间的简单方法。虽然有潜在的解决方案，但它们看起来都相当复杂，难以为用户理解和实现。也许将来会有一个绝妙的主意出现，但目前，这个功能不在我们的计划中。我们欢迎您提出任何建议！
 
-#### My rig contains multiples namespaces or has nested namespace.
-This function isn't currently supported. The picker was designed to offer flexibility with a single level of namespace, allowing for one picker to serve multiple instances of the same rig within a scene. Switching the picker's namespace is straightforward. However, despite our efforts to maintain this flexibility, we haven't yet discovered a straightforward method to support nested namespaces. While there are potential solutions, they all appear rather complex to implement and understand for the user. Perhaps a brilliant idea will emerge in the future, but for now, this feature is not on our roadmap.
-We welcome any suggestions you may have!
+#### 为什么我不能使用相对路径来存储我的图像文件？
+当您打开选择器时，它会将文件直接导入场景中，失去原始路径引用。我们选择导入数据而不是直接引用它们，因为许多动画师更喜欢为他们的特定镜头需求自定义选择器（例如，为特定镜头添加道具或约束按钮）。这种方法使得使用相对路径变得复杂。
 
-#### Why can't I utilize relative paths for my image files?
-When you open a picker, it imports the files directly into the scene, losing the original path reference. We opt to import the data rather than reference them directly, as many animators prefer to customize the picker for their specific shot needs (e.i. adding a button for a prop or constraint unique to a particular shot). This approach complicates the usage of relative paths."
+#### 如何在我将选择器分享给其他人时保留图像，而他们的文件存储在其他地方？
+尽管不支持相对路径，但与其他 Maya 路径属性类似，您可以在路径中包含环境变量。设置自定义环境变量可能很复杂。因此，我们建议使用一个默认变量：DWPICKER_PROJECT_DIRECTORY，可在选择器首选项窗口中使用。
 
-#### How to preserve images when I share my picker to another person, storing his files somewhere else?
-Despite the lacks of support for relative paths, similar to any other Maya path attribute, you can include environment variable in the path. Setting up a custom environment variable might be complexe. Therefore, we propose a default variable one: DWPICKER_PROJECT_DIRECTORY, available in the picker preferences window.
+如果您将 DWPICKER_PROJECT_DIRECTORY 配置为 `c:/my_pickers`，并且您有一个图像路径为：
+`c:/my_pickers/my_character/background.png`，可以这样输入以使路径动态化：`$DWPICKER_PROJECT_DIRECTORY/my_character/background.png`
+当您从 UI 中选择文件时，它会自动创建包含变量的路径。
 
-If you configure DWPICKER_PROJECT_DIRECTORY=`c:/my_pickers` and you have an image with this path:
-`c:/my_pickers/my_character/background.png`, type this to make the path dynamic: `$DWPICKER_PROJECT_DIRECTORY/my_character/background.png`
-When you select a file from the UI, it automatically creates the path containing the variable.
-
-
-### Support
-Preferably, post an issue on the github page.\
-If you don't hold a github account, you can send a mail to `brouyere |a| dreamwall.be`.\
-Please start you mail subject by ***[dwpicker]***. (Note that the replying delay can be longer using that way).
+### 支持
+最好在 GitHub 页面上发布问题。\
+如果您没有 GitHub 帐户，可以发送邮件至 `brouyere |a| dreamwall.be`。\
+请在邮件主题中以 ***[dwpicker]*** 开头。（请注意，使用这种方式回复的延迟可能会更长）。
