@@ -201,3 +201,9 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [15:11:14,905 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [15:11:14,905 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 15:11:14                 
 [15:11:15,693 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[13:32:40,929 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[13:32:41,029 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[13:32:41,029 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 13:32:41                 
+[13:32:41,805 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[13:39:50,460 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[13:39:51,264 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

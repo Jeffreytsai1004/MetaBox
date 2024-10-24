@@ -107,7 +107,7 @@ class InstallDialog(QtWidgets.QDialog):
         msg_box.setText(text)
         msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         
-        # 设置按钮样式
+        # Set button style
         button_style = """
         QPushButton {
             background-color: #B0B0B0;
@@ -231,6 +231,8 @@ class InstallDialog(QtWidgets.QDialog):
         CURRENT_PATH = self.get_script_path()
         SCRIPTS_PATH = os.path.abspath(os.path.join(CURRENT_PATH, "Scripts"))
         ICON_PATH = os.path.abspath(os.path.join(CURRENT_PATH, "Icons", "MetaBox.png"))
+        MAYA_APP_DIR = cmds.internalVar(userAppDir=True)
+        MAYA_VERSION = cmds.about(version=True)
 
         print(f"Current path: {CURRENT_PATH}")
         print(f"Scripts path: {SCRIPTS_PATH}")
