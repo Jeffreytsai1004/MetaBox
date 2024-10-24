@@ -228,3 +228,6 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [21:10:55,069 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [21:10:55,069 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 21:10:55                 
 [21:10:55,842 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[23:29:00,825 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[23:29:00,826 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 23:29:00                 
+[23:29:01,583 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

@@ -3,6 +3,9 @@
 
 #=====================================IMPORT=====================================
 from PySide2 import QtWidgets, QtCore, QtGui
+from shiboken2 import wrapInstance
+from maya import OpenMayaUI as omui
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 import maya.cmds as cmds # type: ignore
 import maya.mel as mel # type: ignore
 import sys
@@ -35,16 +38,22 @@ from Modeling.UV import UVSetEditor
 from Metahuman.Custom import BodyPrep
 from Animation.Blendshape import MorphShape
 from Animation import UniversalRigAdapter
-#=====================================PATH=====================================
+#=====================================VARIABLES=====================================
 METABOX_PATH = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
 sys.path.append(METABOX_PATH)
-print(f"Current directory: {METABOX_PATH}")
-#=====================================VARIABLES=====================================
+
 TOOLBOX_NAME = "MetaBox"
-TOOLBOX_VERSION = "1.0"
+
+TOOLBOX_ICON = "MetaBox.png"
+
+TOOLBOX_VERSION = "1.0.0"
+
 TOOLBOX_AUTHOR = "VIRTUOS"
+
 TOOLBOX_HELP = f"https://ac.virtuosgames.com:8443/display/TK/{TOOLBOX_NAME}"
-ICON_PATH = os.path.join(METABOX_PATH, "Icons", TOOLBOX_NAME + ".png")
+
+ICON_PATH = os.path.join(METABOX_PATH, "Icons", TOOLBOX_ICON)
+
 #=====================================UI BUTTONS COMPONENTS=====================================
 class RoundedButton(QtWidgets.QPushButton):
     """
@@ -80,146 +89,178 @@ class RoundedButton(QtWidgets.QPushButton):
             """
         )
 
-#=====================================UI MAIN WINDOW COMPONENTS=====================================
+#=====================================GLOBAL FUNCTIONS=====================================
 
+# Function to get the directory path of the current script
+def get_script_path():
+    """
+    Get the directory path of the current script
+    """
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Function to get the system encoding
+def get_system_encoding():
+    encoding = sys.getdefaultencoding()
+    if encoding.lower() == 'ascii':
+        # in some Windows systems, the default encoding may be reported as ASCII
+        # but it may actually be using CP437 or other encodings
+        import locale
+        encoding = locale.getpreferredencoding()
+    return encoding
+
+# based on system encoding, default use english
+CURRENT_LANG = 'en_US'
+
+# Initialize translation dictionary
+LANG = {
+    'en_US': {
+        "document": "document",
+        "Help": "Help",
+        "EN": "EN",
+        "ZH": "ZH",
+        "zh_CN": "zh_CN",
+        "Switch Language": "Switch Language",
+        "Modeling": "Modeling",
+        "Metahuman": "Metahuman",
+        "Rigging": "Rigging",
+        "Animation": "Animation",
+        "Display": "Display",
+        "Xray": "Xray",
+        "Joint Xray": "Joint Xray",
+        "Manage": "Manage",
+        "Rename": "Rename",
+        "Batch Import": "Batch Import",
+        "Select": "Select",
+        "Interval Select Edge": "Interval Select Edge",
+        "Same Position Selector": "Same Position Selector",
+        "Edge Loop Smart Select": "Edge Loop Smart Select",
+        "Even Edge Loop": "Even Edge Loop",
+        "Tools": "Tools",
+        "Crease Plus": "Crease Plus",
+        "Speed Cut": "Speed Cut",
+        "ModIt": "ModIt",
+        "PlugIt": "PlugIt",
+        "Zirail": "Zirail",
+        "Groomer`s Tool": "Groomer`s Tool",
+        "Edge Sensei": "Edge Sensei",
+        "Round Inset": "Round Inset",
+        "Arc Deformer": "Arc Deformer", 
+        "Instant Drag": "Instant Drag",
+        "Un Bevel": "Un Bevel",
+        "Align Edge": "Align Edge",
+        "Extra Curve": "Extra Curve",
+        "Speed Bend": "Speed Bend",
+        "GS Curve Tools": "GS Curve Tools",
+        "GS Curve Tools Reset": "GS Curve Tools Reset", 
+        "GS Curve Tools Close": "GS Curve Tools Close",
+        "UV": "UV",
+        "UVDeluxe": "UVDeluxe",
+        "RizomUV Bridge": "RizomUV Bridge",
+        "UV Set Editor": "UV Set Editor",
+        "Preparation": "Preparation",   
+        "Body Prepare": "Body Prepare",
+        "Setup": "Setup",
+        "Advanced Skeleton": "Advanced Skeleton",
+        "Select": "Select",
+        "Anim School Picker": "Anim School Picker",
+        "Tools": "Tools",
+        "bhGhost": "bhGhost",   
+        "IK/FK Switch": "IK/FK Switch",
+        "aTools": "aTools",
+        "Keyframe Pro": "Keyframe Pro",
+        "Studio Library": "Studio Library",
+        "Pose Tools": "Pose Tools",
+        "Epic Pose Wrangler": "Epic Pose Wrangler",
+        "Morph Shape": "Morph Shape",
+        "Universal Rig Adapter": "Universal Rig Adapter"
+    },
+    'zh_CN': {
+        "document": "文档",
+        "Help": "帮助",
+        "EN": "EN",
+        "ZH": "ZH",
+        "zh_CN": "zh_CN",
+        "Switch Language": "切换语言",
+        "Modeling": "建模",
+        "Metahuman": "Metahuman",
+        "Rigging": "绑定",
+        "Animation": "动画",
+        "Display": "显示",
+        "Xray": "Xray",
+        "Joint Xray": "Joint Xray",
+        "Manage": "管理",
+        "Rename": "重命名",
+        "Batch Import": "批量导入",
+        "Select": "选择",
+        "Interval Select Edge": "间隔选择边",
+        "Same Position Selector": "相同位置选择器",
+        "Edge Loop Smart Select": "边缘循环智能选择",
+        "Even Edge Loop": "等边循环",
+        "Tools": "工具",
+        "Crease Plus": "Crease Plus",
+        "Speed Cut": "速切",
+        "ModIt": "ModIt",
+        "PlugIt": "PlugIt",
+        "Zirail": "Zirail 拓扑工具包",
+        "Groomer`s Tool": "Groomer`s 工具包",
+        "Edge Sensei": "边线大师",
+        "Round Inset": "圆角插入",
+        "Arc Deformer": "弧形变形器", 
+        "Instant Drag": "快速放置",
+        "Un Bevel": "反倒角",
+        "Align Edge": "对齐边",
+        "Extra Curve": "额外曲线",
+        "Speed Bend": "速弯",
+        "GS Curve Tools": "GS 曲线工具",
+        "GS Curve Tools Reset": "重置", 
+        "GS Curve Tools Close": "关闭",
+        "UV": "UV",
+        "UVDeluxe": "UVDeluxe",
+        "RizomUV Bridge": "RizomUV Bridge",
+        "UV Set Editor": "UV 编辑器",
+        "Preparation": "准备",   
+        "Body Prepare": "身体准备",
+        "Setup": "设置",
+        "Advanced Skeleton": "高级骨骼",
+        "Select": "选择",
+        "Anim School Picker": "动画学校选择器",
+        "Tools": "工具",
+        "bhGhost": "bhGhost",   
+        "IK/FK Switch": "IK/FK 切换",
+        "aTools": "aTools",
+        "Keyframe Pro": "关键帧大师",
+        "Studio Library": "工作室库",
+        "Pose Tools": "姿势工具",
+        "Epic Pose Wrangler": "Epic 姿势变形器",
+        "Morph Shape": "变形工具",
+        "Universal Rig Adapter": "通用绑定适配器"
+    }
+}
+
+# Function to get the main Maya window
+def maya_main_window():
+    main_window_ptr = omui.MQtUtil.mainWindow()
+    return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
+
+#=====================================UI MAIN WINDOW COMPONENTS=====================================
 class MetaBox(QtWidgets.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=maya_main_window()):
         super(MetaBox, self).__init__(parent)
         self.setWindowTitle(TOOLBOX_NAME)
-        self.setMinimumWidth(300)
+        self.setMinimumWidth(350)
 
-        # Set up the windows icon
+        # Set windows icon
         if os.path.exists(ICON_PATH):
             self.setWindowIcon(QtGui.QIcon(ICON_PATH))
         else:
             print(f"WARNING: Icon file not found: {ICON_PATH}")
 
         # Set the window flags always on top
-        self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(self.windowFlags() | QtCore.Qt.Tool | QtCore.Qt.WindowTitleHint)
 
         # Initialize toggle state
         self.toggle_state = False
-
-        # Initialize language state
-        self.is_chinese = False
-
-        # Initialize translation dictionary
-        self.translations = {
-            'en_US': {
-                "Modeling": "Modeling",
-                "Metahuman": "Metahuman",
-                "Rigging": "Rigging",
-                "Animation": "Animation",
-                "Edit":"Edit",
-                "Display":"Display",
-                "Manage":"Manage",
-                "Select":"Select",
-                "Tools":"Tools",
-                "UV":"UV",
-                "Custom":"Custom",
-                "Setup":"Setup",
-                "Animation Edit":"Animation Edit",
-                "Key":"Key",
-                "Pose":"Pose",
-                "Blendshape":"Blendshape",
-                "Xray":"Xray",
-                "Joint Xray":"Joint Xray",
-                "Rename":"Rename",
-                "Import":"Import",
-                "Batch Import":"Batch Import",
-                "Interval Select Edge":"Interval Select Edge",
-                "Same Position Selector":"Same Position Selector",
-                "Edge Loop Smart Select":"Edge Loop Smart Select",
-                "Even Edge Loop":"Even Edge Loop",
-                "Speed Bend":"Speed Bend",
-                "Poly Fold":"Poly Fold",
-                "Round Inset":"Round Inset",
-                "Arc Deformer":"Arc Deformer",
-                "Instant Drag":"Instant Drag",
-                "Un Bevel":"Un Bevel",
-                "Align Edge":"Align Edge", 
-                "Extra Curve":"Extra Curve",
-                "UV Set Editor":"UV Set Editor",
-                "UVDeluxe":"UVDeluxe",
-                "RizomUV Bridge":"RizomUV Bridge",
-                "Preparation":"Preparation",
-                "Body Prep":"Body Prep",
-                "Custom Mesh":"Custom Mesh",
-                "DNA":"DNA",
-                "Export":"Export",
-                "Advanced Skeleton":"Advanced Skeleton",
-                "Anim School Picker":"Anim School Picker",
-                "bhGhost":"bhGhost",
-                "IK/FK Switch":"IK/FK Switch",
-                "aTools":"aTools",
-                "Keyframe Pro":"Keyframe Pro",
-                "Studio Library":"Studio Library",
-                "Epic Pose Wrangler":"Epic Pose Wrangler",
-                "Morph Shape":"Morph Shape",
-                "Universal Rig Adapter":"Universal Rig Adapter",
-                "document": "Document",
-                "Help": "Help",
-                "Switch Language": "Switch Language"
-            },
-            'zh_CN': {
-                "Modeling": "建模",
-                "Metahuman": "Metahuman",
-                "Rigging": "绑定",
-                "Animation": "动画",
-                "Edit":"编辑",
-                "Display":"显示",
-                "Manage":"管理",
-                "Select":"选择",
-                "Tools":"工具",
-                "UV":"UV",
-                "Custom":"自定义",
-                "Setup":"设置",
-                "Animation Edit":"动画编辑",
-                "Key":"关键帧",
-                "Pose":"姿势",
-                "Blendshape":"混合形状",
-                "Xray":"X光",
-                "Joint Xray":"关节X光",
-                "Rename":"重命名",
-                "Batch Import":"批量导入",
-                "Import":"导入",
-                "Interval Select Edge":"间隔选择边",
-                "Same Position Selector":"相同位置选择器",
-                "Edge Loop Smart Select":"边缘循环智能选择",
-                "Even Edge Loop":"等边循环",
-                "Speed Bend":"速度弯曲",
-                "Poly Fold":"多边形折叠",
-                "Round Inset":"圆角插入",
-                "Arc Deformer":"弧形变形器",
-                "Instant Drag":"瞬时拖拽",
-                "Un Bevel":"Un Bevel",
-                "Align Edge":"对齐边缘", 
-                "Extra Curve":"额外曲线",
-                "UV Set Editor":"UV集编辑器",
-                "UVDeluxe":"UVDeluxe",
-                "RizomUV Bridge":"RizomUV桥接",
-                "Preparation":"准备",
-                "Body Prep":"身体准备",
-                "Custom Mesh":"自定义网格",
-                "DNA":"DNA",
-                "Export":"导出",
-                "Advanced Skeleton":"高级骨骼",
-                "Anim School Picker":"动画学校选择器",
-                "bhGhost":"bhGhost",
-                "IK/FK Switch":"IK/FK切换",
-                "aTools":"aTools",
-                "Keyframe Pro":"关键帧Pro",
-                "Studio Library":"Studio Library",
-                "Epic Pose Wrangler":"Epic姿势编写器",
-                "Morph Shape":"混合形状",
-                "Universal Rig Adapter":"通用绑定适配器",
-                "document": "文档",
-                "Help": "帮助",
-                "Switch Language": "切换语言"
-            }
-        }
-
-        self.current_language = "en_US"
+        self.crease_edge_state = False 
 
         self.create_widgets()
         self.create_layouts()
@@ -227,9 +268,10 @@ class MetaBox(QtWidgets.QWidget):
 #===================================== UI COMPONENTS =====================================
     def create_widgets(self):
         # Create help button
-        self.help_btn = QtWidgets.QPushButton("document")
-        self.help_btn.setToolTip("帮助")
-        self.help_btn.setFixedSize(60, 20)
+        self.help_btn = QtWidgets.QPushButton(LANG[CURRENT_LANG]["document"])
+
+        self.help_btn.setToolTip(LANG[CURRENT_LANG]["Help"])
+        self.help_btn.setFixedSize(90, 20)
         self.help_btn.setStyleSheet("""
             QPushButton {
                 background-color: transparent;
@@ -243,10 +285,10 @@ class MetaBox(QtWidgets.QWidget):
         """)
 
         # Create switch language button
-        self.switch_language_btn = RoundedButton("Switch Language")
-        self.switch_language_btn.setToolTip("切换语言")
-        self.switch_language_btn.setFixedSize(60, 20)
-        self.switch_language_btn.setStyleSheet("""
+        self.lang_btn = QtWidgets.QPushButton("EN" if CURRENT_LANG == 'zh_CN' else "ZH")
+        self.lang_btn.setToolTip(LANG[CURRENT_LANG]["Switch Language"])
+        self.lang_btn.setFixedSize(30, 20)
+        self.lang_btn.setStyleSheet("""
             QPushButton {
                 background-color: transparent;
                 border: none;
@@ -259,68 +301,68 @@ class MetaBox(QtWidgets.QWidget):
         """)
 
         # Create tabs
-        self.modeling_tab_btn = RoundedButton("Modeling")
-        self.metahuman_tab_btn = RoundedButton("Metahuman")
-        self.rigging_tab_btn = RoundedButton("Rigging")
-        self.animation_tab_btn = RoundedButton("Animation")
+        self.modeling_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Modeling"])
+        self.metahuman_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Metahuman"])
+        self.rigging_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Rigging"])
+        self.animation_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Animation"])
 
         # Modeling group widgets
-        self.modeling_display_group = QtWidgets.QGroupBox("Display")
-        self.modeling_xray_btn = RoundedButton("Xray")
-        self.modeling_joint_xray_btn = RoundedButton("Joint Xray")
-        self.modeling_manage_group = QtWidgets.QGroupBox("Manage")
-        self.modeling_rename_btn = RoundedButton("Rename")
-        self.modeling_batch_import_btn = RoundedButton("Batch Import")
-        self.modeling_select_group = QtWidgets.QGroupBox("Select")
-        self.modeling_interval_select_edge_btn = RoundedButton("Interval Select Edge")
-        self.modeling_same_position_selector_btn = RoundedButton("Same Position Selector")
-        self.modeling_edge_loop_smart_select_btn = RoundedButton("Edge Loop Smart Select")
-        self.modeling_even_edge_loop_btn = RoundedButton("Even Edge Loop")
-        self.modeling_tools_group = QtWidgets.QGroupBox("Tools")
-        self.modeling_crease_plus_btn = RoundedButton("Crease Plus")
-        self.modeling_speed_cut_btn = RoundedButton("Speed Cut")
-        self.modeling_modit_btn = RoundedButton("ModIt")
-        self.modeling_plugit_btn = RoundedButton("PlugIt")
-        self.modeling_zirail_btn = RoundedButton("Zirail")
-        self.modeling_xgtools_btn = RoundedButton("Groomer`s Tool")
-        self.modeling_edge_sensei_btn = RoundedButton("Edge Sensei")
-        self.modeling_round_inset_btn = RoundedButton("Round Inset")
-        self.modeling_arc_deformer_btn = RoundedButton("Arc Deformer")
-        self.modeling_instant_drag_btn = RoundedButton("Instant Drag")
-        self.modeling_unbevel_btn = RoundedButton("Un Bevel")
-        self.modeling_align_edge_btn = RoundedButton("Align Edge")
-        self.modeling_extra_curve_btn = RoundedButton("Extra Curve")
-        self.modeling_speed_bend_btn = RoundedButton("Speed Bend")
-        self.modeling_gs_curve_tools_group = QtWidgets.QGroupBox("GS Curve Tools")
-        self.modeling_gs_curve_tools_btn = RoundedButton("GS Curve Tools")
-        self.modeling_reset_gs_curve_tools_btn = RoundedButton("GS Curve Tools Reset")
-        self.modeling_close_gs_curve_tools_btn = RoundedButton("GS Curve Tools Close")
-        self.modeling_uv_group = QtWidgets.QGroupBox("UV") 
-        self.modeling_uvdeluxe_btn = RoundedButton("UVDeluxe")
-        self.modeling_rizom_uv_bridge_btn = RoundedButton("RizomUV Bridge")
-        self.modeling_uv_set_editor_btn = RoundedButton("UV Set Editor")
+        self.modeling_display_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Display"] )
+        self.modeling_xray_btn = RoundedButton(LANG[CURRENT_LANG]["Xray"])
+        self.modeling_joint_xray_btn = RoundedButton(LANG[CURRENT_LANG]["Joint Xray"])
+        self.modeling_manage_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Manage"])
+        self.modeling_rename_btn = RoundedButton(LANG[CURRENT_LANG]["Rename"])
+        self.modeling_batch_import_btn = RoundedButton(LANG[CURRENT_LANG]["Batch Import"])
+        self.modeling_select_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Select"])
+        self.modeling_interval_select_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Interval Select Edge"])
+        self.modeling_same_position_selector_btn = RoundedButton(LANG[CURRENT_LANG]["Same Position Selector"])
+        self.modeling_edge_loop_smart_select_btn = RoundedButton(LANG[CURRENT_LANG]["Edge Loop Smart Select"])
+        self.modeling_even_edge_loop_btn = RoundedButton(LANG[CURRENT_LANG]["Even Edge Loop"])
+        self.modeling_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Tools"])
+        self.modeling_crease_plus_btn = RoundedButton(LANG[CURRENT_LANG]["Crease Plus"])
+        self.modeling_speed_cut_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Cut"])
+        self.modeling_modit_btn = RoundedButton(LANG[CURRENT_LANG]["ModIt"])
+        self.modeling_plugit_btn = RoundedButton(LANG[CURRENT_LANG]["PlugIt"])
+        self.modeling_zirail_btn = RoundedButton(LANG[CURRENT_LANG]["Zirail"])
+        self.modeling_xgtools_btn = RoundedButton(LANG[CURRENT_LANG]["Groomer`s Tool"])
+        self.modeling_edge_sensei_btn = RoundedButton(LANG[CURRENT_LANG]["Edge Sensei"])
+        self.modeling_round_inset_btn = RoundedButton(LANG[CURRENT_LANG]["Round Inset"])
+        self.modeling_arc_deformer_btn = RoundedButton(LANG[CURRENT_LANG]["Arc Deformer"])
+        self.modeling_instant_drag_btn = RoundedButton(LANG[CURRENT_LANG]["Instant Drag"]   )
+        self.modeling_unbevel_btn = RoundedButton(LANG[CURRENT_LANG]["Un Bevel"])
+        self.modeling_align_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Align Edge"])
+        self.modeling_extra_curve_btn = RoundedButton(LANG[CURRENT_LANG]["Extra Curve"])
+        self.modeling_speed_bend_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Bend"])
+        self.modeling_gs_curve_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["GS Curve Tools"])
+        self.modeling_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools"])
+        self.modeling_reset_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Reset"])
+        self.modeling_close_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Close"])
+        self.modeling_uv_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["UV"]) 
+        self.modeling_uvdeluxe_btn = RoundedButton(LANG[CURRENT_LANG]["UVDeluxe"])
+        self.modeling_rizom_uv_bridge_btn = RoundedButton(LANG[CURRENT_LANG]["RizomUV Bridge"])
+        self.modeling_uv_set_editor_btn = RoundedButton(LANG[CURRENT_LANG]["UV Set Editor"])
 
         # Metahuman group widgets
-        self.metahuman_preparation_group = QtWidgets.QGroupBox("Preparation")
-        self.metahuman_body_prepare_btn = RoundedButton("Body Prepare")
+        self.metahuman_preparation_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Preparation"])
+        self.metahuman_body_prepare_btn = RoundedButton(LANG[CURRENT_LANG]["Body Prepare"])
 
         # Rigging group widgets
-        self.rigging_setup_group = QtWidgets.QGroupBox("Setup")
-        self.rigging_advanced_skeleton_btn = RoundedButton("Advanced Skeleton")
+        self.rigging_setup_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Setup"])
+        self.rigging_advanced_skeleton_btn = RoundedButton(LANG[CURRENT_LANG]["Advanced Skeleton"])
 
         # Animation group widgets
-        self.animation_select_group = QtWidgets.QGroupBox("Select")
-        self.animation_animschool_picker_btn = RoundedButton("Anim School Picker")
-        self.animation_tools_group = QtWidgets.QGroupBox("Tools")
-        self.animation_bhghost_btn = RoundedButton("bhGhost")
-        self.animation_ikfk_switch_btn = RoundedButton("IK/FK Switch")
-        self.animation_atools_btn = RoundedButton("aTools")
-        self.animation_keyframepro_btn = RoundedButton("Keyframe Pro")
-        self.animation_studiolibrary_btn = RoundedButton("Studio Library")
-        self.animation_pose_group = QtWidgets.QGroupBox("Pose Tools")
-        self.animation_epic_pose_wrangler_btn = RoundedButton("Epic Pose Wrangler")
-        self.animation_morph_shape_btn = RoundedButton("Morph Shape")
-        self.animation_universal_rig_adapter_btn = RoundedButton("Universal Rig Adapter")
+        self.animation_select_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Select"])
+        self.animation_animschool_picker_btn = RoundedButton(LANG[CURRENT_LANG]["Anim School Picker"])
+        self.animation_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Tools"])
+        self.animation_bhghost_btn = RoundedButton(LANG[CURRENT_LANG]["bhGhost"])
+        self.animation_ikfk_switch_btn = RoundedButton(LANG[CURRENT_LANG]["IK/FK Switch"])
+        self.animation_atools_btn = RoundedButton(LANG[CURRENT_LANG]["aTools"])
+        self.animation_keyframepro_btn = RoundedButton(LANG[CURRENT_LANG]["Keyframe Pro"])
+        self.animation_studiolibrary_btn = RoundedButton(LANG[CURRENT_LANG]["Studio Library"])
+        self.animation_pose_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Pose Tools"])
+        self.animation_epic_pose_wrangler_btn = RoundedButton(LANG[CURRENT_LANG]["Epic Pose Wrangler"])
+        self.animation_morph_shape_btn = RoundedButton(LANG[CURRENT_LANG]["Morph Shape"])
+        self.animation_universal_rig_adapter_btn = RoundedButton(LANG[CURRENT_LANG]["Universal Rig Adapter"])
 
     def create_layouts(self):
         main_layout = QtWidgets.QVBoxLayout(self)
@@ -335,7 +377,7 @@ class MetaBox(QtWidgets.QWidget):
         modeling_tab = QtWidgets.QWidget()
         modeling_layout = QtWidgets.QVBoxLayout(modeling_tab)
         modeling_layout.addWidget(self.modeling_display_group)
-        modeling_display_layout = QtWidgets.QGridLayout(self.modeling_display_group)  # 修改为 QGridLayout
+        modeling_display_layout = QtWidgets.QGridLayout(self.modeling_display_group)
         modeling_display_layout.addWidget(self.modeling_xray_btn, 0, 0)
         modeling_display_layout.addWidget(self.modeling_joint_xray_btn, 0, 1)
         modeling_layout.addWidget(self.modeling_manage_group)
@@ -349,7 +391,7 @@ class MetaBox(QtWidgets.QWidget):
         modeling_select_layout.addWidget(self.modeling_edge_loop_smart_select_btn)
         modeling_select_layout.addWidget(self.modeling_even_edge_loop_btn)
         modeling_layout.addWidget(self.modeling_tools_group)
-        modeling_tools_layout = QtWidgets.QGridLayout(self.modeling_tools_group)  # 修改为 QGridLayout
+        modeling_tools_layout = QtWidgets.QGridLayout(self.modeling_tools_group)
         modeling_tools_layout.addWidget(self.modeling_crease_plus_btn, 0, 0)
         modeling_tools_layout.addWidget(self.modeling_speed_cut_btn, 0, 1)
         modeling_tools_layout.addWidget(self.modeling_modit_btn, 1, 0)
@@ -397,7 +439,7 @@ class MetaBox(QtWidgets.QWidget):
         animation_select_layout = QtWidgets.QVBoxLayout(self.animation_select_group)
         animation_select_layout.addWidget(self.animation_animschool_picker_btn)
         animation_layout.addWidget(self.animation_tools_group)
-        animation_tools_layout = QtWidgets.QGridLayout(self.animation_tools_group)  # 修改为 QGridLayout
+        animation_tools_layout = QtWidgets.QGridLayout(self.animation_tools_group)
         animation_tools_layout.addWidget(self.animation_bhghost_btn, 0, 0)
         animation_tools_layout.addWidget(self.animation_ikfk_switch_btn, 0, 1)
         animation_tools_layout.addWidget(self.animation_atools_btn, 1, 0)
@@ -410,11 +452,37 @@ class MetaBox(QtWidgets.QWidget):
         animation_pose_layout.addWidget(self.animation_universal_rig_adapter_btn)
         tabs_layout.addTab(animation_tab, "Animation")
 
+        # change bottom layout
+        bottom_layout = QtWidgets.QHBoxLayout()
+
+        # create icon label
+        icon_label = QtWidgets.QLabel()
+        icon_path = os.path.join(get_script_path(), "Icons", TOOLBOX_ICON).replace('\\', '/')
+        if os.path.exists(icon_path):
+            icon = QtGui.QPixmap(icon_path).scaled(24, 24, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            icon_label.setPixmap(icon)
+        else:
+            print(f"Warning: Icon file '{icon_path}' does not exist.")
+        
+        # add icon label to bottom layout
+        bottom_layout.addWidget(icon_label)
+        
+        # add version information label
+        version_label = QtWidgets.QLabel(f"v{TOOLBOX_VERSION}")
+        version_label.setStyleSheet("color: gray; font-size: 12px;")
+        bottom_layout.addWidget(version_label)
+        
+        # add a stretchable space to push the help and language buttons to the right
+        bottom_layout.addStretch()
+        
+        # add help and language buttons
+        bottom_layout.addWidget(self.help_btn)
+        bottom_layout.addWidget(self.lang_btn)
+
+        # add bottom layout to main layout
+        main_layout.addLayout(bottom_layout)
+
     def create_connections(self):
-        # Help button connection
-        self.help_btn.clicked.connect(self.show_help)
-        # Switch language button connection
-        self.switch_language_btn.clicked.connect(self.toggle_language)
         # Modeling tab connections
         self.modeling_xray_btn.clicked.connect(self.run_xray)
         self.modeling_joint_xray_btn.clicked.connect(self.run_joint_xray)
@@ -458,15 +526,14 @@ class MetaBox(QtWidgets.QWidget):
         self.animation_epic_pose_wrangler_btn.clicked.connect(self.open_epic_pose_wrangler)
         self.animation_morph_shape_btn.clicked.connect(self.run_morph_shape)
         self.animation_universal_rig_adapter_btn.clicked.connect(self.run_universal_rig_adapter)
+        # connect help button
+        self.help_btn.clicked.connect(self.show_help)
+        # connect language switch button
+        self.lang_btn.clicked.connect(self.toggle_language)
+
 
 #========================================================================== FUNCTIONS ==========================================================================
-    # Initialization
-    def show_help(self):
-        webbrowser.open(TOOLBOX_HELP)
 
-    def toggle_language(self):
-        self.current_language = "en_US" if self.current_language == "zh_CN" else "zh_CN"
-        self.switch_language_btn.setText(self.current_language)
     
     # Modeling Functions
     # ****************************************************************************************************************
@@ -1119,6 +1186,142 @@ class MetaBox(QtWidgets.QWidget):
             cmds.warning(ERROR_MESSAGE)
             cmds.confirmDialog(title='Error', message=ERROR_MESSAGE, button=['OK'], defaultButton='OK')
 
+
+    def show_help(self):
+        # Specify the URL of the website you want to open
+        webbrowser.open(TOOLBOX_HELP)
+
+    def toggle_language(self):
+        global CURRENT_LANG
+        CURRENT_LANG = 'en_US' if CURRENT_LANG == 'zh_CN' else 'zh_CN'
+        self.lang_btn.setText("EN" if CURRENT_LANG == 'zh_CN' else "CN")
+        self.retranslate_ui()
+        
+        QtWidgets.QToolTip.showText(
+            self.lang_btn.mapToGlobal(QtCore.QPoint(0, -30)),
+            "Language switched" if CURRENT_LANG == 'en_US' else "语言已切换",
+            self.lang_btn
+        )
+
+    def retranslate_ui(self):
+        # Update all UI elements
+        self.setWindowTitle("MetaBox")
+        self.help_btn.setText(LANG[CURRENT_LANG]["document"])
+        self.help_btn.setFont(QtGui.QFont("Microsoft Yahei", 10))
+        self.help_btn.setToolTip(LANG[CURRENT_LANG]["Help"])
+        self.lang_btn.setFont(QtGui.QFont("Microsoft Yahei", 10))
+        self.lang_btn.setToolTip(LANG[CURRENT_LANG]["Switch Language"])
+        self.modeling_tab_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_tab_btn.setText(LANG[CURRENT_LANG]["Modeling"])
+        self.metahuman_tab_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.metahuman_tab_btn.setText(LANG[CURRENT_LANG]["Metahuman"])
+        self.rigging_tab_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.rigging_tab_btn.setText(LANG[CURRENT_LANG]["Rigging"])
+        self.animation_tab_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_tab_btn.setText(LANG[CURRENT_LANG]["Animation"])
+        self.animation_tab_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_display_group.setTitle(LANG[CURRENT_LANG]["Display"] )
+        self.modeling_display_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_xray_btn.setText(LANG[CURRENT_LANG]["Xray"])
+        self.modeling_xray_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_joint_xray_btn.setText(LANG[CURRENT_LANG]["Joint Xray"])
+        self.modeling_joint_xray_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_manage_group.setTitle(LANG[CURRENT_LANG]["Manage"])
+        self.modeling_manage_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_rename_btn.setText(LANG[CURRENT_LANG]["Rename"])
+        self.modeling_rename_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_batch_import_btn.setText(LANG[CURRENT_LANG]["Batch Import"])
+        self.modeling_batch_import_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_select_group.setTitle(LANG[CURRENT_LANG]["Select"])
+        self.modeling_select_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_interval_select_edge_btn.setText(LANG[CURRENT_LANG]["Interval Select Edge"])
+        self.modeling_interval_select_edge_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_same_position_selector_btn.setText(LANG[CURRENT_LANG]["Same Position Selector"])
+        self.modeling_same_position_selector_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_edge_loop_smart_select_btn.setText(LANG[CURRENT_LANG]["Edge Loop Smart Select"])
+        self.modeling_edge_loop_smart_select_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_even_edge_loop_btn.setText(LANG[CURRENT_LANG]["Even Edge Loop"])
+        self.modeling_even_edge_loop_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_tools_group.setTitle(LANG[CURRENT_LANG]["Tools"])
+        self.modeling_tools_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_crease_plus_btn.setText(LANG[CURRENT_LANG]["Crease Plus"])
+        self.modeling_crease_plus_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_speed_cut_btn.setText(LANG[CURRENT_LANG]["Speed Cut"])
+        self.modeling_speed_cut_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_modit_btn.setText(LANG[CURRENT_LANG]["ModIt"])
+        self.modeling_modit_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_plugit_btn.setText(LANG[CURRENT_LANG]["PlugIt"])
+        self.modeling_plugit_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_zirail_btn.setText(LANG[CURRENT_LANG]["Zirail"])
+        self.modeling_zirail_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_xgtools_btn.setText(LANG[CURRENT_LANG]["Groomer`s Tool"])
+        self.modeling_xgtools_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_edge_sensei_btn.setText(LANG[CURRENT_LANG]["Edge Sensei"])
+        self.modeling_edge_sensei_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_round_inset_btn.setText(LANG[CURRENT_LANG]["Round Inset"])
+        self.modeling_round_inset_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_arc_deformer_btn.setText(LANG[CURRENT_LANG]["Arc Deformer"])
+        self.modeling_arc_deformer_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_instant_drag_btn.setText(LANG[CURRENT_LANG]["Instant Drag"])
+        self.modeling_instant_drag_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_unbevel_btn.setText(LANG[CURRENT_LANG]["Un Bevel"])
+        self.modeling_unbevel_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_align_edge_btn.setText(LANG[CURRENT_LANG]["Align Edge"])
+        self.modeling_align_edge_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_extra_curve_btn.setText(LANG[CURRENT_LANG]["Extra Curve"])
+        self.modeling_extra_curve_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_speed_bend_btn.setText(LANG[CURRENT_LANG]["Speed Bend"])
+        self.modeling_speed_bend_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_gs_curve_tools_group.setTitle(LANG[CURRENT_LANG]["GS Curve Tools"])
+        self.modeling_gs_curve_tools_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_gs_curve_tools_btn.setText(LANG[CURRENT_LANG]["GS Curve Tools"])
+        self.modeling_gs_curve_tools_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_reset_gs_curve_tools_btn.setText(LANG[CURRENT_LANG]["GS Curve Tools Reset"])
+        self.modeling_reset_gs_curve_tools_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_close_gs_curve_tools_btn.setText(LANG[CURRENT_LANG]["GS Curve Tools Close"])
+        self.modeling_close_gs_curve_tools_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_uv_group.setTitle(LANG[CURRENT_LANG]["UV"])
+        self.modeling_uv_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_uvdeluxe_btn.setText(LANG[CURRENT_LANG]["UVDeluxe"])
+        self.modeling_uvdeluxe_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_rizom_uv_bridge_btn.setText(LANG[CURRENT_LANG]["RizomUV Bridge"])
+        self.modeling_rizom_uv_bridge_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.modeling_uv_set_editor_btn.setText(LANG[CURRENT_LANG]["UV Set Editor"])
+        self.modeling_uv_set_editor_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.metahuman_preparation_group.setTitle(LANG[CURRENT_LANG]["Preparation"])
+        self.metahuman_preparation_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.metahuman_body_prepare_btn.setText(LANG[CURRENT_LANG]["Body Prepare"])
+        self.metahuman_body_prepare_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.rigging_setup_group.setTitle(LANG[CURRENT_LANG]["Setup"])
+        self.rigging_setup_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.rigging_advanced_skeleton_btn.setText(LANG[CURRENT_LANG]["Advanced Skeleton"])
+        self.rigging_advanced_skeleton_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_select_group.setTitle(LANG[CURRENT_LANG]["Select"])
+        self.animation_select_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_animschool_picker_btn.setText(LANG[CURRENT_LANG]["Anim School Picker"])
+        self.animation_animschool_picker_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_tools_group.setTitle(LANG[CURRENT_LANG]["Tools"])
+        self.animation_tools_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_bhghost_btn.setText(LANG[CURRENT_LANG]["bhGhost"])
+        self.animation_bhghost_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_ikfk_switch_btn.setText(LANG[CURRENT_LANG]["IK/FK Switch"])
+        self.animation_ikfk_switch_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_atools_btn.setText(LANG[CURRENT_LANG]["aTools"])
+        self.animation_atools_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_keyframepro_btn.setText(LANG[CURRENT_LANG]["Keyframe Pro"])
+        self.animation_keyframepro_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_studiolibrary_btn.setText(LANG[CURRENT_LANG]["Studio Library"])
+        self.animation_studiolibrary_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_pose_group.setTitle(LANG[CURRENT_LANG]["Pose Tools"])
+        self.animation_pose_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_epic_pose_wrangler_btn.setText(LANG[CURRENT_LANG]["Epic Pose Wrangler"])
+        self.animation_epic_pose_wrangler_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_morph_shape_btn.setText(LANG[CURRENT_LANG]["Morph Shape"])
+        self.animation_morph_shape_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.animation_universal_rig_adapter_btn.setText(LANG[CURRENT_LANG]["Universal Rig Adapter"])
+        self.animation_universal_rig_adapter_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+
+
     # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def show():
@@ -1139,6 +1342,8 @@ def show():
     
     # Create a new window instance and display it
     main_window = MetaBox()
+    main_window.setWindowFlags(QtCore.Qt.Window)
+    main_window.setAttribute(QtCore.Qt.WA_DeleteOnClose)
     main_window.show()
 
 
