@@ -207,3 +207,24 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [13:32:41,805 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
 [13:39:50,460 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
 [13:39:51,264 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[18:23:11,663 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[18:23:11,663 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 18:23:11                 
+[18:23:12,433 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[18:23:13,174 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[18:23:13,943 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[18:39:31,544 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[18:39:31,650 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[18:39:31,650 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 18:39:31                 
+[18:39:32,424 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[20:31:28,027 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[20:31:28,028 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 20:31:28                 
+[20:31:28,802 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[20:31:30,309 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[20:31:31,074 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[20:50:13,251 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[20:50:13,251 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 20:50:13                 
+[20:50:14,019 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[20:52:09,964 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[21:10:55,069 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[21:10:55,069 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 21:10:55                 
+[21:10:55,842 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!

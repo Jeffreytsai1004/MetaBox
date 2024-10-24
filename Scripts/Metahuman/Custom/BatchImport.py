@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import maya.cmds as cmds
 import sys
 
@@ -15,9 +18,11 @@ def run(*args):
     else:
         multipleFilters =  'All native importable files (*.abc *.ass *.at *.catpart *.dae *.fbx *.igs *.iges *.jt *.ma *.mb *.obj *.prt *.sat *.step *.stp *.wire);; Maya binary (*.mb);; Maya Ascii (*.ma);; WIRE_ATF (*.wire);; Obj (*.obj);; FBX (*.fbx);; DAE_FBX (*.dae);; Alembic Cache (*.abc);; Atom (*.atom);; Step (*.stp *.step);; IGES_ATF (*.igs *.iges);; ASS (*.ass);; 3DS Max (*.3ds);; CATIAV5_ATF (*.catpart);; JT_ATF (*.jt);; SAT_ATF (*.sat);; NX_ATF (*.prt)'
     files = cmds.fileDialog2(caption = 'Choose files to import', ds = 2, fileMode = 4, okCaption = 'Import', fileFilter = multipleFilters, hideNameEdit = False)
-    if files == None or files[0] == None or len(files) < 0:
-        sys.exit('You or something else canceled the selection of a directory. Did you only see empty folders? Make sure you have the requiered permissions for the folder.\n')
-
+    
+    # 添加检查以确保 files 有效
+    if not files or not isinstance(files, list) or len(files) == 0:
+        cmds.warning('未选择任何文件，导入操作已取消。')
+        return  # 直接返回，避免后续代码执行
 
     for x in files:
         if any(y in x for y in ['.ma', '.MA']):
