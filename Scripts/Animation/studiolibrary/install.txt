@@ -1,6 +1,12 @@
-如何安装 Studio Library。
-1. 将 "install.mel" 文件拖放到 Maya 视口中。
-2. 点击工具栏上的 Studio Library 图标以运行。
-提示：如果您想与其他用户共享 Studio Library，请将下载的 "studiolibrary" 文件夹放在网络驱动器上。
-支持：
+How to install the Studio Library.
+
+1. Drag and drop the "install.mel" file onto the Maya viewport.
+
+2. Click the Studio Library icon on the shelf to run.
+
+Tip: If you would like to share the Studio Library with other users then
+place the downloaded "studiolibrary" folder on a network drive.
+
+Support:
+
 www.studiolibrary.com

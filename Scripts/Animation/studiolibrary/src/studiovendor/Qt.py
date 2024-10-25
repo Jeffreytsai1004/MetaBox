@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 """Minimal Python 2 & 3 shim around all Qt bindings
 
 DOCUMENTATION
@@ -697,7 +694,7 @@ def _wrapinstance(ptr, base=None):
         if Qt.IsPyQt4 or Qt.IsPyQt5:
             base = Qt.QtCore.QObject
         else:
-            q_object = func(int(ptr), Qt.QtCore.QObject)
+            q_object = func(long(ptr), Qt.QtCore.QObject)
             meta_object = q_object.metaObject()
 
             while True:
@@ -714,7 +711,7 @@ def _wrapinstance(ptr, base=None):
 
                 break
 
-    return func(int(ptr), base)
+    return func(long(ptr), base)
 
 
 def _isvalid(object):

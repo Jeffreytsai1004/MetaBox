@@ -16,7 +16,7 @@
      'rotateZ': ('doubleAngle', 90.0),
      'testVectorZ': ('double', 2.6000000000000001),
      'scaleZ': ('double', 0.5),
-     'testInteger': ('int', 5),
+     'testInteger': ('long', 5),
      'testBoolean': ('bool', True),
      'testConnect': ('double', 8.0)
 }, 

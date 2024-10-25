@@ -1,5 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Copyright 2020 by Kurt Rathjen. All Rights Reserved.
+#
+# This library is free software: you can redistribute it and/or modify it 
+# under the terms of the GNU Lesser General Public License as published by 
+# the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version. This library is distributed in the 
+# hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+# See the GNU Lesser General Public License for more details.
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import shutil
@@ -133,10 +142,10 @@ def clampRange(srcTime, dstTime):
     Clips the given source time to within the given destination time.
 
     Example:
-        print(clampRange((15, 35), (20, 30)))
+        print clampRange((15, 35), (20, 30))
         # 20, 30
 
-        print(clampRange((25, 45), (20, 30)))
+        print clampRange((25, 45), (20, 30))
         # 25, 30
 
     :type srcTime: (int, int)
@@ -165,7 +174,7 @@ def moveTime(time, start):
     Move the given time to the given start time.
 
     Example:
-        print(moveTime((15, 35), 5))
+        print moveTime((15, 35), 5)
         # 5, 20
 
     :type time: (int, int)
@@ -379,7 +388,7 @@ class Animation(mutils.Pose):
 
         Example:
             anim = Animation.fromPath("/temp/example.anim")
-            print(anim.endFrame())
+            print anim.endFrame()
             # 14
 
         :type path: str

@@ -1,4 +1,4 @@
-[comment]: # "请通过github查看此页面: https://github.com/krathjen/studiolibrary/blob/master/DOCS.md"
+﻿[comment]: # "请通过github查看此页面: https://github.com/krathjen/studiolibrary/blob/master/DOCS.md"
 
 <a name="top"></a>
 <img src="./src/studiolibrary/resource/icons/header.png" width="252" height="42"/>

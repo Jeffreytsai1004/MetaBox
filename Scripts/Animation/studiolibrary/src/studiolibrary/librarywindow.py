@@ -1,5 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Copyright 2020 by Kurt Rathjen. All Rights Reserved.
+#
+# This library is free software: you can redistribute it and/or modify it 
+# under the terms of the GNU Lesser General Public License as published by 
+# the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version. This library is distributed in the 
+# hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+# See the GNU Lesser General Public License for more details.
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 import re
 import os
@@ -44,7 +53,7 @@ class CheckForUpdate(QtCore.QThread):
     finished = QtCore.Signal(object)
 
     def __init__(self, url):
-        super().__init__()
+        super(CheckForUpdate, self).__init__()
         self.url = url
 
     def run(self):
@@ -2429,7 +2438,7 @@ class LibraryWindow(QtWidgets.QWidget):
         self.setStatusBarWidgetVisible(True)
 
     def showRefreshMessage(self):
-        """Show how int the current refresh took."""
+        """Show how long the current refresh took."""
         itemCount = len(self.library().results())
         elapsedTime = self.library().searchTime()
 

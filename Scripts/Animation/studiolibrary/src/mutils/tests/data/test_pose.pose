@@ -14,7 +14,7 @@
     "srcSphere:sphere": {
       "attrs": {
         "testInteger": {
-          "type": "int", 
+          "type": "long", 
           "value": 5
         }, 
         "testProxy": {

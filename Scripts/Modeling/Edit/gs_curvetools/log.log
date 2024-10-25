@@ -231,3 +231,38 @@ TypeError: eval() arg 1 must be a string, bytes or code object
 [23:29:00,825 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
 [23:29:00,826 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 23:29:00                 
 [23:29:01,583 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[09:40:24,719 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[09:40:24,719 | DEBUG |     main |    58]: <module>() :                  25/10/2024, 09:40:24                 
+[09:40:25,486 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[10:45:16,508 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[10:45:16,508 | DEBUG |     main |    58]: <module>() :                  25/10/2024, 10:45:16                 
+[10:45:17,275 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[10:45:18,574 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
+[10:45:19,329 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[12:36:49,094 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
+[12:36:49,094 | DEBUG |     main |    58]: <module>() :                  25/10/2024, 12:36:49                 
+[12:36:49,923 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
+[12:40:38,463 |  INFO |     core |  4055]: saveOptions() : Saving options
+[12:40:39,602 |  INFO |     core |  4055]: saveOptions() : Saving options
+[12:40:45,957 | ERROR |    utils |   110]: warningInView() : Select Edges to Convert
+[12:40:45,963 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6171, in edgeToCurve
+[12:40:46,738 | ERROR |    utils |   110]: warningInView() : Select Edges to Convert
+[12:40:46,740 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6171, in edgeToCurve
+[12:40:53,725 | ERROR |    utils |   110]: warningInView() : Select at least two Curves
+[12:40:53,728 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 361, in transferUV
+[12:40:54,358 | ERROR |    utils |   110]: warningInView() : Select at least two Curves
+[12:40:54,359 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 361, in transferUV
+[12:40:55,406 | ERROR |    utils |   110]: warningInView() : Select at least two Curves
+[12:40:55,408 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 288, in transferAttr
+[12:40:56,544 | ERROR |    utils |   110]: warningInView() : Select at least one Curve
+[12:40:56,546 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5238, in resetCurvePivotPoint
+[12:40:57,916 | ERROR |    utils |   110]: warningInView() : Select at least one curve
+[12:40:57,918 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5776, in duplicateCurve
+[12:40:58,741 | ERROR |    utils |   110]: warningInView() : Select at least one curve
+[12:40:58,743 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5953, in extendCurve
+[12:40:59,616 | ERROR |    utils |   110]: warningInView() : Select at least one curve
+[12:40:59,618 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5856, in smoothCurve
+[12:41:05,931 | ERROR |    utils |   110]: warningInView() : No nurbs curves selected
+[12:41:05,934 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6074, in controlCurveCreate
+[12:41:06,440 | ERROR |    utils |   110]: warningInView() : No nurbs curves selected
+[12:41:06,442 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6074, in controlCurveCreate

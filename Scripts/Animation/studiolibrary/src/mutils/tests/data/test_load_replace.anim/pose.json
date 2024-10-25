@@ -20,7 +20,7 @@
       "attrs": {
         "testInteger": {
           "curve": "CURVE1", 
-          "type": "int", 
+          "type": "long", 
           "value": 5
         }, 
         "testProxy": {

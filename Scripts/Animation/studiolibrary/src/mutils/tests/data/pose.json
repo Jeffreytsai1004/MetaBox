@@ -103,7 +103,7 @@
         }, 
         "testInteger": {
           "curve": "CURVE15", 
-          "type": "int", 
+          "type": "long", 
           "value": 5
         }, 
         "testBoolean": {

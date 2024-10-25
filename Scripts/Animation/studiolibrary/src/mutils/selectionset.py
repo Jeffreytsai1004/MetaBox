@@ -1,6 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+# Copyright 2020 by Kurt Rathjen. All Rights Reserved.
+#
+# This library is free software: you can redistribute it and/or modify it 
+# under the terms of the GNU Lesser General Public License as published by 
+# the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version. This library is distributed in the 
+# hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+# See the GNU Lesser General Public License for more details.
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
 
@@ -67,7 +75,7 @@ class SelectionSet(mutils.TransferObject):
                 # Remove the first pipe in-case the object has a parent.
                 dstNode.stripFirstPipe()
 
-                # Try to get the short name. Much faster than the int
+                # Try to get the short name. Much faster than the long
                 # name when selecting objects.
                 try:
                     dstNode = dstNode.toShortName()

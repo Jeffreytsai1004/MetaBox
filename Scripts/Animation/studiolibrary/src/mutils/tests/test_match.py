@@ -1,5 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Copyright 2020 by Kurt Rathjen. All Rights Reserved.
+#
+# This library is free software: you can redistribute it and/or modify it 
+# under the terms of the GNU Lesser General Public License as published by 
+# the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version. This library is distributed in the 
+# hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+# See the GNU Lesser General Public License for more details.
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 import mutils
 import test_base
@@ -83,7 +92,7 @@ class TestMatch(test_base.TestBase):
     def test_match6(self):
         """
         Test namespace
-        Test int name
+        Test long name
         Test namespace in source objects
         Test namespace that is not in source objects
         """
@@ -141,7 +150,7 @@ class TestMatch(test_base.TestBase):
 
     def test_match11(self):
         """
-        Match int name to short name.
+        Match long name to short name.
         """
         srcObjects = ["|grpEyeAllLf|grpLidTpLf|ctlLidTpLf"]
         dstObjects = ["ctlLidTpLf"]
@@ -151,7 +160,7 @@ class TestMatch(test_base.TestBase):
 
     def test_match12(self):
         """
-        Match short name to int name.
+        Match short name to long name.
         """
         srcObjects = ["ctlLidTpLf"]
         dstObjects = ["|grpEyeAllLf|grpLidTpLf|ctlLidTpLf"]
@@ -161,7 +170,7 @@ class TestMatch(test_base.TestBase):
 
     def test_match13(self):
         """
-        Match short name to int name with namespace.
+        Match short name to long name with namespace.
         """
         srcObjects = ["ctlLidTpLf"]
         dstObjects = ["|malcolm:grpEyeAllLf|malcolm:grpLidTpLf|malcolm:ctlLidTpLf"]
@@ -171,7 +180,7 @@ class TestMatch(test_base.TestBase):
 
     def test_match14(self):
         """
-        Match int name to short name with namespace.
+        Match long name to short name with namespace.
         """
         srcObjects = ["|malcolm:grpEyeAllLf|malcolm:grpLidTpLf|malcolm:ctlLidTpLf"]
         dstObjects = ["ctlLidTpLf"]

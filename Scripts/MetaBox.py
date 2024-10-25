@@ -37,6 +37,7 @@ from Modeling.UV import UVSetEditor
 from Metahuman.Custom import BodyPrep
 from Animation.Blendshape import MorphShape
 from Animation import UniversalRigAdapter
+from Dev import mayaiconview
 #=====================================VARIABLES=====================================
 METABOX_PATH = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
 sys.path.append(METABOX_PATH)
@@ -51,8 +52,8 @@ TOOLBOX_AUTHOR = "VIRTUOS"
 
 TOOLBOX_HELP = f"https://ac.virtuosgames.com:8443/display/TK/{TOOLBOX_NAME}"
 
-ICON_PATH = os.path.join(METABOX_PATH, "Icons", TOOLBOX_ICON)
-
+ICON_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Icons", TOOLBOX_ICON).replace('\\', '/')
+print(ICON_PATH)
 #=====================================UI BUTTONS COMPONENTS=====================================
 class RoundedButton(QtWidgets.QPushButton):
     """
@@ -63,28 +64,28 @@ class RoundedButton(QtWidgets.QPushButton):
     - Custom color and hover effect
     - Bold text
     """
-    def __init__(self, text="", icon=None):
+    def __init__(self, text="", icon=None, color="#D0D0D0", hover_color="#E0E0E0", pressed_color="#C0C0C0"):
         super(RoundedButton, self).__init__(text)
         if icon:
             self.setIcon(icon)
             self.setIconSize(QtCore.QSize(24, 24))
+        
         self.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #D0D0D0;
-                color: #303030;
-                border-radius: 10px;
+            f"""
+            QPushButton {{
+                background-color: {color}; 
+                color: #303030; 
+                border-radius: 10px; 
                 padding: 5px;
                 font-weight: bold;
                 text-align: center;
-                
-            }
-            QPushButton:hover {
-                background-color: #E0E0E0;
-            }
-            QPushButton:pressed {
-                background-color: #C0C0C0;
-            }
+            }}
+            QPushButton:hover {{
+                background-color: {hover_color}; 
+            }}
+            QPushButton:pressed {{
+                background-color: {pressed_color}; 
+            }}
             """
         )
 
@@ -113,7 +114,7 @@ CURRENT_LANG = 'en_US'
 # Initialize translation dictionary
 LANG = {
     'en_US': {
-        "document": "document",
+        "Document": "Document",
         "Help": "Help",
         "EN": "EN",
         "ZH": "ZH",
@@ -172,10 +173,13 @@ LANG = {
         "Pose Tools": "Pose Tools",
         "Epic Pose Wrangler": "Epic Pose Wrangler",
         "Morph Shape": "Morph Shape",
-        "Universal Rig Adapter": "Universal Rig Adapter"
+        "Universal Rig Adapter": "Universal Rig Adapter",
+        "Dev": "Dev",
+        "Dev Tool": "Dev Tool",
+        "Icon Viewer": "Icon Viewer"
     },
     'zh_CN': {
-        "document": "文档",
+        "Document": "文档",
         "Help": "帮助",
         "EN": "EN",
         "ZH": "ZH",
@@ -186,32 +190,32 @@ LANG = {
         "Rigging": "绑定",
         "Animation": "动画",
         "Display": "显示",
-        "Xray": "Xray",
-        "Joint Xray": "Joint Xray",
+        "Xray": "X光显示",
+        "Joint Xray": "关节X光显示",
         "Manage": "管理",
         "Rename": "重命名",
         "Batch Import": "批量导入",
         "Select": "选择",
         "Interval Select Edge": "间隔选择边",
-        "Same Position Selector": "相同位置选择器",
+        "Same Position Selector": "相同位置物体选择器",
         "Edge Loop Smart Select": "边缘循环智能选择",
         "Even Edge Loop": "等边循环",
         "Tools": "工具",
-        "Crease Plus": "Crease Plus",
-        "Speed Cut": "速切",
+        "Crease Plus": "Crease ++",
+        "Speed Cut": "快速切割",
         "ModIt": "ModIt",
         "PlugIt": "PlugIt",
-        "Zirail": "Zirail 拓扑工具包",
-        "Groomer`s Tool": "Groomer`s 工具包",
+        "Zirail": "Zirail 拓扑工具",
+        "Groomer`s Tool": "Groomer 工具",
         "Edge Sensei": "边线大师",
         "Round Inset": "圆角插入",
         "Arc Deformer": "弧形变形器", 
-        "Instant Drag": "快速放置",
-        "Un Bevel": "反倒角",
-        "Align Edge": "对齐边",
-        "Extra Curve": "额外曲线",
-        "Speed Bend": "速弯",
-        "GS Curve Tools": "GS 曲线工具",
+        "Instant Drag": "吸附放置",
+        "Un Bevel": "去除倒角",
+        "Align Edge": "对齐到边",
+        "Extra Curve": "提取曲线",
+        "Speed Bend": "快速弯曲",
+        "GS Curve Tools": "GS曲线工具",
         "GS Curve Tools Reset": "重置", 
         "GS Curve Tools Close": "关闭",
         "UV": "UV",
@@ -223,10 +227,10 @@ LANG = {
         "Setup": "设置",
         "Advanced Skeleton": "高级骨骼",
         "Select": "选择",
-        "Anim School Picker": "动画学校拾取器",
-        "DWPicker": "DW拾取器",
+        "Anim School Picker": "Anim School 拾取器",
+        "DWPicker": "DW 拾取器",
         "Tools": "工具",
-        "bhGhost": "bhGhost",   
+        "bhGhost": "洋葱皮",   
         "IK/FK Switch": "IK/FK 切换",
         "aTools": "aTools",
         "Keyframe Pro": "关键帧大师",
@@ -234,21 +238,32 @@ LANG = {
         "Pose Tools": "姿势工具",
         "Epic Pose Wrangler": "Epic 姿势变形器",
         "Morph Shape": "变形工具",
-        "Universal Rig Adapter": "通用绑定适配器"
+        "Universal Rig Adapter": "通用绑定适配器",
+        "Dev": "开发",
+        "Dev Tool": "开发工具",
+        "Icon Viewer": "图标查看器"
     }
 }
 
 # Function to get the main Maya window
 def maya_main_window():
     main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
+    if main_window_ptr is not None:
+        return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
+    else:
+        raise RuntimeError("Failed to obtain Maya main window.")
 
 #=====================================UI MAIN WINDOW COMPONENTS=====================================
 class MetaBox(QtWidgets.QWidget):
     def __init__(self, parent=maya_main_window()):
         super(MetaBox, self).__init__(parent)
+
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowStaysOnTopHint)
+        self.setParent(parent)
+        self.setAttribute(QtCore.Qt.WA_QuitOnClose, False)
         self.setWindowTitle(TOOLBOX_NAME)
-        self.setMinimumWidth(350)
+        self.setMinimumWidth(380)
 
         # Set windows icon
         if os.path.exists(ICON_PATH):
@@ -260,8 +275,7 @@ class MetaBox(QtWidgets.QWidget):
         self.setWindowFlags(self.windowFlags() | QtCore.Qt.Tool | QtCore.Qt.WindowTitleHint)
 
         # Initialize toggle state
-        self.toggle_state = False
-        self.crease_edge_state = False 
+        self.toggle_state = True 
 
         self.create_widgets()
         self.create_layouts()
@@ -269,7 +283,7 @@ class MetaBox(QtWidgets.QWidget):
 #===================================== UI COMPONENTS =====================================
     def create_widgets(self):
         # Create help button
-        self.help_btn = QtWidgets.QPushButton(LANG[CURRENT_LANG]["document"])
+        self.help_btn = QtWidgets.QPushButton(LANG[CURRENT_LANG]["Document"])
 
         self.help_btn.setToolTip(LANG[CURRENT_LANG]["Help"])
         self.help_btn.setFixedSize(90, 20)
@@ -306,65 +320,70 @@ class MetaBox(QtWidgets.QWidget):
         self.metahuman_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Metahuman"])
         self.rigging_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Rigging"])
         self.animation_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Animation"])
+        self.dev_tab_btn = RoundedButton(LANG[CURRENT_LANG]["Dev"])
 
         # Modeling group widgets
         self.modeling_display_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Display"] )
-        self.modeling_xray_btn = RoundedButton(LANG[CURRENT_LANG]["Xray"])
-        self.modeling_joint_xray_btn = RoundedButton(LANG[CURRENT_LANG]["Joint Xray"])
+        self.modeling_xray_btn = RoundedButton(LANG[CURRENT_LANG]["Xray"], color="#FFB3BA", hover_color="#FF9DAF", pressed_color="#FF6F61")
+        self.modeling_joint_xray_btn = RoundedButton(LANG[CURRENT_LANG]["Joint Xray"], color="#FFDAA5", hover_color="#FFC78C", pressed_color="#FFC0A1")
         self.modeling_manage_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Manage"])
-        self.modeling_rename_btn = RoundedButton(LANG[CURRENT_LANG]["Rename"])
-        self.modeling_batch_import_btn = RoundedButton(LANG[CURRENT_LANG]["Batch Import"])
+        self.modeling_rename_btn = RoundedButton(LANG[CURRENT_LANG]["Rename"], color="#A4D7E1", hover_color="#A0D8D0", pressed_color="#8CC8C5")
+        self.modeling_batch_import_btn = RoundedButton(LANG[CURRENT_LANG]["Batch Import"], color="#A7C6ED", hover_color="#B2D3F0", pressed_color="#8BB8E0")
         self.modeling_select_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Select"])
-        self.modeling_interval_select_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Interval Select Edge"])
-        self.modeling_same_position_selector_btn = RoundedButton(LANG[CURRENT_LANG]["Same Position Selector"])
-        self.modeling_edge_loop_smart_select_btn = RoundedButton(LANG[CURRENT_LANG]["Edge Loop Smart Select"])
-        self.modeling_even_edge_loop_btn = RoundedButton(LANG[CURRENT_LANG]["Even Edge Loop"])
+        self.modeling_interval_select_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Interval Select Edge"], color="#FFEBA1", hover_color="#FFF5B3", pressed_color="#FFE68A")
+        self.modeling_same_position_selector_btn = RoundedButton(LANG[CURRENT_LANG]["Same Position Selector"], color="#FFABAB", hover_color="#FFC3C3", pressed_color="#FF8C8C")
+        self.modeling_edge_loop_smart_select_btn = RoundedButton(LANG[CURRENT_LANG]["Edge Loop Smart Select"], color="#A7C6ED", hover_color="#B2D3F0", pressed_color="#8BB8E0")
+        self.modeling_even_edge_loop_btn = RoundedButton(LANG[CURRENT_LANG]["Even Edge Loop"], color="#FF8C94", hover_color="#FFB3B8", pressed_color="#FF6F7D")
         self.modeling_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Tools"])
-        self.modeling_crease_plus_btn = RoundedButton(LANG[CURRENT_LANG]["Crease Plus"])
-        self.modeling_speed_cut_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Cut"])
-        self.modeling_modit_btn = RoundedButton(LANG[CURRENT_LANG]["ModIt"])
-        self.modeling_plugit_btn = RoundedButton(LANG[CURRENT_LANG]["PlugIt"])
-        self.modeling_zirail_btn = RoundedButton(LANG[CURRENT_LANG]["Zirail"])
-        self.modeling_xgtools_btn = RoundedButton(LANG[CURRENT_LANG]["Groomer`s Tool"])
-        self.modeling_edge_sensei_btn = RoundedButton(LANG[CURRENT_LANG]["Edge Sensei"])
-        self.modeling_round_inset_btn = RoundedButton(LANG[CURRENT_LANG]["Round Inset"])
-        self.modeling_arc_deformer_btn = RoundedButton(LANG[CURRENT_LANG]["Arc Deformer"])
-        self.modeling_instant_drag_btn = RoundedButton(LANG[CURRENT_LANG]["Instant Drag"]   )
-        self.modeling_unbevel_btn = RoundedButton(LANG[CURRENT_LANG]["Un Bevel"])
-        self.modeling_align_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Align Edge"])
-        self.modeling_extra_curve_btn = RoundedButton(LANG[CURRENT_LANG]["Extra Curve"])
-        self.modeling_speed_bend_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Bend"])
+        self.modeling_crease_plus_btn = RoundedButton(LANG[CURRENT_LANG]["Crease Plus"], color="#FFB74D", hover_color="#FFD54F", pressed_color="#FFA726")
+        self.modeling_speed_cut_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Cut"], color="#FFEBA1", hover_color="#FFF5B3", pressed_color="#FFE68A")
+        self.modeling_modit_btn = RoundedButton(LANG[CURRENT_LANG]["ModIt"], color="#A4D7E1", hover_color="#A0D8D0", pressed_color="#8CC8C5")
+        self.modeling_plugit_btn = RoundedButton(LANG[CURRENT_LANG]["PlugIt"], color="#B39DDB", hover_color="#D1C4E9", pressed_color="#9575CD")
+        self.modeling_zirail_btn = RoundedButton(LANG[CURRENT_LANG]["Zirail"], color="#A7C6ED", hover_color="#B2D3F0", pressed_color="#8BB8E0")
+        self.modeling_xgtools_btn = RoundedButton(LANG[CURRENT_LANG]["Groomer`s Tool"], color="#FFAB40", hover_color="#FFB74D", pressed_color="#FF8F00")
+        self.modeling_edge_sensei_btn = RoundedButton(LANG[CURRENT_LANG]["Edge Sensei"], color="#B2E0B2", hover_color="#C6E6C6", pressed_color="#99D699")
+        self.modeling_round_inset_btn = RoundedButton(LANG[CURRENT_LANG]["Round Inset"], color="#FF8C94", hover_color="#FFB3B8", pressed_color="#FF6F7D")
+        self.modeling_arc_deformer_btn = RoundedButton(LANG[CURRENT_LANG]["Arc Deformer"], color="#E1BEE7", hover_color="#EAB8E4", pressed_color="#D81B60")
+        self.modeling_instant_drag_btn = RoundedButton(LANG[CURRENT_LANG]["Instant Drag"], color="#BBDEFB", hover_color="#90CAF9", pressed_color="#64B5F6")
+        self.modeling_unbevel_btn = RoundedButton(LANG[CURRENT_LANG]["Un Bevel"], color="#C8E6C9", hover_color="#A5D6A7", pressed_color="#81C784")
+        self.modeling_align_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Align Edge"], color="#FFCCBC", hover_color="#FFAB91", pressed_color="#FF8A65")
+        self.modeling_extra_curve_btn = RoundedButton(LANG[CURRENT_LANG]["Extra Curve"], color="#FFABAB", hover_color="#FF8C8C", pressed_color="#FF6F61")
+        self.modeling_speed_bend_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Bend"], color="#E1BEE7", hover_color="#D1C4E9", pressed_color="#BA68C8")
         self.modeling_gs_curve_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["GS Curve Tools"])
-        self.modeling_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools"])
-        self.modeling_reset_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Reset"])
-        self.modeling_close_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Close"])
+        self.modeling_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools"], color="#C8E6C9", hover_color="#A5D6A7", pressed_color="#81C784")
+        self.modeling_reset_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Reset"], color="#FFEBA1", hover_color="#FFF5B3", pressed_color="#FFE68A")
+        self.modeling_close_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Close"], color="#FFCCBC", hover_color="#FFAB91", pressed_color="#FF8A65")
         self.modeling_uv_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["UV"]) 
-        self.modeling_uvdeluxe_btn = RoundedButton(LANG[CURRENT_LANG]["UVDeluxe"])
-        self.modeling_rizom_uv_bridge_btn = RoundedButton(LANG[CURRENT_LANG]["RizomUV Bridge"])
-        self.modeling_uv_set_editor_btn = RoundedButton(LANG[CURRENT_LANG]["UV Set Editor"])
+        self.modeling_uvdeluxe_btn = RoundedButton(LANG[CURRENT_LANG]["UVDeluxe"], color="#A7C6ED", hover_color="#B2D3F0", pressed_color="#8BB8E0")
+        self.modeling_rizom_uv_bridge_btn = RoundedButton(LANG[CURRENT_LANG]["RizomUV Bridge"], color="#FFABAB", hover_color="#FFC3C3", pressed_color="#FF8C8C")
+        self.modeling_uv_set_editor_btn = RoundedButton(LANG[CURRENT_LANG]["UV Set Editor"], color="#FFEBA1", hover_color="#FFF5B3", pressed_color="#FFE68A")
 
         # Metahuman group widgets
         self.metahuman_preparation_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Preparation"])
-        self.metahuman_body_prepare_btn = RoundedButton(LANG[CURRENT_LANG]["Body Prepare"])
+        self.metahuman_body_prepare_btn = RoundedButton(LANG[CURRENT_LANG]["Body Prepare"], color="#FFABAB", hover_color="#FF6F6F", pressed_color="#FF8C8C")
 
         # Rigging group widgets
         self.rigging_setup_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Setup"])
-        self.rigging_advanced_skeleton_btn = RoundedButton(LANG[CURRENT_LANG]["Advanced Skeleton"])
+        self.rigging_advanced_skeleton_btn = RoundedButton(LANG[CURRENT_LANG]["Advanced Skeleton"], color="#FFDAA5", hover_color="#FFC78C", pressed_color="#FFC0A1")
 
         # Animation group widgets
         self.animation_select_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Select"])
-        self.animation_animschool_picker_btn = RoundedButton(LANG[CURRENT_LANG]["Anim School Picker"])
-        self.animation_dwpicker_btn = RoundedButton(LANG[CURRENT_LANG]["DWPicker"])
+        self.animation_animschool_picker_btn = RoundedButton(LANG[CURRENT_LANG]["Anim School Picker"], color="#FFB3BA", hover_color="#FF9DAF", pressed_color="#FF8C94")
+        self.animation_dwpicker_btn = RoundedButton(LANG[CURRENT_LANG]["DWPicker"], color="#A0D8D0", hover_color="#8CC8C5", pressed_color="#7FBFBF")
         self.animation_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Tools"])
-        self.animation_bhghost_btn = RoundedButton(LANG[CURRENT_LANG]["bhGhost"])
-        self.animation_ikfk_switch_btn = RoundedButton(LANG[CURRENT_LANG]["IK/FK Switch"])
-        self.animation_atools_btn = RoundedButton(LANG[CURRENT_LANG]["aTools"])
-        self.animation_keyframepro_btn = RoundedButton(LANG[CURRENT_LANG]["Keyframe Pro"])
-        self.animation_studiolibrary_btn = RoundedButton(LANG[CURRENT_LANG]["Studio Library"])
+        self.animation_bhghost_btn = RoundedButton(LANG[CURRENT_LANG]["bhGhost"], color="#FFDAA5", hover_color="#FFC78C", pressed_color="#FFC0A1")
+        self.animation_ikfk_switch_btn = RoundedButton(LANG[CURRENT_LANG]["IK/FK Switch"], color="#B2E1D4", hover_color="#A0D8D0", pressed_color="#8CC8C5")
+        self.animation_atools_btn = RoundedButton(LANG[CURRENT_LANG]["aTools"], color="#FFB3BA", hover_color="#FF9DAF", pressed_color="#FF8C94")
+        self.animation_keyframepro_btn = RoundedButton(LANG[CURRENT_LANG]["Keyframe Pro"], color="#FFDAA5", hover_color="#FFC78C", pressed_color="#FFC0A1")
+        self.animation_studiolibrary_btn = RoundedButton(LANG[CURRENT_LANG]["Studio Library"], color="#A0D8D0", hover_color="#8CC8C5", pressed_color="#7FBFBF")
         self.animation_pose_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Pose Tools"])
-        self.animation_epic_pose_wrangler_btn = RoundedButton(LANG[CURRENT_LANG]["Epic Pose Wrangler"])
-        self.animation_morph_shape_btn = RoundedButton(LANG[CURRENT_LANG]["Morph Shape"])
-        self.animation_universal_rig_adapter_btn = RoundedButton(LANG[CURRENT_LANG]["Universal Rig Adapter"])
+        self.animation_epic_pose_wrangler_btn = RoundedButton(LANG[CURRENT_LANG]["Epic Pose Wrangler"], color="#FFB3BA", hover_color="#FF9DAF", pressed_color="#FF8C94")
+        self.animation_morph_shape_btn = RoundedButton(LANG[CURRENT_LANG]["Morph Shape"], color="#FFDAA5", hover_color="#FFC78C", pressed_color="#FFC0A1")
+        self.animation_universal_rig_adapter_btn = RoundedButton(LANG[CURRENT_LANG]["Universal Rig Adapter"], color="#A0D8D0", hover_color="#8CC8C5", pressed_color="#7FBFBF")
+
+        # Dev group widgets
+        self.dev_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Dev Tool"])
+        self.dev_icon_viewer_btn = RoundedButton(LANG[CURRENT_LANG]["Icon Viewer"], color="#FFDAA5", hover_color="#FFC78C", pressed_color="#FFC0A1")
 
     def create_layouts(self):
         main_layout = QtWidgets.QVBoxLayout(self)
@@ -400,17 +419,19 @@ class MetaBox(QtWidgets.QWidget):
         modeling_tools_layout.addWidget(self.modeling_plugit_btn, 1, 1)
         modeling_tools_layout.addWidget(self.modeling_zirail_btn, 2, 0)
         modeling_tools_layout.addWidget(self.modeling_xgtools_btn, 2, 1)
-        modeling_tools_layout.addWidget(self.modeling_gs_curve_tools_btn, 3, 0)
-        modeling_tools_layout.addWidget(self.modeling_reset_gs_curve_tools_btn, 3, 1)
-        modeling_tools_layout.addWidget(self.modeling_close_gs_curve_tools_btn, 4, 0)
-        modeling_tools_layout.addWidget(self.modeling_edge_sensei_btn, 4, 1)
-        modeling_tools_layout.addWidget(self.modeling_round_inset_btn, 5, 0)
-        modeling_tools_layout.addWidget(self.modeling_arc_deformer_btn, 5, 1)
-        modeling_tools_layout.addWidget(self.modeling_instant_drag_btn, 6, 0)
-        modeling_tools_layout.addWidget(self.modeling_unbevel_btn, 6, 1)
-        modeling_tools_layout.addWidget(self.modeling_align_edge_btn, 7, 0)
-        modeling_tools_layout.addWidget(self.modeling_extra_curve_btn, 7, 1)
-        modeling_tools_layout.addWidget(self.modeling_speed_bend_btn, 8, 0)
+        modeling_tools_layout.addWidget(self.modeling_edge_sensei_btn, 3, 0)
+        modeling_tools_layout.addWidget(self.modeling_round_inset_btn, 3, 1)
+        modeling_tools_layout.addWidget(self.modeling_arc_deformer_btn, 4, 0)
+        modeling_tools_layout.addWidget(self.modeling_instant_drag_btn, 4, 1)
+        modeling_tools_layout.addWidget(self.modeling_unbevel_btn, 5, 0)
+        modeling_tools_layout.addWidget(self.modeling_align_edge_btn, 5, 1)
+        modeling_tools_layout.addWidget(self.modeling_extra_curve_btn, 6, 0)
+        modeling_tools_layout.addWidget(self.modeling_speed_bend_btn, 6, 1)
+        modeling_layout.addWidget(self.modeling_gs_curve_tools_group)
+        modeling_gs_curve_tools_layout = QtWidgets.QVBoxLayout(self.modeling_gs_curve_tools_group)
+        modeling_gs_curve_tools_layout.addWidget(self.modeling_gs_curve_tools_btn)
+        modeling_gs_curve_tools_layout.addWidget(self.modeling_reset_gs_curve_tools_btn)
+        modeling_gs_curve_tools_layout.addWidget(self.modeling_close_gs_curve_tools_btn)
         modeling_layout.addWidget(self.modeling_uv_group)
         modeling_uv_layout = QtWidgets.QVBoxLayout(self.modeling_uv_group)
         modeling_uv_layout.addWidget(self.modeling_uv_set_editor_btn)
@@ -454,6 +475,14 @@ class MetaBox(QtWidgets.QWidget):
         animation_pose_layout.addWidget(self.animation_morph_shape_btn)
         animation_pose_layout.addWidget(self.animation_universal_rig_adapter_btn)
         tabs_layout.addTab(animation_tab, "Animation")
+
+        # Dev Layout
+        dev_tab = QtWidgets.QWidget()
+        dev_layout = QtWidgets.QVBoxLayout(dev_tab)
+        dev_layout.addWidget(self.dev_tools_group)
+        dev_tools_layout = QtWidgets.QVBoxLayout(self.dev_tools_group)
+        dev_tools_layout.addWidget(self.dev_icon_viewer_btn)
+        tabs_layout.addTab(dev_tab, "Dev")
 
         # change bottom layout
         bottom_layout = QtWidgets.QHBoxLayout()
@@ -501,9 +530,6 @@ class MetaBox(QtWidgets.QWidget):
         self.modeling_plugit_btn.clicked.connect(self.run_plugit)
         self.modeling_zirail_btn.clicked.connect(self.run_zirail)
         self.modeling_xgtools_btn.clicked.connect(self.run_xgtools)
-        self.modeling_gs_curve_tools_btn.clicked.connect(self.run_gs_curve_tools)
-        self.modeling_reset_gs_curve_tools_btn.clicked.connect(self.reset_gs_curve_tools)
-        self.modeling_close_gs_curve_tools_btn.clicked.connect(self.stop_gs_curve_tools)
         self.modeling_edge_sensei_btn.clicked.connect(self.run_edge_sensei)
         self.modeling_round_inset_btn.clicked.connect(self.run_round_inset)
         self.modeling_arc_deformer_btn.clicked.connect(self.run_arc_deformer)
@@ -512,6 +538,9 @@ class MetaBox(QtWidgets.QWidget):
         self.modeling_speed_bend_btn.clicked.connect(self.run_speed_bend)
         self.modeling_align_edge_btn.clicked.connect(self.run_align_edge)
         self.modeling_extra_curve_btn.clicked.connect(self.run_extra_curve)
+        self.modeling_gs_curve_tools_btn.clicked.connect(self.run_gs_curve_tools)
+        self.modeling_reset_gs_curve_tools_btn.clicked.connect(self.reset_gs_curve_tools)
+        self.modeling_close_gs_curve_tools_btn.clicked.connect(self.stop_gs_curve_tools)
         self.modeling_uv_set_editor_btn.clicked.connect(self.run_uv_set_editor)
         self.modeling_uvdeluxe_btn.clicked.connect(self.run_uvdeluxe)
         self.modeling_rizom_uv_bridge_btn.clicked.connect(self.run_rizom_uv_bridge)
@@ -530,6 +559,8 @@ class MetaBox(QtWidgets.QWidget):
         self.animation_epic_pose_wrangler_btn.clicked.connect(self.open_epic_pose_wrangler)
         self.animation_morph_shape_btn.clicked.connect(self.run_morph_shape)
         self.animation_universal_rig_adapter_btn.clicked.connect(self.run_universal_rig_adapter)
+        # Dev tab connections
+        self.dev_icon_viewer_btn.clicked.connect(self.run_icon_viewer)
         # connect help button
         self.help_btn.clicked.connect(self.show_help)
         # connect language switch button
@@ -1209,9 +1240,18 @@ class MetaBox(QtWidgets.QWidget):
         except Exception as e:
             ERROR_MESSAGE = f"Error occurred while running MorphShape: {e}"
             cmds.warning(ERROR_MESSAGE)
+            
+    def run_icon_viewer(self, *args):
+        try:
+            from Dev.mayaiconview import create_icon_viewer
+            create_icon_viewer()
+        except Exception as e:
+            ERROR_MESSAGE = f"Error occurred while running Icon Viewer: {e}"
+            cmds.warning(ERROR_MESSAGE)
             cmds.confirmDialog(title='Error', message=ERROR_MESSAGE, button=['OK'], defaultButton='OK')
-
-
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Help and Language
+# ****************************************************************************************************************
     def show_help(self):
         # Specify the URL of the website you want to open
         webbrowser.open(TOOLBOX_HELP)
@@ -1231,7 +1271,7 @@ class MetaBox(QtWidgets.QWidget):
     def retranslate_ui(self):
         # Update all UI elements
         self.setWindowTitle("MetaBox")
-        self.help_btn.setText(LANG[CURRENT_LANG]["document"])
+        self.help_btn.setText(LANG[CURRENT_LANG]["Document"])
         self.help_btn.setFont(QtGui.QFont("Microsoft Yahei", 10))
         self.help_btn.setToolTip(LANG[CURRENT_LANG]["Help"])
         self.lang_btn.setFont(QtGui.QFont("Microsoft Yahei", 10))
@@ -1347,13 +1387,18 @@ class MetaBox(QtWidgets.QWidget):
         self.animation_morph_shape_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
         self.animation_universal_rig_adapter_btn.setText(LANG[CURRENT_LANG]["Universal Rig Adapter"])
         self.animation_universal_rig_adapter_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.dev_tools_group.setTitle(LANG[CURRENT_LANG]["Dev Tool"])
+        self.dev_tools_group.setFont(QtGui.QFont("Microsoft Yahei", 8))
+        self.dev_icon_viewer_btn.setText(LANG[CURRENT_LANG]["Icon Viewer"])
+        self.dev_icon_viewer_btn.setFont(QtGui.QFont("Microsoft Yahei", 8))
 
 
-    # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Main
+# ****************************************************************************************************************
 def show():
     """
-    Display the HUG Tools main window
+    Display the MetaBox main window
     
     This function will close the existing window (if any) and then create and display a new window.
     Use the global variable main_window to keep a reference to the window instance.

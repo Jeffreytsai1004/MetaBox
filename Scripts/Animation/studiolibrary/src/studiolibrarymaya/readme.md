@@ -1,11 +1,11 @@
-# Studio Library 项目
+# Studio Library Items
 
-项目用于加载和保存数据。
+Items are used for loading and saving data.
 
 
-### 姿势项目
+### Pose Item
 
-保存和加载姿势项目
+Saving and loading a pose items
 
 ```python
 from studiolibrarymaya import poseitem
@@ -14,16 +14,16 @@ path = "/AnimLibrary/Characters/Malcolm/malcolm.pose"
 objects = maya.cmds.ls(selection=True) or []
 namespaces = []
 
-# 保存姿势项目
+# Saving a pose item
 poseitem.save(path, objects=objects)
 
-# 加载姿势项目
+# Loading a pose item
 poseitem.load(path, objects=objects, namespaces=namespaces, key=True, mirror=False)
 ```
 
-### 动画项目
+### Animation Item
 
-保存和加载动画项目
+Saving and loading animation items
 
 ```python
 from studiolibrarymaya import animitem
@@ -31,23 +31,23 @@ from studiolibrarymaya import animitem
 path = "/AnimLibrary/Characters/Malcolm/malcolm.anim"
 objects = maya.cmds.ls(selection=True) or []
 
-# 保存动画项目
+# Saving an animation item
 animitem.save(path, objects=objects, frameRange=(0, 200), bakeConnected=False)
 
-# 加载动画项目
+# Loading an animation item
 animitem.load(path, objects=objects, option="replace all", connect=False, currentTime=False)
 ```
 
-加载多个命名空间的动画
+Loading an animation to multiple namespaces
 
 ```python
 from studiolibrarymaya import animitem
 animitem.load(path, namespaces=["character1", "character2"], option="replace all")
 ```
 
-### 镜像表项目
+### Mirror Table Item
 
-保存和加载镜像表
+Saving and loading mirror tables
 
 ```python
 from studiolibrarymaya import mirroritem
@@ -55,16 +55,16 @@ from studiolibrarymaya import mirroritem
 path = "/AnimLibrary/Characters/Malcolm/malcolm.mirror"
 objects = maya.cmds.ls(selection=True) or []
 
-# 保存镜像表项目
+# Saving a mirror table item
 mirroritem.save(path, objects=objects, leftSide="Lf", rightSide="Rf")
 
-# 加载镜像表项目
+# Loading a mirror table item
 mirroritem.load(path, objects=objects, namespaces=[], option="swap", animation=True, time=None)
 ```
 
-### 选择集项目
+### Selection Set Item
 
-保存和加载选择集
+Saving and loading selection sets
 
 ```python
 from studiolibrarymaya import setsitem
@@ -72,20 +72,20 @@ from studiolibrarymaya import setsitem
 path = "/AnimLibrary/Characters/Malcolm/malcolm.set"
 objects = maya.cmds.ls(selection=True) or []
 
-# 保存选择集项目
+# Saving a selection sets item
 setsitem.save(path, objects=objects)
 
-# 加载选择集项目
+# Loading a selection sets item
 setsitem.load(path, objects=objects, namespaces=[])
 ```
 
 
-### Maya 文件项目（开发中）
+### Maya File Item (Development)
 
-保存和加载 Maya 文件项目
+Saving and loading a Maya file item
 
-此项目可用于加载和保存任何 Maya 节点。例如：
-定位器和几何体。
+This item can be used to load and save any Maya nodes. For example:
+locators and geometry.
 
 ```python
 from studiolibrarymaya import mayafileitem
@@ -93,17 +93,17 @@ from studiolibrarymaya import mayafileitem
 path = "/AnimLibrary/Characters/Malcolm/malcolm.mayafile"
 objects = maya.cmds.ls(selection=True) or []
 
-# 将项目保存到磁盘
+# Saving the item to disc
 mayafileitem.save(path, objects=objects)
 
-# 从磁盘加载项目
+# Loading the item from disc
 mayafileitem.load(path)
 ```
 
-### 示例项目
+### Example Item
 
-如果您想创建一个自定义项目以保存和加载不同数据类型，请查看 [exampleitem.py](exampleitem.py)
+If you would like to create a custom item for saving and loading different data types, then please have a look at the [exampleitem.py](exampleitem.py)
 
-在开发新项目时，您可以在架子图标上“Shift + 点击”，这将重新加载所有 Studio Library 模块，包括您对项目的更改。
+When developing a new item you can "Shift + Click" on the shelf icon which will reload all Studio Library modules including your changes to the item.
 
-确保使用 [配置文件](../studiolibrary/config/default.json) 中的 "itemRegistry" 键或通过调用 `studiolibrary.registerItem(cls)` 注册任何新项目。
+Make sure you register any new items using either the "itemRegistry" key in the [config file](../studiolibrary/config/default.json) or by calling `studiolibrary.registerItem(cls)`.

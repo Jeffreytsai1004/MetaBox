@@ -1,5 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Copyright 2020 by Kurt Rathjen. All Rights Reserved.
+#
+# This library is free software: you can redistribute it and/or modify it 
+# under the terms of the GNU Lesser General Public License as published by 
+# the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version. This library is distributed in the 
+# hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+# See the GNU Lesser General Public License for more details.
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import sys
@@ -512,7 +521,7 @@ def formatPath(formatString, path="", **kwargs):
     Resolve the given string with the given path and kwargs.
 
     Example:
-        print(formatPath("{dirname}/meta.json", path="C:/hello/world.json"))
+        print formatPath("{dirname}/meta.json", path="C:/hello/world.json")
         # "C:/hello/meta.json"
 
     :type formatString: str
@@ -760,13 +769,6 @@ def read(path):
 
 
 def write(path, data):
-    if six.PY2:
-        write2(path, data)
-    else:
-        write3(path, data)
-
-
-def write2(path, data):
     """
     Write the given data to the given file on disc.
 
@@ -823,41 +825,6 @@ def write2(path, data):
             os.rename(bak, path)
 
         raise
-
-
-def write3(path, data):
-    """
-    Writes the given data to a file atomically by first writing to a
-    temp file and then renaming it.
-    """
-    path = normPath(path)
-    data = relPath(data, path)
-
-    dirname = os.path.dirname(path)
-    if not os.path.exists(dirname):
-        os.makedirs(dirname)
-
-    tmp = None
-
-    try:
-
-        with tempfile.NamedTemporaryFile(
-                mode='w',
-                dir=dirname,
-                delete=False,
-                suffix='.delete'
-        ) as f:
-            tmp = f.name
-            f.write(data)
-            f.flush()
-
-        # Introduced in python 3.3
-        os.replace(tmp, path)
-
-    finally:
-
-        if tmp and os.path.exists(tmp):
-            os.remove(tmp)
 
 
 def update(data, other):
@@ -1154,7 +1121,7 @@ def splitPath(path):
     Split the given path into directory, basename and extension.
     
     Example:
-        print(splitPath("P:/production/rigs/character/mario.ma"))
+        print splitPath("P:/production/rigs/character/mario.ma
         
         # (u'P:/production/rigs/character', u'mario', u'.ma')
     
@@ -1171,7 +1138,7 @@ def listToString(data):
     Return a string from the given list.
     
     Example:
-        print(listToString(['apple', 'pear', 'cherry']))
+        print listToString(['apple', 'pear', 'cherry'])
         
         # apple,pear,cherry
     
@@ -1190,7 +1157,7 @@ def stringToList(data):
     Return a list from the given string.
         
     Example:
-        print(listToString('apple, pear, cherry'))
+        print listToString('apple, pear, cherry')
         
         # ['apple', 'pear', 'cherry']
     
@@ -1224,7 +1191,7 @@ def generateUniquePath(path, attempts=1000):
         # C:/tmp/file.text
         # C:/tmp/file (2).text
 
-        print(generateUniquePath("C:/tmp/file.text"))
+        print generateUniquePath("C:/tmp/file.text")
         # C:/tmp/file (3).text
 
     :type path:  str
@@ -1285,11 +1252,10 @@ def walkup(path, match=None, depth=3, sep="/"):
         except PermissionError:
             continue  # expected on network shares
         except OSError as e:
-            if getattr(e, 'winerror', None) == 59:
-                continue  # "An unexpected network error occurred"
-            if getattr(e, 'winerror', None) == 6:
-                # "The handle is invalid" - something weird on network share
-                continue
+            if 'unexpected network error' in e.strerror:
+                continue  # expected on network shares
+            if 'handle is invalid' in e.strerror:
+                continue  # something weird on network share
             raise
         for filename in filenames:
             path = os.path.join(folder, filename)
@@ -1299,10 +1265,10 @@ def walkup(path, match=None, depth=3, sep="/"):
 
 def timeAgo(timeStamp):
     """
-    Return a pretty string for how int ago the given timeStamp was.
+    Return a pretty string for how long ago the given timeStamp was.
     
     Example:
-        print(timeAgo("2015-04-27 22:29:55"))
+        print timeAgo("2015-04-27 22:29:55"
         # 2 years ago
     
     :type timeStamp: str
