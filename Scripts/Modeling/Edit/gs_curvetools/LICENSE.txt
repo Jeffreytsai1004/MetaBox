@@ -1,4 +1,4 @@
-﻿License:
+License:
 This collection of code named GS CurveTools is a property of George Sladkovsky (Yehor Sladkovskyi) 
 and can not be copied or distributed without his written permission.
 

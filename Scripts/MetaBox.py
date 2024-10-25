@@ -644,6 +644,21 @@ class MetaBox(QtWidgets.QWidget):
             if gs_curvetools_path not in sys.path:
                 sys.path.insert(0, gs_curvetools_path)
 
+            gs_curvetools_sub_path = [
+                os.path.join(gs_curvetools_path, 'fonts').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'icons').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'plugins').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'utils').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'constants').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'core').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'main').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'ui').replace('\\', '/'),
+                os.path.join(gs_curvetools_path, 'uv_editor').replace('\\', '/')
+            ]
+            for path in gs_curvetools_sub_path:
+                if path not in sys.path:
+                    sys.path.insert(0, path)
+
             from Modeling.Edit.gs_curvetools import main as ct_main
             # Run the main function
             ct_main.main()

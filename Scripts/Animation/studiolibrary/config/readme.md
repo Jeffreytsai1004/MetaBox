@@ -1,22 +1,25 @@
-﻿
-## 配置
 
-创建自定义配置有两种方法。
+## Config
 
-1. 您可以在此目录中创建一个 config.json 文件。
-   config.json 文件将覆盖 [default.json](../src/studiolibrary/config/default.json) 文件中的任何键，并将被 git 忽略。
+There are two ways to create a custom config.
 
-2. 另一种方法是创建一个名为 STUDIO_LIBRARY_CONFIG_PATH 的环境变量。
-   该变量的值应为您的 config.json 文件的完整路径。
+1. You can create a config.json file in this directory.
+The config.json file will override any keys in the [default.json](../src/studiolibrary/config/default.json) file
+and will be ignored by git.
 
-配置使用 json 文件类型，并基本支持使用 "//" 的注释。
+2. The other way is to create an environment variable with the name
+STUDIO_LIBRARY_CONFIG_PATH. The value of this variable should be the
+full path to your config.json file.
 
-##### 示例：
+The config uses the json file type with basic support for comments using "//".
+
+##### Example:
 
 ```javascript
 // config.json
 {
-  // 从根目录开始的最大搜索深度
+  // The maximum walking depth from the root directory
   "recursiveSearchDepth": 4
 }
 ```
+

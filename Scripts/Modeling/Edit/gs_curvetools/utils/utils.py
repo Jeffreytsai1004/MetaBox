@@ -51,15 +51,14 @@ import maya.mel as mel
 
 from ..constants import *
 
+gs_curvetools_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))).replace('\\', '/')
 
 ### Logging ###
 class Logger:
     """ Create logger, log and print messages"""
 
     def __init__(self):
-        current_dir = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
-        parent_dir = os.path.dirname(current_dir)
-        logFilePath = os.path.join(parent_dir, 'log.log')  # type: str
+        logFilePath = os.path.join(gs_curvetools_path, 'log.log').replace('\\', '/')  # type: str
         # Check if file already there and its size. Delete if too large.
         if os.path.exists(logFilePath):
             size = os.stat(logFilePath).st_size
@@ -121,9 +120,9 @@ class Logger:
     def openLogFile(self):
         if OS == "mac":
             self.warning('Opening log file is not supported on Mac. Please open it manually from gs_curvetools folder:')
-            self.warning('{}'.format(path.join(getFolder.root(), 'log.log')))
+            self.warning('{}'.format(path.join(gs_curvetools_path, 'log.log').replace('\\', '/')))
             return
-        subprocess.call('notepad "{}"'.format(path.join(getFolder.root(), 'log.log')), creationflags=0x00000008)
+        subprocess.call('notepad "{}"'.format(path.join(gs_curvetools_path, 'log.log').replace('\\', '/')), creationflags=0x00000008)
 
 
 logger = Logger()
@@ -456,7 +455,7 @@ def resetUI():
         stopUI(True)
 
     # Reload all files
-    import importlib
+    from importlib import import_module
     files = [
         '.constants',
         '.core',
@@ -471,9 +470,9 @@ def resetUI():
     ]
     modules = {}
     for file in files:
-        modules[file] = importlib.import_module(file, 'gs_curvetools')
+        modules[file] = import_module(file, 'gs_curvetools')
     for module in modules:
-        importlib.reload(modules[module])
+        reload(modules[module])
 
     # Run main function
     if '.main' in modules:
@@ -664,34 +663,21 @@ Proceed?',
 
 class GetFolder:
     """ Get various folders from Maya """
-    # Get maya version
-    MAYA_VERSION = mc.about(v=1)
-    CURRENT_DIR = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
-    PARENT_DIR = os.path.dirname(CURRENT_DIR).replace('\\', '/')
 
     def scripts(self):
-        return self.PARENT_DIR
+        return mc.internalVar(usd=1)
 
     def root(self):
-        return os.path.join(self.PARENT_DIR, 'gs_curvetools').replace('\\', '/')
+        return path.join(gs_curvetools_path, '')
 
     def fonts(self):
-        fonts_path = os.path.join(self.PARENT_DIR, 'fonts').replace('\\', '/')
-        if not os.path.exists(fonts_path):
-            os.makedirs(fonts_path)
-        return fonts_path
+        return path.join(gs_curvetools_path, 'fonts', '')
 
     def icons(self):
-        icons_path = os.path.join(self.PARENT_DIR, 'icons').replace('\\', '/')
-        if not os.path.exists(icons_path):
-            os.makedirs(icons_path)
-        return icons_path
+        return path.join(gs_curvetools_path, 'icons', '')
 
     def plugins(self):
-        plugins_path = os.path.join(self.PARENT_DIR, self.MAYA_VERSION, 'plugins').replace('\\', '/')
-        if not os.path.exists(plugins_path):
-            os.makedirs(plugins_path)
-        return plugins_path
+        return path.join(gs_curvetools_path, 'plugins', '')
 
 
 getFolder = GetFolder()

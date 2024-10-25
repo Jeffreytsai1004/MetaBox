@@ -1,4 +1,4 @@
-﻿<!-- 
+<!-- 
 Tooltips are added in format:
     # Widget
     Tooltip

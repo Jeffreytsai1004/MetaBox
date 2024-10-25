@@ -1,268 +1,57 @@
-[00:29:21,972 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[00:29:21,972 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 00:29:21                 
-[00:29:22,754 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:29:24,101 | ERROR |    utils |   110]: warningInView() : Select one curve and one geometry or Select one target curve and any number of curveCards/Tubes
-[00:29:24,105 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 1359, in bind
-[00:39:44,997 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[00:39:44,997 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 00:39:44                 
-[00:39:45,779 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[01:21:13,543 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[01:21:13,543 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 01:21:13                 
-[01:21:14,324 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[17:46:40,989 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[17:46:40,990 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 17:46:40                 
-[17:46:41,768 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[18:04:19,264 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[18:04:19,265 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 18:04:19                 
-[18:04:20,032 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[18:11:08,557 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[18:11:08,558 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 18:11:08                 
-[18:11:09,340 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[20:45:08,653 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[20:45:08,653 | DEBUG |     main |    58]: <module>() :                  16/10/2024, 20:45:08                 
-[20:45:09,434 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[01:15:01,809 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[01:15:01,809 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 01:15:01                 
-[01:15:02,494 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[01:22:19,132 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[01:22:19,132 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 01:22:19                 
-[01:22:19,848 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[01:23:59,953 | ERROR |    utils |   110]: warningInView() : Select at least one compatible card or tube curve.
-[01:23:59,957 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4447, in subdivideCurve
-[02:34:49,947 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[02:34:49,947 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 02:34:49                 
-[02:34:50,652 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[02:34:53,204 | ERROR |    utils |   218]: wrapper() : 'NoneType' object is not iterable
-Traceback (most recent call last):
-  File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\utils\utils.py", line 209, in wrapper
-    rv = func(*args, **kwargs)
-  File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5464, in extractAllCurves
-    parentGrps = set(mc.listRelatives(allGeo, p=1))
-TypeError: 'NoneType' object is not iterable
-[03:23:13,056 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[03:23:13,056 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 03:23:13                 
-[03:23:13,807 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[03:50:36,765 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[03:50:36,766 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 03:50:36                 
-[03:50:37,479 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[04:12:37,267 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[04:12:37,267 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 04:12:37                 
-[04:12:37,980 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[04:12:40,778 |  INFO |     core |  4046]: saveOptions() : Saving options
-[04:12:53,200 |  INFO |     core |  4046]: saveOptions() : Saving options
-[04:12:58,915 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
-[04:12:58,917 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
-[04:12:58,917 | ERROR |    utils |   110]: warningInView() : Select at least two curves
-[04:12:58,918 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
-[04:13:01,958 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
-[04:13:01,958 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
-[04:13:01,959 | ERROR |    utils |   110]: warningInView() : Select at least two curves
-[04:13:01,959 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
-[04:13:24,033 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
-[04:13:24,034 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
-[04:13:24,034 | ERROR |    utils |   110]: warningInView() : Select at least two curves
-[04:13:24,035 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
-[04:13:25,792 |  INFO |     core |  4046]: saveOptions() : Saving options
-[04:13:27,234 |  INFO |     core |  4046]: saveOptions() : Saving options
-[04:13:28,198 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
-[04:13:28,199 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
-[04:13:28,199 | ERROR |    utils |   110]: warningInView() : Select at least two curves
-[04:13:28,200 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
-[04:13:32,534 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
-[04:13:32,535 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
-[04:13:32,535 | ERROR |    utils |   110]: warningInView() : Select at least two curves
-[04:13:32,536 | DEBUG |    utils |   112]: warningInView() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 629, in populate
-[04:13:34,020 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
-[04:13:34,021 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
-[04:13:47,269 |  INFO |     core |  4046]: saveOptions() : Saving options
-[04:13:48,518 | ERROR |    utils |   103]: warning() : Invalid scale factor. Reverting to default (1.0).
-[04:13:48,518 | DEBUG |    utils |   105]: warning() : File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 4122, in getScaleFactor
-[04:14:13,015 |  INFO |     core |  4046]: saveOptions() : Saving options
-[04:14:13,016 | ERROR |       ui |  1465]: updateColors() : eval() arg 1 must be a string, bytes or code object
-Traceback (most recent call last):
-  File "H:\Workspace/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\ui.py", line 1456, in updateColors
-    eval(mc.optionVar(q="GSCT_UVEditorBGColor")),
-TypeError: eval() arg 1 must be a string, bytes or code object
-[11:31:58,097 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:31:58,097 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 11:31:58                 
-[11:31:58,873 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[15:56:12,030 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[15:56:12,030 | DEBUG |     main |    58]: <module>() :                  17/10/2024, 15:56:12                 
-[15:56:12,833 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:03:19,677 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:03:19,678 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:03:19                 
-[11:03:20,692 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:03:25,397 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:03:30,481 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:03:38,756 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:04:43,485 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:04:46,594 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:04:48,590 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:27:56,165 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:27:56,165 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:27:56                 
-[11:27:56,967 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:27:57,942 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:30:33,321 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:30:33,322 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:30:33                 
-[11:30:34,138 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:30:35,408 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:30:49,534 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:30:50,788 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:33:58,015 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:33:58,015 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:33:58                 
-[11:33:58,877 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:34:00,254 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:35:17,746 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:35:24,001 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:50:47,169 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:50:47,169 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:50:47                 
-[11:50:48,027 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:50:49,486 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:53:08,689 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:53:08,689 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 11:53:08                 
-[11:53:09,533 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:53:10,327 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[12:09:31,257 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[12:09:31,257 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 12:09:31                 
-[12:09:32,088 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[12:09:32,878 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[12:09:33,676 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[12:09:37,059 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[12:09:37,847 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[12:09:40,011 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[12:09:40,536 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[12:09:41,319 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[12:09:44,283 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[13:35:16,179 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[13:35:16,179 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 13:35:16                 
-[13:35:17,005 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[13:35:17,938 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[13:35:18,749 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[13:35:23,636 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:14:41,909 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[16:14:41,910 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 16:14:41                 
-[16:14:42,707 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:14:43,508 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[16:14:44,310 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:14:47,981 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:14:48,846 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[16:14:49,630 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:17:48,478 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:17:49,161 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[16:17:49,976 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:17:52,989 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[16:17:53,789 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:17:59,369 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:57:24,684 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[16:57:24,781 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[16:57:24,782 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 16:57:24                 
-[16:57:25,565 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[17:13:42,047 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[17:13:42,047 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 17:13:42                 
-[17:13:42,837 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[17:13:46,689 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[17:13:47,466 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[19:05:27,207 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[19:05:27,207 | DEBUG |     main |    58]: <module>() :                  22/10/2024, 19:05:27                 
-[19:05:28,041 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[19:05:29,103 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[19:05:29,872 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[19:05:33,175 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[19:05:34,960 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[19:05:35,729 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:06:27,387 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[00:06:27,387 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 00:06:27                 
-[00:06:28,043 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:06:29,134 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[00:06:29,762 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:06:32,788 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:07:07,752 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[00:07:08,390 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:07:20,560 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[00:07:21,197 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:45:24,117 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[00:45:24,118 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 00:45:24                 
-[00:45:24,786 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[00:45:51,483 |  INFO |     core |  4055]: saveOptions() : Saving options
-[00:46:14,391 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[02:47:56,382 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[02:47:56,382 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 02:47:56                 
-[02:47:57,058 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[02:47:57,683 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[02:47:58,326 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[09:58:07,183 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[09:58:07,184 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 09:58:07                 
-[09:58:07,954 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:56:04,203 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[11:56:04,203 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 11:56:04                 
-[11:56:04,995 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[11:56:06,597 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[11:56:07,386 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[15:11:14,905 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[15:11:14,905 | DEBUG |     main |    58]: <module>() :                  23/10/2024, 15:11:14                 
-[15:11:15,693 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[13:32:40,929 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[13:32:41,029 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[13:32:41,029 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 13:32:41                 
-[13:32:41,805 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[13:39:50,460 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[13:39:51,264 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[18:23:11,663 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[18:23:11,663 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 18:23:11                 
-[18:23:12,433 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[18:23:13,174 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[18:23:13,943 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[18:39:31,544 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[18:39:31,650 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[18:39:31,650 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 18:39:31                 
-[18:39:32,424 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[20:31:28,027 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[20:31:28,028 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 20:31:28                 
-[20:31:28,802 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[20:31:30,309 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[20:31:31,074 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[20:50:13,251 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[20:50:13,251 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 20:50:13                 
-[20:50:14,019 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[20:52:09,964 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[21:10:55,069 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[21:10:55,069 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 21:10:55                 
-[21:10:55,842 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[23:29:00,825 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[23:29:00,826 | DEBUG |     main |    58]: <module>() :                  24/10/2024, 23:29:00                 
-[23:29:01,583 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[09:40:24,719 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[09:40:24,719 | DEBUG |     main |    58]: <module>() :                  25/10/2024, 09:40:24                 
-[09:40:25,486 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[10:45:16,508 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[10:45:16,508 | DEBUG |     main |    58]: <module>() :                  25/10/2024, 10:45:16                 
-[10:45:17,275 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[10:45:18,574 |  INFO |    utils |   448]: stopUI() : Deleting window state for GSCT_CurveTools
-[10:45:19,329 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[12:36:49,094 | DEBUG |     main |    57]: <module>() : -----------------Starting Log Session-----------------
-[12:36:49,094 | DEBUG |     main |    58]: <module>() :                  25/10/2024, 12:36:49                 
-[12:36:49,923 |  INFO |     main |    85]: checkScriptJobs() : scriptJobs created for "main" UI!
-[12:40:38,463 |  INFO |     core |  4055]: saveOptions() : Saving options
-[12:40:39,602 |  INFO |     core |  4055]: saveOptions() : Saving options
-[12:40:45,957 | ERROR |    utils |   110]: warningInView() : Select Edges to Convert
-[12:40:45,963 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6171, in edgeToCurve
-[12:40:46,738 | ERROR |    utils |   110]: warningInView() : Select Edges to Convert
-[12:40:46,740 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6171, in edgeToCurve
-[12:40:53,725 | ERROR |    utils |   110]: warningInView() : Select at least two Curves
-[12:40:53,728 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 361, in transferUV
-[12:40:54,358 | ERROR |    utils |   110]: warningInView() : Select at least two Curves
-[12:40:54,359 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 361, in transferUV
-[12:40:55,406 | ERROR |    utils |   110]: warningInView() : Select at least two Curves
-[12:40:55,408 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 288, in transferAttr
-[12:40:56,544 | ERROR |    utils |   110]: warningInView() : Select at least one Curve
-[12:40:56,546 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5238, in resetCurvePivotPoint
-[12:40:57,916 | ERROR |    utils |   110]: warningInView() : Select at least one curve
-[12:40:57,918 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5776, in duplicateCurve
-[12:40:58,741 | ERROR |    utils |   110]: warningInView() : Select at least one curve
-[12:40:58,743 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5953, in extendCurve
-[12:40:59,616 | ERROR |    utils |   110]: warningInView() : Select at least one curve
-[12:40:59,618 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5856, in smoothCurve
-[12:41:05,931 | ERROR |    utils |   110]: warningInView() : No nurbs curves selected
-[12:41:05,934 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6074, in controlCurveCreate
-[12:41:06,440 | ERROR |    utils |   110]: warningInView() : No nurbs curves selected
-[12:41:06,442 | DEBUG |    utils |   112]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 6074, in controlCurveCreate
+[15:47:11,248 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[15:47:11,249 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 15:47:11                 
+[15:47:19,392 |  INFO |    utils |   447]: stopUI() : Deleting window state for GSCT_CurveTools
+[15:47:19,393 |  INFO |    utils |   447]: stopUI() : Deleting window state for GSCT_CustomLayerColorsWindow
+[15:47:19,393 |  INFO |    utils |   447]: stopUI() : Deleting window state for GSCT_CardToCurvePopOut
+[15:52:10,648 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[15:52:10,648 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 15:52:10                 
+[15:55:45,945 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[15:55:45,946 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 15:55:45                 
+[15:55:49,786 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[15:55:52,238 |  INFO |    utils |   447]: stopUI() : Deleting window state for GSCT_CurveTools
+[15:55:52,994 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[15:55:56,505 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[15:56:50,105 | ERROR |    utils |   109]: warningInView() : Wrong Selection: extractedGeo_1 is skipped
+[15:56:50,109 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5659, in curveAddToLayer
+[15:56:54,291 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
+[15:56:54,291 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
+[15:56:56,160 | ERROR |    utils |   109]: warningInView() : Wrong Selection: extractedGeo_2 is skipped
+[15:56:56,161 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5659, in curveAddToLayer
+[15:57:13,014 |  INFO |     core |  4036]: saveOptions() : Saving options
+[15:57:13,979 |  INFO |     core |  4036]: saveOptions() : Saving options
+[15:59:57,188 |  INFO |    utils |   447]: stopUI() : Deleting window state for GSCT_CurveTools
+[15:59:57,964 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:00:00,991 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:02:50,064 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:02:50,067 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5599, in curveGeometryEditToggle
+[16:03:31,403 | ERROR |    utils |   109]: warningInView() : Select at least two Curves
+[16:03:31,405 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 358, in transferUV
+[16:06:58,025 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:06:58,027 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5582, in curveLayerSelectObj
+[16:07:00,139 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:07:00,142 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5582, in curveLayerSelectObj
+[16:07:08,822 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:07:08,824 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5582, in curveLayerSelectObj
+[16:07:23,048 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:07:23,050 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5582, in curveLayerSelectObj
+[16:14:46,677 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[16:14:46,677 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 16:14:46                 
+[16:14:51,806 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:15:08,644 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
+[16:15:08,648 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
+[16:15:11,945 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
+[16:15:11,946 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
+[16:16:11,394 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:16:11,395 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
+[16:16:15,705 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:16:15,706 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
+[16:16:49,043 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:16:49,044 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
+[16:20:25,818 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:20:25,818 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
+[16:20:31,563 | ERROR |    utils |   109]: warningInView() : Layer is Empty
+[16:20:31,565 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
+[16:21:21,635 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
+[16:21:21,636 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
+[16:21:22,280 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
+[16:21:22,281 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves

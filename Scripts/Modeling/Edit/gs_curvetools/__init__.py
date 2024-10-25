@@ -1,8 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-from .core import *
-from .constants import *
-from .utils import *
-from .ui import *
-from .uv_editor import *
+from . import *
+from . import fonts
+from . import icons
+from . import plugins
+from . import utils
+from . import core
+from . import init
+from . import main
+from . import ui
+from . import uv_editor

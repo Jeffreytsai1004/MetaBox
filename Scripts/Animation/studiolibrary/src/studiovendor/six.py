@@ -767,7 +767,7 @@ if print_ is None:
             return
 
         def write(data):
-            if not isinstance(data, bytes):
+            if not isinstance(data, basestring):
                 data = str(data)
             # If the file has an encoding, encode unicode with it.
             if (isinstance(fp, file) and
