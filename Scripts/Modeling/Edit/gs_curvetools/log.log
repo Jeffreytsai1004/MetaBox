@@ -76,3 +76,5 @@ TypeError: 'NoneType' object is not iterable
 [17:11:21,232 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 17:11:21                 
 [17:12:35,318 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
 [17:12:35,318 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 17:12:35                 
+[17:27:17,603 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[17:27:17,603 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 17:27:17                 
