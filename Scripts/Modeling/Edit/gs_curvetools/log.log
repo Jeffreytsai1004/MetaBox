@@ -34,24 +34,29 @@
 [16:07:08,824 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5582, in curveLayerSelectObj
 [16:07:23,048 | ERROR |    utils |   109]: warningInView() : Layer is Empty
 [16:07:23,050 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5582, in curveLayerSelectObj
-[16:14:46,677 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[16:14:46,677 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 16:14:46                 
-[16:14:51,806 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
-[16:15:08,644 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
-[16:15:08,648 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
-[16:15:11,945 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
-[16:15:11,946 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
-[16:16:11,394 | ERROR |    utils |   109]: warningInView() : Layer is Empty
-[16:16:11,395 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
-[16:16:15,705 | ERROR |    utils |   109]: warningInView() : Layer is Empty
-[16:16:15,706 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
-[16:16:49,043 | ERROR |    utils |   109]: warningInView() : Layer is Empty
-[16:16:49,044 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
-[16:20:25,818 | ERROR |    utils |   109]: warningInView() : Layer is Empty
-[16:20:25,818 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
-[16:20:31,563 | ERROR |    utils |   109]: warningInView() : Layer is Empty
-[16:20:31,565 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5572, in curveLayerSelectObj
-[16:21:21,635 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
-[16:21:21,636 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
-[16:21:22,280 | ERROR |    utils |   109]: warningInView() : Select at least one Curve
-[16:21:22,281 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5341, in extractSelectedCurves
+[16:28:53,631 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[16:28:53,631 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 16:28:53                 
+[16:30:21,253 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:30:22,539 |  INFO |    utils |   447]: stopUI() : Deleting window state for GSCT_CurveTools
+[16:30:23,312 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:30:25,548 |  INFO |    utils |   447]: stopUI() : Deleting window state for GSCT_CurveTools
+[16:30:26,317 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:31:38,714 |  INFO |     core |  4036]: saveOptions() : Saving options
+[16:35:38,164 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[16:35:38,165 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 16:35:38                 
+[16:35:57,855 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[16:37:07,264 | ERROR |    utils |   109]: warningInView() : Select at least two curves
+[16:37:07,268 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 774, in fill
+[16:37:09,026 | ERROR |    utils |   109]: warningInView() : Select one curve and one geometry or Select one target curve and any number of curveCards/Tubes
+[16:37:09,027 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 1356, in bind
+[16:37:10,565 | ERROR |    utils |   109]: warningInView() : Select at least one compatible curve (Bound/Warp curves or geometry)
+[16:37:10,565 | DEBUG |    utils |   111]: warningInView() : File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 1614, in unbind
+[16:37:11,893 | ERROR |    utils |   217]: wrapper() : 'NoneType' object is not iterable
+Traceback (most recent call last):
+  File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\utils\utils.py", line 208, in wrapper
+    rv = func(*args, **kwargs)
+  File "D:\P4/Art/Tools/MetaBox\Scripts\Modeling\Edit\gs_curvetools\core.py", line 5454, in extractAllCurves
+    parentGrps = set(mc.listRelatives(allGeo, p=1))
+TypeError: 'NoneType' object is not iterable
+[16:37:22,299 |  INFO |    utils |   117]: printInView() : Regrouped 0 curve(s)
+[16:37:22,497 |  INFO |    utils |   117]: printInView() : Regrouped 0 curve(s)
