@@ -1596,7 +1596,7 @@ def extraOptions():
 
     cmds.button("Generate_Code_Button", l="Generate Code", recomputeSize=True,
                 bgc=[0.6220035095750363, 1.0, 0.7237659266041047], h=44, w=110, parent="ikfk_form_layout_extra",
-                command=lambda *args:generateCode(),
+                command=lambda *args: generateCode(),
                 ann="It isolates the code from the UI, so you can put it on a shelf or add it to a marking menu, and you don't have to come back to the UI every time.\nThere's 2 ways to use this.\n"
                     "Specific setup:  If you select the controls in the scene as if you were applying the setup, when you hit generate it'll store the selection into the code, so you don't have to select them every time.\n"
                     "General setup:  If you have nothing selected in the scene and hit generate, it'll produce a generic version of the code, and you'll have to select the controls every time before executing the code, but it's more flexible.\n"
