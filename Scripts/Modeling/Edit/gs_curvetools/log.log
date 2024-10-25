@@ -60,3 +60,13 @@ Traceback (most recent call last):
 TypeError: 'NoneType' object is not iterable
 [16:37:22,299 |  INFO |    utils |   117]: printInView() : Regrouped 0 curve(s)
 [16:37:22,497 |  INFO |    utils |   117]: printInView() : Regrouped 0 curve(s)
+[16:55:35,765 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[16:55:35,766 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 16:55:35                 
+[16:59:15,547 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[16:59:15,548 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 16:59:15                 
+[17:02:46,653 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[17:02:46,653 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 17:02:46                 
+[17:03:34,706 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[17:03:34,707 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 17:03:34                 
+[17:05:26,126 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[17:05:26,126 | DEBUG |     main |    54]: <module>() :                  25/10/2024, 17:05:26                 
