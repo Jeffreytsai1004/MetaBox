@@ -7,12 +7,14 @@ from shiboken2 import wrapInstance
 from maya import OpenMayaUI as omui
 import maya.cmds as cmds # type: ignore
 import maya.mel as mel # type: ignore
-import sys
-import os
+import maya.utils as utils # type: ignore
 import importlib
 import traceback
 import subprocess
 import webbrowser
+import locale
+import sys
+import os
 
 #=====================================IMPORT FUNCTIONS=====================================
 from Modeling.Manage import Rename
@@ -44,16 +46,18 @@ sys.path.append(METABOX_PATH)
 
 TOOLBOX_NAME = "MetaBox"
 
-TOOLBOX_ICON = "MetaBox.png"
-
-TOOLBOX_VERSION = "1.0.0"
+TOOLBOX_VERSION = "Beta v1.0.0"
 
 TOOLBOX_AUTHOR = "VIRTUOS"
 
+CURRENT_LANG = 'en_US'
+
+WKSP_CTRL_NAME = "ToolBoxWorkSpaceControl"
+
 TOOLBOX_HELP = f"https://ac.virtuosgames.com:8443/display/TK/{TOOLBOX_NAME}"
 
-ICON_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Icons", TOOLBOX_ICON).replace('\\', '/')
-print(ICON_PATH)
+TOOLBOX_ICON = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Icons", "MetaBox.png").replace('\\', '/')
+print(TOOLBOX_ICON)
 #=====================================UI BUTTONS COMPONENTS=====================================
 class RoundedButton(QtWidgets.QPushButton):
     """
@@ -69,7 +73,7 @@ class RoundedButton(QtWidgets.QPushButton):
         if icon:
             self.setIcon(icon)
             self.setIconSize(QtCore.QSize(24, 24))
-        
+        self.setMinimumHeight(30) # Set minimum height
         self.setStyleSheet(
             f"""
             QPushButton {{
@@ -91,30 +95,19 @@ class RoundedButton(QtWidgets.QPushButton):
 
 #=====================================GLOBAL FUNCTIONS=====================================
 
-# Function to get the directory path of the current script
-def get_script_path():
-    """
-    Get the directory path of the current script
-    """
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Function to get the system encoding
 def get_system_encoding():
     encoding = sys.getdefaultencoding()
     if encoding.lower() == 'ascii':
-        # in some Windows systems, the default encoding may be reported as ASCII
-        # but it may actually be using CP437 or other encodings
-        import locale
         encoding = locale.getpreferredencoding()
     return encoding
 
-# based on system encoding, default use english
-CURRENT_LANG = 'en_US'
+def maya_main_window():
+    main_window_ptr = omui.MQtUtil.mainWindow()
+    return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
 
-# Initialize translation dictionary
 LANG = {
     'en_US': {
-        "Document": "Document",
+        "DOCUMENT": "DOCUMENT",
         "Help": "Help",
         "EN": "EN",
         "ZH": "ZH",
@@ -179,7 +172,7 @@ LANG = {
         "Icon Viewer": "Icon Viewer"
     },
     'zh_CN': {
-        "Document": "文档",
+        "DOCUMENT": "说明文档",
         "Help": "帮助",
         "EN": "EN",
         "ZH": "ZH",
@@ -244,49 +237,47 @@ LANG = {
         "Icon Viewer": "图标查看器"
     }
 }
-
-# Function to get the main Maya window
-def maya_main_window():
-    main_window_ptr = omui.MQtUtil.mainWindow()
-    if main_window_ptr is not None:
-        return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
-    else:
-        raise RuntimeError("Failed to obtain Maya main window.")
-
 #=====================================UI MAIN WINDOW COMPONENTS=====================================
 class MetaBox(QtWidgets.QWidget):
     def __init__(self, parent=maya_main_window()):
         super(MetaBox, self).__init__(parent)
-
-        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowStaysOnTopHint)
-        self.setParent(parent)
-        self.setAttribute(QtCore.Qt.WA_QuitOnClose, False)
         self.setWindowTitle(TOOLBOX_NAME)
-        self.setMinimumWidth(380)
-
-        # Set windows icon
-        if os.path.exists(ICON_PATH):
-            self.setWindowIcon(QtGui.QIcon(ICON_PATH))
-        else:
-            print(f"WARNING: Icon file not found: {ICON_PATH}")
-
-        # Set the window flags always on top
-        self.setWindowFlags(self.windowFlags() | QtCore.Qt.Tool | QtCore.Qt.WindowTitleHint)
-
-        # Initialize toggle state
-        self.toggle_state = True 
-
+        self.setObjectName('MetaBoxWindow')
+        self.setWindowFlags(QtCore.Qt.Window)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        #Main UI components
         self.create_widgets()
         self.create_layouts()
         self.create_connections()
+        #Set window icon
+        if os.path.exists(TOOLBOX_ICON):
+            self.setWindowIcon(QtGui.QIcon(TOOLBOX_ICON))
+        else:
+            print(f"WARNING: Icon file not found: {TOOLBOX_ICON}")
+
+    #Dock to Maya
+    def dock_to_maya(self):
+        if cmds.workspaceControl(WKSP_CTRL_NAME, exists=True):
+            cmds.deleteUI(WKSP_CTRL_NAME)
+        def create_control():
+            try:
+                workspace_control = cmds.workspaceControl(
+                    WKSP_CTRL_NAME,
+                    label="MetaBox",
+                    floating=True,
+                    retain=True,
+                    uiScript="from MetaBox import MetaBox; MetaBox()"
+                )
+                cmds.control(self.objectName(), e=True, p=workspace_control, width=300)
+            except Exception as e:
+                print(f"Error creating workspace control: {e}")
+        cmds.evalDeferred(create_control)
 #===================================== UI COMPONENTS =====================================
     def create_widgets(self):
         # Create help button
-        self.help_btn = QtWidgets.QPushButton(LANG[CURRENT_LANG]["Document"])
-
+        self.help_btn = QtWidgets.QPushButton(LANG[CURRENT_LANG]["DOCUMENT"])
         self.help_btn.setToolTip(LANG[CURRENT_LANG]["Help"])
-        self.help_btn.setFixedSize(90, 20)
+        self.help_btn.setFixedSize(100, 20)
         self.help_btn.setStyleSheet("""
             QPushButton {
                 background-color: transparent;
@@ -387,31 +378,44 @@ class MetaBox(QtWidgets.QWidget):
 
     def create_layouts(self):
         main_layout = QtWidgets.QVBoxLayout(self)
-        main_layout.setSpacing(5)
-        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setContentsMargins(2, 2, 2, 2)
+        # Resizable by dragging
+        main_layout.setStretch(0, 1)
 
         # Tabs Layout
         tabs_layout = QtWidgets.QTabWidget(self)
+
         main_layout.addWidget(tabs_layout)
 
-        # Modeling Layout
+        #===================================MODELING TAB===================================
         modeling_tab = QtWidgets.QWidget()
-        modeling_layout = QtWidgets.QVBoxLayout(modeling_tab)
-        modeling_layout.addWidget(self.modeling_display_group)
+        modeling_layout = QtWidgets.QHBoxLayout(modeling_tab)  # Use a horizontal layout
+        # Scroll area
+        modeling_scroll_area = QtWidgets.QScrollArea()
+        modeling_scroll_area.setWidgetResizable(True)  # Make the scroll area resizable
+        modeling_scroll_area_content = QtWidgets.QWidget()  # Create a content widget
+        modeling_scroll_area_layout = QtWidgets.QVBoxLayout(modeling_scroll_area_content)  # Create a vertical layout
+        modeling_scroll_area.setWidget(modeling_scroll_area_content)  # Set the content widget as the scroll area's widget
+        # Add all buttons and groups to the scroll area
+        # Display
+        modeling_scroll_area_layout.addWidget(self.modeling_display_group)
         modeling_display_layout = QtWidgets.QGridLayout(self.modeling_display_group)
         modeling_display_layout.addWidget(self.modeling_xray_btn, 0, 0)
         modeling_display_layout.addWidget(self.modeling_joint_xray_btn, 0, 1)
-        modeling_layout.addWidget(self.modeling_manage_group)
+        # Manage
+        modeling_scroll_area_layout.addWidget(self.modeling_manage_group)
         modeling_manage_layout = QtWidgets.QVBoxLayout(self.modeling_manage_group)
         modeling_manage_layout.addWidget(self.modeling_rename_btn)
         modeling_manage_layout.addWidget(self.modeling_batch_import_btn)
-        modeling_layout.addWidget(self.modeling_select_group)
+        # Select
+        modeling_scroll_area_layout.addWidget(self.modeling_select_group)
         modeling_select_layout = QtWidgets.QVBoxLayout(self.modeling_select_group)
         modeling_select_layout.addWidget(self.modeling_interval_select_edge_btn)
         modeling_select_layout.addWidget(self.modeling_same_position_selector_btn)
         modeling_select_layout.addWidget(self.modeling_edge_loop_smart_select_btn)
         modeling_select_layout.addWidget(self.modeling_even_edge_loop_btn)
-        modeling_layout.addWidget(self.modeling_tools_group)
+        # Tools
+        modeling_scroll_area_layout.addWidget(self.modeling_tools_group)
         modeling_tools_layout = QtWidgets.QGridLayout(self.modeling_tools_group)
         modeling_tools_layout.addWidget(self.modeling_crease_plus_btn, 0, 0)
         modeling_tools_layout.addWidget(self.modeling_speed_cut_btn, 0, 1)
@@ -427,61 +431,101 @@ class MetaBox(QtWidgets.QWidget):
         modeling_tools_layout.addWidget(self.modeling_align_edge_btn, 5, 1)
         modeling_tools_layout.addWidget(self.modeling_extra_curve_btn, 6, 0)
         modeling_tools_layout.addWidget(self.modeling_speed_bend_btn, 6, 1)
-        modeling_layout.addWidget(self.modeling_gs_curve_tools_group)
+        # GS Curve Tools
+        modeling_scroll_area_layout.addWidget(self.modeling_gs_curve_tools_group)
         modeling_gs_curve_tools_layout = QtWidgets.QVBoxLayout(self.modeling_gs_curve_tools_group)
         modeling_gs_curve_tools_layout.addWidget(self.modeling_gs_curve_tools_btn)
         modeling_gs_curve_tools_layout.addWidget(self.modeling_reset_gs_curve_tools_btn)
         modeling_gs_curve_tools_layout.addWidget(self.modeling_close_gs_curve_tools_btn)
-        modeling_layout.addWidget(self.modeling_uv_group)
+        # UV
+        modeling_scroll_area_layout.addWidget(self.modeling_uv_group)
         modeling_uv_layout = QtWidgets.QVBoxLayout(self.modeling_uv_group)
         modeling_uv_layout.addWidget(self.modeling_uv_set_editor_btn)
         modeling_uv_layout.addWidget(self.modeling_uvdeluxe_btn)
         modeling_uv_layout.addWidget(self.modeling_rizom_uv_bridge_btn)
+        # Add the scroll area to the main layout
+        modeling_layout.addWidget(modeling_scroll_area)  # Add the scroll area to the tab layout
         tabs_layout.addTab(modeling_tab, "Modeling")
 
-        # Metahuman Layout
+        #===================================METAHUMAN TAB===================================
         metahuman_tab = QtWidgets.QWidget()
         metahuman_layout = QtWidgets.QVBoxLayout(metahuman_tab)
-        metahuman_layout.addWidget(self.metahuman_preparation_group)
+        # Scroll area
+        metahuman_scroll_area = QtWidgets.QScrollArea()
+        metahuman_scroll_area.setWidgetResizable(True)  # Make the scroll area resizable
+        metahuman_scroll_area_content = QtWidgets.QWidget()  # Create a content widget
+        metahuman_scroll_area_layout = QtWidgets.QVBoxLayout(metahuman_scroll_area_content)  # Create a vertical layout
+        metahuman_scroll_area.setWidget(metahuman_scroll_area_content)  # Set the content widget as the scroll area's widget
+        # Add all buttons and groups to the scroll area
+        metahuman_scroll_area_layout.addWidget(self.metahuman_preparation_group)
         metahuman_preparation_layout = QtWidgets.QVBoxLayout(self.metahuman_preparation_group)
         metahuman_preparation_layout.addWidget(self.metahuman_body_prepare_btn)
+        # Add the scroll area to the main layout
+        metahuman_layout.addWidget(metahuman_scroll_area)  # Add the scroll area to the tab layout
         tabs_layout.addTab(metahuman_tab, "Metahuman")
 
-        # Rigging Layout
+        #===================================RIGGING TAB===================================
         rigging_tab = QtWidgets.QWidget()
         rigging_layout = QtWidgets.QVBoxLayout(rigging_tab)
-        rigging_layout.addWidget(self.rigging_setup_group)
+        # Scroll area   
+        rigging_scroll_area = QtWidgets.QScrollArea()
+        rigging_scroll_area.setWidgetResizable(True)  # Make the scroll area resizable
+        rigging_scroll_area_content = QtWidgets.QWidget()  # Create a content widget
+        rigging_scroll_area_layout = QtWidgets.QVBoxLayout(rigging_scroll_area_content)  # Create a vertical layout
+        rigging_scroll_area.setWidget(rigging_scroll_area_content)  # Set the content widget as the scroll area's widget
+        # Add all buttons and groups to the scroll area
+        rigging_scroll_area_layout.addWidget(self.rigging_setup_group)
         rigging_setup_layout = QtWidgets.QVBoxLayout(self.rigging_setup_group)
         rigging_setup_layout.addWidget(self.rigging_advanced_skeleton_btn)
+        # Add the scroll area to the main layout
+        rigging_layout.addWidget(rigging_scroll_area)  # Add the scroll area to the tab layout
         tabs_layout.addTab(rigging_tab, "Rigging")
 
-        # Animation Layout
+        #===================================A   
         animation_tab = QtWidgets.QWidget()
         animation_layout = QtWidgets.QVBoxLayout(animation_tab)
-        animation_layout.addWidget(self.animation_select_group)
+        # Scroll area
+        animation_scroll_area = QtWidgets.QScrollArea()
+        animation_scroll_area.setWidgetResizable(True)  # Make the scroll area resizable
+        animation_scroll_area_content = QtWidgets.QWidget()  # Create a content widget
+        animation_scroll_area_layout = QtWidgets.QVBoxLayout(animation_scroll_area_content)  # Create a vertical layout
+        animation_scroll_area.setWidget(animation_scroll_area_content)  # Set the content widget as the scroll area's widget
+        # Add all buttons and groups to the scroll area
+        animation_scroll_area_layout.addWidget(self.animation_select_group)
         animation_select_layout = QtWidgets.QVBoxLayout(self.animation_select_group)
         animation_select_layout.addWidget(self.animation_animschool_picker_btn)
         animation_select_layout.addWidget(self.animation_dwpicker_btn)
-        animation_layout.addWidget(self.animation_tools_group)
+        animation_scroll_area_layout.addWidget(self.animation_tools_group)
         animation_tools_layout = QtWidgets.QGridLayout(self.animation_tools_group)
         animation_tools_layout.addWidget(self.animation_bhghost_btn, 0, 0)
         animation_tools_layout.addWidget(self.animation_ikfk_switch_btn, 0, 1)
         animation_tools_layout.addWidget(self.animation_atools_btn, 1, 0)
         animation_tools_layout.addWidget(self.animation_keyframepro_btn, 1, 1)
         animation_tools_layout.addWidget(self.animation_studiolibrary_btn, 2, 0)
-        animation_layout.addWidget(self.animation_pose_group)
+        animation_scroll_area_layout.addWidget(self.animation_pose_group)
         animation_pose_layout = QtWidgets.QVBoxLayout(self.animation_pose_group)
         animation_pose_layout.addWidget(self.animation_epic_pose_wrangler_btn)
         animation_pose_layout.addWidget(self.animation_morph_shape_btn)
         animation_pose_layout.addWidget(self.animation_universal_rig_adapter_btn)
+        # Add the scroll area to the main layout
+        animation_layout.addWidget(animation_scroll_area)  # Add the scroll area to the tab layout
         tabs_layout.addTab(animation_tab, "Animation")
 
-        # Dev Layout
+        #===================================DEV TAB===================================
         dev_tab = QtWidgets.QWidget()
         dev_layout = QtWidgets.QVBoxLayout(dev_tab)
-        dev_layout.addWidget(self.dev_tools_group)
+        # Scroll area
+        dev_scroll_area = QtWidgets.QScrollArea()
+        dev_scroll_area.setWidgetResizable(True)  # Make the scroll area resizable
+        dev_scroll_area_content = QtWidgets.QWidget()  # Create a content widget
+        dev_scroll_area_layout = QtWidgets.QVBoxLayout(dev_scroll_area_content)  # Create a vertical layout
+        dev_scroll_area.setWidget(dev_scroll_area_content)  # Set the content widget as the scroll area's widget
+        # Add all buttons and groups to the scroll area
+        dev_scroll_area_layout.addWidget(self.dev_tools_group)
         dev_tools_layout = QtWidgets.QVBoxLayout(self.dev_tools_group)
         dev_tools_layout.addWidget(self.dev_icon_viewer_btn)
+        # Add the scroll area to the main layout
+        dev_layout.addWidget(dev_scroll_area)  # Add the scroll area to the tab layout
         tabs_layout.addTab(dev_tab, "Dev")
 
         # change bottom layout
@@ -489,18 +533,18 @@ class MetaBox(QtWidgets.QWidget):
 
         # create icon label
         icon_label = QtWidgets.QLabel()
-        icon_path = os.path.join(get_script_path(), "Icons", TOOLBOX_ICON).replace('\\', '/')
-        if os.path.exists(icon_path):
-            icon = QtGui.QPixmap(icon_path).scaled(24, 24, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+
+        if os.path.exists(TOOLBOX_ICON):
+            icon = QtGui.QPixmap(TOOLBOX_ICON).scaled(24, 24, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
             icon_label.setPixmap(icon)
         else:
-            print(f"Warning: Icon file '{icon_path}' does not exist.")
+            print(f"Warning: Icon file '{TOOLBOX_ICON}' does not exist.")
         
         # add icon label to bottom layout
         bottom_layout.addWidget(icon_label)
         
         # add version information label
-        version_label = QtWidgets.QLabel(f"v{TOOLBOX_VERSION}")
+        version_label = QtWidgets.QLabel(f"{TOOLBOX_VERSION}")
         version_label.setStyleSheet("color: gray; font-size: 12px;")
         bottom_layout.addWidget(version_label)
         
@@ -748,7 +792,7 @@ class MetaBox(QtWidgets.QWidget):
             for path in modlit_sub_paths:
                 if path not in sys.path:
                     sys.path.append(path)
-            # Add modit_icon_paths to MAYA_PLUG_IN_PATH
+
             os.environ['MAYA_PLUG_IN_PATH'] = os.pathsep.join(modlit_sub_paths)
             modit_ui_path = os.path.join(modit_path, 'ModIt_UI.py').replace('\\', '/')
             if modit_ui_path not in sys.path:
@@ -1286,7 +1330,7 @@ class MetaBox(QtWidgets.QWidget):
     def retranslate_ui(self):
         # Update all UI elements
         self.setWindowTitle("MetaBox")
-        self.help_btn.setText(LANG[CURRENT_LANG]["Document"])
+        self.help_btn.setText(LANG[CURRENT_LANG]["DOCUMENT"])
         self.help_btn.setFont(QtGui.QFont("Microsoft YaHei", 10))
         self.help_btn.setToolTip(LANG[CURRENT_LANG]["Help"])
         self.lang_btn.setFont(QtGui.QFont("Microsoft YaHei", 10))
@@ -1409,30 +1453,42 @@ class MetaBox(QtWidgets.QWidget):
 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Main
-# ****************************************************************************************************************
+# Show Window
+# ************************************************************************************************************************************************************************************************************
 def show():
-    """
-    Display the MetaBox main window
-    
-    This function will close the existing window (if any) and then create and display a new window.
-    Use the global variable main_window to keep a reference to the window instance.
-    """
     global main_window
     try:
-        # Try to close the existing window
-        main_window.close()
-        main_window.deleteLater()
+        if cmds.workspaceControl(WKSP_CTRL_NAME, exists=True):
+            cmds.deleteUI(WKSP_CTRL_NAME, control=True)
+        elif main_window:
+            main_window.close()
+            main_window.deleteLater()
     except:
-        # If the window does not exist, ignore the error
         pass
     
-    # Create a new window instance and display it
-    main_window = MetaBox()
-    main_window.setWindowFlags(QtCore.Qt.Window)
-    main_window.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-    main_window.show()
+    def create_ui(retry_count=0):
+        global main_window
+        try:
+            main_window = MetaBox()
+            main_window.dock_to_maya()
+        except Exception as e:
+            if retry_count < 3:
+                print(f"MetaBox creation failed, retrying... (Attempt {retry_count + 1})")
+                utils.executeDeferred(lambda: create_ui(retry_count + 1))
+            else:
+                print(f"Failed to create MetaBox after 3 attempts: {str(e)}")
 
+    utils.executeDeferred(create_ui)
+
+    # Create a new window instance and dock it to Maya
+    main_window = MetaBox()
+    cmds.evalDeferred(lambda *args: main_window.dock_to_maya())
+
+def load_metabox():
+    from MetaBox import show
+    show()
+
+utils.executeDeferred(load_metabox)
 
 if __name__ == "__main__":
     show()
