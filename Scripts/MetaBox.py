@@ -56,8 +56,8 @@ WKSP_CTRL_NAME = "ToolBoxWorkSpaceControl"
 
 TOOLBOX_HELP = f"https://ac.virtuosgames.com:8443/display/TK/{TOOLBOX_NAME}"
 
-TOOLBOX_ICON = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Icons", "MetaBox.png").replace('\\', '/')
-print(TOOLBOX_ICON)
+TOOLBOX_ICON = os.path.join(METABOX_PATH, "Icons", "MetaBox.png").replace('\\', '/')
+
 #=====================================UI BUTTONS COMPONENTS=====================================
 class RoundedButton(QtWidgets.QPushButton):
     """
@@ -335,11 +335,11 @@ class MetaBox(QtWidgets.QWidget):
         self.modeling_edge_sensei_btn = RoundedButton(LANG[CURRENT_LANG]["Edge Sensei"], color="#B2E0B2", hover_color="#C6E6C6", pressed_color="#99D699")
         self.modeling_round_inset_btn = RoundedButton(LANG[CURRENT_LANG]["Round Inset"], color="#FF8C94", hover_color="#FFB3B8", pressed_color="#FF6F7D")
         self.modeling_arc_deformer_btn = RoundedButton(LANG[CURRENT_LANG]["Arc Deformer"], color="#E1BEE7", hover_color="#EAB8E4", pressed_color="#D81B60")
+        self.modeling_speed_bend_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Bend"], color="#FFABAB", hover_color="#FF8C8C", pressed_color="#FF6F61")
         self.modeling_instant_drag_btn = RoundedButton(LANG[CURRENT_LANG]["Instant Drag"], color="#BBDEFB", hover_color="#90CAF9", pressed_color="#64B5F6")
         self.modeling_unbevel_btn = RoundedButton(LANG[CURRENT_LANG]["Un Bevel"], color="#C8E6C9", hover_color="#A5D6A7", pressed_color="#81C784")
         self.modeling_align_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Align Edge"], color="#FFCCBC", hover_color="#FFAB91", pressed_color="#FF8A65")
-        self.modeling_extra_curve_btn = RoundedButton(LANG[CURRENT_LANG]["Extra Curve"], color="#FFABAB", hover_color="#FF8C8C", pressed_color="#FF6F61")
-        self.modeling_speed_bend_btn = RoundedButton(LANG[CURRENT_LANG]["Speed Bend"], color="#E1BEE7", hover_color="#D1C4E9", pressed_color="#BA68C8")
+        self.modeling_extra_curve_btn = RoundedButton(LANG[CURRENT_LANG]["Extra Curve"], color="#E1BEE7", hover_color="#D1C4E9", pressed_color="#BA68C8")
         self.modeling_gs_curve_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["GS Curve Tools"])
         self.modeling_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools"], color="#C8E6C9", hover_color="#A5D6A7", pressed_color="#81C784")
         self.modeling_reset_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Reset"], color="#FFEBA1", hover_color="#FFF5B3", pressed_color="#FFE68A")
@@ -426,11 +426,11 @@ class MetaBox(QtWidgets.QWidget):
         modeling_tools_layout.addWidget(self.modeling_edge_sensei_btn, 3, 0)
         modeling_tools_layout.addWidget(self.modeling_round_inset_btn, 3, 1)
         modeling_tools_layout.addWidget(self.modeling_arc_deformer_btn, 4, 0)
-        modeling_tools_layout.addWidget(self.modeling_instant_drag_btn, 4, 1)
-        modeling_tools_layout.addWidget(self.modeling_unbevel_btn, 5, 0)
-        modeling_tools_layout.addWidget(self.modeling_align_edge_btn, 5, 1)
-        modeling_tools_layout.addWidget(self.modeling_extra_curve_btn, 6, 0)
-        modeling_tools_layout.addWidget(self.modeling_speed_bend_btn, 6, 1)
+        modeling_tools_layout.addWidget(self.modeling_speed_bend_btn, 4, 1)
+        modeling_tools_layout.addWidget(self.modeling_instant_drag_btn, 5, 0)
+        modeling_tools_layout.addWidget(self.modeling_unbevel_btn, 5, 1)
+        modeling_tools_layout.addWidget(self.modeling_align_edge_btn, 6, 0)
+        modeling_tools_layout.addWidget(self.modeling_extra_curve_btn, 6, 1)
         # GS Curve Tools
         modeling_scroll_area_layout.addWidget(self.modeling_gs_curve_tools_group)
         modeling_gs_curve_tools_layout = QtWidgets.QVBoxLayout(self.modeling_gs_curve_tools_group)
