@@ -41,8 +41,8 @@ from Animation.Blendshape import MorphShape
 from Animation import UniversalRigAdapter
 from Dev import mayaiconview
 #=====================================VARIABLES=====================================
-METABOX_PATH = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
-sys.path.append(METABOX_PATH)
+TOOLBOX_PATH = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
+sys.path.append(TOOLBOX_PATH)
 
 TOOLBOX_NAME = "MetaBox"
 
@@ -56,7 +56,7 @@ WKSP_CTRL_NAME = "ToolBoxWorkSpaceControl"
 
 TOOLBOX_HELP = f"https://ac.virtuosgames.com:8443/display/TK/{TOOLBOX_NAME}"
 
-TOOLBOX_ICON = os.path.join(METABOX_PATH, "Icons", "MetaBox.png").replace('\\', '/')
+TOOLBOX_ICON = os.path.join(TOOLBOX_PATH, "Icons", "MetaBox.png").replace('\\', '/')
 
 #=====================================UI BUTTONS COMPONENTS=====================================
 class RoundedButton(QtWidgets.QPushButton):
@@ -638,7 +638,7 @@ class MetaBox(QtWidgets.QWidget):
     # Manage
     def run_rename(self, *args):
         try:
-            Rename_Path = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'Manage', 'Rename.py')).replace('\\', '/')
+            Rename_Path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'Manage', 'Rename.py')).replace('\\', '/')
             sys.path.append(Rename_Path)
             Rename.UI()
         except Exception as e:
@@ -648,7 +648,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def run_batch_import(self, *args):
         try:
-            BatchImport_Path = os.path.normpath(os.path.join(METABOX_PATH, 'Metahuman', 'Custom', 'BatchImport.py')).replace('\\', '/')
+            BatchImport_Path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Metahuman', 'Custom', 'BatchImport.py')).replace('\\', '/')
             if BatchImport_Path not in sys.path:
                 sys.path.append(BatchImport_Path)
             from Metahuman.Custom import BatchImport
@@ -661,7 +661,7 @@ class MetaBox(QtWidgets.QWidget):
     # Edit
     def run_crease_plus(self, *args):
         try:
-            crease_plus_dir = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'CreasePlus')).replace('\\', '/')
+            crease_plus_dir = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'CreasePlus')).replace('\\', '/')
             print(f"CreasePlus directory: {crease_plus_dir}")
             if crease_plus_dir not in sys.path:
                 sys.path.append(crease_plus_dir)
@@ -684,7 +684,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def run_gs_curve_tools(self, *args):
         try:
-            gs_curvetools_path = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            gs_curvetools_path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
             if gs_curvetools_path not in sys.path:
                 sys.path.insert(0, gs_curvetools_path)
 
@@ -715,7 +715,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def stop_gs_curve_tools(self, *args):
         try:
-            gs_curvetools_path = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            gs_curvetools_path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
             if gs_curvetools_path not in sys.path:
                 sys.path.insert(0, gs_curvetools_path)
 
@@ -731,7 +731,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def reset_gs_curve_tools(self, *args):
         try:
-            gs_curvetools_path = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
+            gs_curvetools_path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'gs_curvetools')).replace('\\', '/')
             if gs_curvetools_path not in sys.path:
                 sys.path.insert(0, gs_curvetools_path)
 
@@ -780,7 +780,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def run_modit(self, *args):
         try:
-            modit_path = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'ModIt')).replace('\\', '/')
+            modit_path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'ModIt')).replace('\\', '/')
             modlit_sub_paths = [
                 os.path.join(modit_path, 'Classes'),
                 os.path.join(modit_path, 'Icons'),
@@ -807,7 +807,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def run_plugit(self, *args):
         try:
-            PlugIt_Path = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'PlugIt')).replace('\\', '/')
+            PlugIt_Path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'PlugIt')).replace('\\', '/')
 
             plugIt_sub_paths = [
                 os.path.join(PlugIt_Path, 'Icons'),
@@ -839,7 +839,7 @@ class MetaBox(QtWidgets.QWidget):
             import sys
             import os
             import traceback
-            XGTC_PARENT_PATH = os.path.join(METABOX_PATH, 'Modeling', 'Edit')
+            XGTC_PARENT_PATH = os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit')
             if XGTC_PARENT_PATH not in sys.path:
                 sys.path.insert(0, XGTC_PARENT_PATH)
 
@@ -877,8 +877,8 @@ class MetaBox(QtWidgets.QWidget):
             # if Maya version is 2022~2023, set ziRail path to Scripts\Modeling\Edit\ziRail\2022_2023 and ziRail plugin path to Scripts\Modeling\Edit\ziRail\2022_2023\plug-ins
             # Else, print the error message
             if MAYA_VERSION == '2018' or MAYA_VERSION == '2019' or MAYA_VERSION == '2020':
-                ZIRAIL_PATH = os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'ziRail', '2018_2020').replace('\\', '/')
-                ZIRAIL_PLUGIN_PATH = os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'ziRail', '2018_2020', 'plug-ins').replace('\\', '/')
+                ZIRAIL_PATH = os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'ziRail', '2018_2020').replace('\\', '/')
+                ZIRAIL_PLUGIN_PATH = os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'ziRail', '2018_2020', 'plug-ins').replace('\\', '/')
                 for plugin in [f'ziRail_{MAYA_VERSION}.mll', f'ziWireframeViewport_{MAYA_VERSION}.mll']:
                     plugin_path = os.path.join(ZIRAIL_PLUGIN_PATH, plugin)
                     if os.path.exists(plugin_path):
@@ -888,8 +888,8 @@ class MetaBox(QtWidgets.QWidget):
                         print(f"Warning: Plugin file does not exist: {plugin_path}")
 
             elif MAYA_VERSION == '2022' or MAYA_VERSION == '2023':
-                ZIRAIL_PATH = os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'ziRail', '2022_2023').replace('\\', '/')
-                ZIRAIL_PLUGIN_PATH = os.path.join(METABOX_PATH, 'Modeling', 'Edit', 'ziRail', '2022_2023', 'plug-ins').replace('\\', '/')
+                ZIRAIL_PATH = os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'ziRail', '2022_2023').replace('\\', '/')
+                ZIRAIL_PLUGIN_PATH = os.path.join(TOOLBOX_PATH, 'Modeling', 'Edit', 'ziRail', '2022_2023', 'plug-ins').replace('\\', '/')
                 for plugin in [f'ziRail_{MAYA_VERSION}.mll', f'ziWireframeViewport_{MAYA_VERSION}.mll']:
                     plugin_path = os.path.join(ZIRAIL_PLUGIN_PATH, plugin)
                     if os.path.exists(plugin_path):
@@ -1053,7 +1053,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def run_rizom_uv_bridge(self, *args):
         try:
-            RIZOMUV_PATH = os.path.normpath(os.path.join(METABOX_PATH, 'Modeling', 'UV', 'RizomUVBridge')).replace('\\', '/')
+            RIZOMUV_PATH = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Modeling', 'UV', 'RizomUVBridge')).replace('\\', '/')
             if RIZOMUV_PATH not in sys.path:
                 sys.path.insert(0, RIZOMUV_PATH)
             RIZOMUV_LUA_PATH = os.path.join(RIZOMUV_PATH, 'RizomUVBridge.lua').replace('\\', '/')
@@ -1073,14 +1073,14 @@ class MetaBox(QtWidgets.QWidget):
     def run_advanced_skeleton(self, *args):
         try:
             adv_sub_path = [
-                os.path.join(METABOX_PATH, 'Animation', 'AdvancedSkeleton').replace('\\', '/'),
-                os.path.join(METABOX_PATH, 'Animation', 'AdvancedSkeleton', 'AdvancedSkeleton5Files').replace('\\', '/')
+                os.path.join(TOOLBOX_PATH, 'Animation', 'AdvancedSkeleton').replace('\\', '/'),
+                os.path.join(TOOLBOX_PATH, 'Animation', 'AdvancedSkeleton', 'AdvancedSkeleton5Files').replace('\\', '/')
             ]
             for path in adv_sub_path:
                 if path not in sys.path:
                     sys.path.insert(0, path)
             # If advancedSkeleton5Files does not exist, run the adv_install.py and the launch.py, else run the adv_launch.py directly
-            if not os.path.exists(os.path.join(METABOX_PATH, 'Animation', 'AdvancedSkeleton', 'adv_install.py').replace('\\', '/')):
+            if not os.path.exists(os.path.join(TOOLBOX_PATH, 'Animation', 'AdvancedSkeleton', 'adv_install.py').replace('\\', '/')):
                 from Animation.AdvancedSkeleton import adv_install
                 adv_install.install()
             from Animation.AdvancedSkeleton import adv_launch
@@ -1110,7 +1110,7 @@ class MetaBox(QtWidgets.QWidget):
     def open_aTools(self, *args):
         try:
             # Get aTools path
-            ATOOLS_PATH = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'aTools')).replace('\\', '/')
+            ATOOLS_PATH = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Animation', 'aTools')).replace('\\', '/')
             if ATOOLS_PATH not in sys.path:
                 sys.path.insert(0, ATOOLS_PATH)
             ATOOLS_PARENT_PATH = os.path.dirname(ATOOLS_PATH)
@@ -1134,9 +1134,9 @@ class MetaBox(QtWidgets.QWidget):
     def open_keyframe_pro(self, *args):
         try:
             KEYFRAME_PRO_PATH = [
-                os.path.join(METABOX_PATH, 'Animation', 'keyframe_pro'),
-                os.path.join(METABOX_PATH, 'Animation', 'keyframe_pro', 'keyframe_pro'),
-                os.path.join(METABOX_PATH, 'Animation', 'keyframe_pro', 'keyframe_pro_maya')
+                os.path.join(TOOLBOX_PATH, 'Animation', 'keyframe_pro'),
+                os.path.join(TOOLBOX_PATH, 'Animation', 'keyframe_pro', 'keyframe_pro'),
+                os.path.join(TOOLBOX_PATH, 'Animation', 'keyframe_pro', 'keyframe_pro_maya')
             ]
             for path in KEYFRAME_PRO_PATH:
                 if path not in sys.path:
@@ -1152,7 +1152,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def run_dwpicker(self, *args):
         try:
-            DWPICKER_PATH = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'dwpicker')).replace('\\', '/')
+            DWPICKER_PATH = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Animation', 'dwpicker')).replace('\\', '/')
             if DWPICKER_PATH not in sys.path:
                 sys.path.insert(0, DWPICKER_PATH)
             DWPICKER_SUB_PATHS = [
@@ -1173,7 +1173,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def open_studio_library(self, *args):
         try:
-            STUDIOLIBRARY_PATH = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'studiolibrary')).replace('\\', '/')
+            STUDIOLIBRARY_PATH = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Animation', 'studiolibrary')).replace('\\', '/')
             STUDIOLIBRARY_SUB_PATHS = [
                 os.path.join(STUDIOLIBRARY_PATH, 'src'),
                 os.path.join(STUDIOLIBRARY_PATH, 'src', 'studiolibrary'),
@@ -1204,7 +1204,7 @@ class MetaBox(QtWidgets.QWidget):
     def run_anim_school_picker(self, *args):
         try:
             # Added the path to the AnimSchoolPicker.mel file
-            ANIMPICKER_PATH = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'AnimSchoolPicker')).replace('\\', '/')
+            ANIMPICKER_PATH = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Animation', 'AnimSchoolPicker')).replace('\\', '/')
             if ANIMPICKER_PATH not in sys.path:
                 sys.path.insert(0, ANIMPICKER_PATH)
 
@@ -1228,7 +1228,7 @@ class MetaBox(QtWidgets.QWidget):
     
     def run_bhghost(self, *args):
         try:
-            bhghost_path = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'bhGhost')).replace('\\', '/')
+            bhghost_path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Animation', 'bhGhost')).replace('\\', '/')
             print(bhghost_path)
             if bhghost_path not in sys.path:
                 sys.path.insert(0, bhghost_path)
@@ -1244,7 +1244,7 @@ class MetaBox(QtWidgets.QWidget):
 
     def run_ik_fk_switch(self, *args):
         try:
-            IK_FK_Switch_Path = os.path.normpath(os.path.join(METABOX_PATH, 'Animation', 'IK_FK_Switch')).replace('\\', '/')
+            IK_FK_Switch_Path = os.path.normpath(os.path.join(TOOLBOX_PATH, 'Animation', 'IK_FK_Switch')).replace('\\', '/')
             if IK_FK_Switch_Path not in sys.path:
                 sys.path.insert(0, IK_FK_Switch_Path)
             from Animation import IK_FK_Switcher
@@ -1258,7 +1258,7 @@ class MetaBox(QtWidgets.QWidget):
     def open_epic_pose_wrangler(self, *args):
         try:
             # Add Epic Pose Wrangler path
-            epic_pose_wrangler_path = os.path.join(METABOX_PATH, 'Animation', 'epic_pose_wrangler').replace('\\', '/')
+            epic_pose_wrangler_path = os.path.join(TOOLBOX_PATH, 'Animation', 'epic_pose_wrangler').replace('\\', '/')
             sys.path.append(epic_pose_wrangler_path)
             print(epic_pose_wrangler_path)
             print(f"Attempting to import Epic Pose Wrangler from: {epic_pose_wrangler_path}")            
