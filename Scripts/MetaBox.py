@@ -245,6 +245,15 @@ class MetaBox(QtWidgets.QWidget):
         self.setObjectName('MetaBoxWindow')
         self.setWindowFlags(QtCore.Qt.Window)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        # # Add these lines to allow resizing
+        # self.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        # # Set a minimum width
+        # self.setMinimumWidth(200)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.MinimumExpanding,
+            QtWidgets.QSizePolicy.Preferred
+        )
+        self.setMinimumWidth(200)
         #Main UI components
         self.create_widgets()
         self.create_layouts()
@@ -266,9 +275,14 @@ class MetaBox(QtWidgets.QWidget):
                     label="MetaBox",
                     floating=True,
                     retain=True,
-                    uiScript="from MetaBox import MetaBox; MetaBox()"
+                    resizeWidth=True,
+                    initialWidth=300,
+                    minimumWidth=200
                 )
-                cmds.control(self.objectName(), e=True, p=workspace_control, width=300)
+                cmds.workspaceControl(WKSP_CTRL_NAME, e=True, resizeWidth=True)
+                cmds.control(self.objectName(), e=True, p=workspace_control)
+
+                cmds.evalDeferred(lambda: cmds.workspaceControl(WKSP_CTRL_NAME, e=True, resizeWidth=True))
             except Exception as e:
                 print(f"Error creating workspace control: {e}")
         cmds.evalDeferred(create_control)
@@ -1459,26 +1473,30 @@ def show():
     global main_window
     try:
         if cmds.workspaceControl(WKSP_CTRL_NAME, exists=True):
+            current_width = cmds.workspaceControl(WKSP_CTRL_NAME, q=True, width=True)
             cmds.deleteUI(WKSP_CTRL_NAME, control=True)
         elif main_window:
             main_window.close()
             main_window.deleteLater()
     except:
+        current_width = 300
         pass
     
-    def create_ui(retry_count=0):
+    def create_ui(retry_count=0, width=300):
         global main_window
         try:
             main_window = MetaBox()
             main_window.dock_to_maya()
+            cmds.evalDeferred(lambda: cmds.workspaceControl(WKSP_CTRL_NAME, e=True, width=width))
+            cmds.evalDeferred(lambda: cmds.workspaceControl(WKSP_CTRL_NAME, e=True, resizeWidth=True))
         except Exception as e:
             if retry_count < 3:
                 print(f"MetaBox creation failed, retrying... (Attempt {retry_count + 1})")
-                utils.executeDeferred(lambda: create_ui(retry_count + 1))
+                utils.executeDeferred(lambda: create_ui(retry_count + 1, width))
             else:
                 print(f"Failed to create MetaBox after 3 attempts: {str(e)}")
 
-    utils.executeDeferred(create_ui)
+    utils.executeDeferred(lambda: create_ui(width=current_width))
 
     # Create a new window instance and dock it to Maya
     main_window = MetaBox()
