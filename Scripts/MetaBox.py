@@ -253,7 +253,7 @@ class MetaBox(QtWidgets.QWidget):
             QtWidgets.QSizePolicy.MinimumExpanding,
             QtWidgets.QSizePolicy.Preferred
         )
-        self.setMinimumWidth(200)
+        self.setMinimumSize(300, 800)
         #Main UI components
         self.create_widgets()
         self.create_layouts()
@@ -277,7 +277,7 @@ class MetaBox(QtWidgets.QWidget):
                     retain=True,
                     resizeWidth=True,
                     initialWidth=300,
-                    minimumWidth=200
+                    minimumWidth=300
                 )
                 cmds.workspaceControl(WKSP_CTRL_NAME, e=True, resizeWidth=True)
                 cmds.control(self.objectName(), e=True, p=workspace_control)
