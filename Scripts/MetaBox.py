@@ -872,7 +872,7 @@ class MetaBox(QtWidgets.QWidget):
             from Modeling.Edit.xgtc.scripts import xgToolsUI_user_sub
             print("Successfully imported XGTools modules")
 
-            xgToolsUI_user_sub.xgToolsUI()
+            xgToolsUI_user_sub.XgtRun()
 
         except ImportError as e:
             ERROR_MESSAGE = f"Error importing modules for XGTools: {str(e)}"
