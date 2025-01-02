@@ -108,15 +108,12 @@ TypeError: 'NoneType' object is not iterable
 [13:56:05,230 | DEBUG |     main |    54]: <module>() :                  29/10/2024, 13:56:05                 
 [13:58:23,170 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
 [13:58:23,170 | DEBUG |     main |    54]: <module>() :                  29/10/2024, 13:58:23                 
-[14:57:11,158 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[14:57:11,158 | DEBUG |     main |    54]: <module>() :                  29/10/2024, 14:57:11                 
-[01:59:57,800 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[01:59:57,800 | DEBUG |     main |    54]: <module>() :                  19/12/2024, 01:59:57                 
-[02:13:16,819 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[02:13:16,819 | DEBUG |     main |    54]: <module>() :                  19/12/2024, 02:13:16                 
-[02:24:50,858 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[02:24:50,858 | DEBUG |     main |    54]: <module>() :                  19/12/2024, 02:24:50                 
-[02:26:14,866 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[02:26:14,866 | DEBUG |     main |    54]: <module>() :                  19/12/2024, 02:26:14                 
-[02:28:11,210 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[02:28:11,210 | DEBUG |     main |    54]: <module>() :                  19/12/2024, 02:28:11                 
+[20:53:31,681 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[20:53:31,681 | DEBUG |     main |    54]: <module>() :                  02/01/2025, 20:53:31                 
+[20:55:41,532 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[20:55:41,532 | DEBUG |     main |    54]: <module>() :                  02/01/2025, 20:55:41                 
+[20:57:14,643 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[20:57:14,643 | DEBUG |     main |    54]: <module>() :                  02/01/2025, 20:57:14                 
+[21:02:25,417 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[21:02:25,417 | DEBUG |     main |    54]: <module>() :                  02/01/2025, 21:02:25                 
+[21:03:03,240 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!

@@ -40,6 +40,9 @@ from Metahuman.Custom import BodyPrep
 from Animation.Blendshape import MorphShape
 from Animation import UniversalRigAdapter
 from Dev import mayaiconview
+from Modeling.Edit import AutoSnap
+from Modeling.Edit import XgenController
+
 #=====================================VARIABLES=====================================
 TOOLBOX_PATH = os.path.dirname(os.path.abspath(__file__)).replace('\\', '/')
 sys.path.append(TOOLBOX_PATH)
@@ -56,7 +59,7 @@ WKSP_CTRL_NAME = "ToolBoxWorkSpaceControl"
 
 TOOLBOX_HELP = f"https://ac.virtuosgames.com:8443/display/TK/{TOOLBOX_NAME}"
 
-TOOLBOX_ICON = os.path.join(TOOLBOX_PATH, "Icons", "MetaBox.png").replace('\\', '/')
+TOOLBOX_ICON = os.path.join(os.path.dirname(TOOLBOX_PATH), "Icons", "MetaBox.png").replace('\\', '/')
 
 #=====================================UI BUTTONS COMPONENTS=====================================
 class RoundedButton(QtWidgets.QPushButton):
@@ -142,6 +145,8 @@ LANG = {
         "Un Bevel": "Un Bevel",
         "Align Edge": "Align Edge",
         "Extra Curve": "Extra Curve",
+        "Auto Snap": "Auto Snap",
+        "Xgen Controller": "Xgen Controller",
         "Speed Bend": "Speed Bend",
         "GS Curve Tools": "GS Curve Tools",
         "GS Curve Tools Reset": "GS Curve Tools Reset", 
@@ -169,7 +174,8 @@ LANG = {
         "Universal Rig Adapter": "Universal Rig Adapter",
         "Dev": "Dev",
         "Dev Tool": "Dev Tool",
-        "Icon Viewer": "Icon Viewer"
+        "Icon Viewer": "Icon Viewer",
+        "Import": "Import",
     },
     'zh_CN': {
         "DOCUMENT": "说明文档",
@@ -207,6 +213,8 @@ LANG = {
         "Un Bevel": "去除倒角",
         "Align Edge": "对齐到边",
         "Extra Curve": "提取曲线",
+        "Auto Snap": "自动吸附",
+        "Xgen Controller": "Xgen 控制器",
         "Speed Bend": "快速弯曲",
         "GS Curve Tools": "GS曲线工具",
         "GS Curve Tools Reset": "重置", 
@@ -234,7 +242,8 @@ LANG = {
         "Universal Rig Adapter": "通用绑定适配器",
         "Dev": "开发",
         "Dev Tool": "开发工具",
-        "Icon Viewer": "图标查看器"
+        "Icon Viewer": "图标查看器",
+        "Import": "导入",
     }
 }
 #=====================================UI MAIN WINDOW COMPONENTS=====================================
@@ -354,6 +363,8 @@ class MetaBox(QtWidgets.QWidget):
         self.modeling_unbevel_btn = RoundedButton(LANG[CURRENT_LANG]["Un Bevel"], color="#C8E6C9", hover_color="#A5D6A7", pressed_color="#81C784")
         self.modeling_align_edge_btn = RoundedButton(LANG[CURRENT_LANG]["Align Edge"], color="#FFCCBC", hover_color="#FFAB91", pressed_color="#FF8A65")
         self.modeling_extra_curve_btn = RoundedButton(LANG[CURRENT_LANG]["Extra Curve"], color="#E1BEE7", hover_color="#D1C4E9", pressed_color="#BA68C8")
+        self.modeling_auto_snap_btn = RoundedButton(LANG[CURRENT_LANG]["Auto Snap"], color="#FFABAB", hover_color="#FF8C8C", pressed_color="#FF6F61")
+        self.modeling_xgen_controller_btn = RoundedButton(LANG[CURRENT_LANG]["Xgen Controller"], color="#FFEBA1", hover_color="#FFF5B3", pressed_color="#FFE68A")
         self.modeling_gs_curve_tools_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["GS Curve Tools"])
         self.modeling_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools"], color="#C8E6C9", hover_color="#A5D6A7", pressed_color="#81C784")
         self.modeling_reset_gs_curve_tools_btn = RoundedButton(LANG[CURRENT_LANG]["GS Curve Tools Reset"], color="#FFEBA1", hover_color="#FFF5B3", pressed_color="#FFE68A")
@@ -366,6 +377,8 @@ class MetaBox(QtWidgets.QWidget):
         # Metahuman group widgets
         self.metahuman_preparation_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Preparation"])
         self.metahuman_body_prepare_btn = RoundedButton(LANG[CURRENT_LANG]["Body Prepare"], color="#FFABAB", hover_color="#FF6F6F", pressed_color="#FF8C8C")
+        self.metahuman_import_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Import"])
+        self.metahuman_batch_import_btn = RoundedButton(LANG[CURRENT_LANG]["Batch Import"], color="#A7C6ED", hover_color="#B2D3F0", pressed_color="#8BB8E0")
 
         # Rigging group widgets
         self.rigging_setup_group = QtWidgets.QGroupBox(LANG[CURRENT_LANG]["Setup"])
@@ -445,6 +458,8 @@ class MetaBox(QtWidgets.QWidget):
         modeling_tools_layout.addWidget(self.modeling_unbevel_btn, 5, 1)
         modeling_tools_layout.addWidget(self.modeling_align_edge_btn, 6, 0)
         modeling_tools_layout.addWidget(self.modeling_extra_curve_btn, 6, 1)
+        modeling_tools_layout.addWidget(self.modeling_auto_snap_btn, 7, 0)
+        modeling_tools_layout.addWidget(self.modeling_xgen_controller_btn, 7, 1)
         # GS Curve Tools
         modeling_scroll_area_layout.addWidget(self.modeling_gs_curve_tools_group)
         modeling_gs_curve_tools_layout = QtWidgets.QVBoxLayout(self.modeling_gs_curve_tools_group)
@@ -474,6 +489,12 @@ class MetaBox(QtWidgets.QWidget):
         metahuman_scroll_area_layout.addWidget(self.metahuman_preparation_group)
         metahuman_preparation_layout = QtWidgets.QVBoxLayout(self.metahuman_preparation_group)
         metahuman_preparation_layout.addWidget(self.metahuman_body_prepare_btn)
+
+        # Add Import group layout
+        metahuman_scroll_area_layout.addWidget(self.metahuman_import_group)
+        metahuman_import_layout = QtWidgets.QVBoxLayout(self.metahuman_import_group)
+        metahuman_import_layout.addWidget(self.metahuman_batch_import_btn)
+
         # Add the scroll area to the main layout
         metahuman_layout.addWidget(metahuman_scroll_area)  # Add the scroll area to the tab layout
         tabs_layout.addTab(metahuman_tab, "Metahuman")
@@ -596,6 +617,8 @@ class MetaBox(QtWidgets.QWidget):
         self.modeling_speed_bend_btn.clicked.connect(self.run_speed_bend)
         self.modeling_align_edge_btn.clicked.connect(self.run_align_edge)
         self.modeling_extra_curve_btn.clicked.connect(self.run_extra_curve)
+        self.modeling_auto_snap_btn.clicked.connect(self.run_auto_snap)
+        self.modeling_xgen_controller_btn.clicked.connect(self.run_xgen_controller)
         self.modeling_gs_curve_tools_btn.clicked.connect(self.run_gs_curve_tools)
         self.modeling_reset_gs_curve_tools_btn.clicked.connect(self.reset_gs_curve_tools)
         self.modeling_close_gs_curve_tools_btn.clicked.connect(self.stop_gs_curve_tools)
@@ -604,6 +627,7 @@ class MetaBox(QtWidgets.QWidget):
         self.modeling_rizom_uv_bridge_btn.clicked.connect(self.run_rizom_uv_bridge)
         # Metahuman tab connections
         self.metahuman_body_prepare_btn.clicked.connect(self.run_body_prepare)
+        self.metahuman_batch_import_btn.clicked.connect(self.run_batch_import)
         # Rigging tab connections
         self.rigging_advanced_skeleton_btn.clicked.connect(self.run_advanced_skeleton)
         # Animation tab connections
@@ -872,7 +896,7 @@ class MetaBox(QtWidgets.QWidget):
             from Modeling.Edit.xgtc.scripts import xgToolsUI_user_sub
             print("Successfully imported XGTools modules")
 
-            xgToolsUI_user_sub.XgtRun()
+            xgToolsUI_user_sub.xgToolsUI()
 
         except ImportError as e:
             ERROR_MESSAGE = f"Error importing modules for XGTools: {str(e)}"
@@ -1009,6 +1033,22 @@ class MetaBox(QtWidgets.QWidget):
     def run_extra_curve(self, *args):
         try:
             mel.eval('polyToCurve -form 2 -degree 3 -conformToSmoothMeshPreview 1')
+        except Exception as e:
+            ERROR_MESSAGE = f"Error occurred while running ExtractCurve: {e}"
+            cmds.warning(ERROR_MESSAGE)
+            cmds.confirmDialog(title='Error', message=ERROR_MESSAGE, button=['OK'], defaultButton='OK')
+
+    def run_auto_snap(self, *args):
+        try:
+            AutoSnap.cmd()
+        except Exception as e:
+            ERROR_MESSAGE = f"Error occurred while running ExtractCurve: {e}"
+            cmds.warning(ERROR_MESSAGE)
+            cmds.confirmDialog(title='Error', message=ERROR_MESSAGE, button=['OK'], defaultButton='OK')
+
+    def run_xgen_controller(self, *args):
+        try:
+            XgenController.create_window()
         except Exception as e:
             ERROR_MESSAGE = f"Error occurred while running ExtractCurve: {e}"
             cmds.warning(ERROR_MESSAGE)
@@ -1408,6 +1448,10 @@ class MetaBox(QtWidgets.QWidget):
         self.modeling_align_edge_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
         self.modeling_extra_curve_btn.setText(LANG[CURRENT_LANG]["Extra Curve"])
         self.modeling_extra_curve_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
+        self.modeling_auto_snap_btn.setText(LANG[CURRENT_LANG]["Auto Snap"])
+        self.modeling_auto_snap_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
+        self.modeling_xgen_controller_btn.setText(LANG[CURRENT_LANG]["Xgen Controller"])
+        self.modeling_xgen_controller_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
         self.modeling_speed_bend_btn.setText(LANG[CURRENT_LANG]["Speed Bend"])
         self.modeling_speed_bend_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
         self.modeling_gs_curve_tools_group.setTitle(LANG[CURRENT_LANG]["GS Curve Tools"])
@@ -1430,6 +1474,8 @@ class MetaBox(QtWidgets.QWidget):
         self.metahuman_preparation_group.setFont(QtGui.QFont("Microsoft YaHei", 8))
         self.metahuman_body_prepare_btn.setText(LANG[CURRENT_LANG]["Body Prepare"])
         self.metahuman_body_prepare_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
+        self.metahuman_batch_import_btn.setText(LANG[CURRENT_LANG]["Batch Import"])
+        self.metahuman_batch_import_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
         self.rigging_setup_group.setTitle(LANG[CURRENT_LANG]["Setup"])
         self.rigging_setup_group.setFont(QtGui.QFont("Microsoft YaHei", 8))
         self.rigging_advanced_skeleton_btn.setText(LANG[CURRENT_LANG]["Advanced Skeleton"])
@@ -1464,6 +1510,8 @@ class MetaBox(QtWidgets.QWidget):
         self.dev_tools_group.setFont(QtGui.QFont("Microsoft YaHei", 8))
         self.dev_icon_viewer_btn.setText(LANG[CURRENT_LANG]["Icon Viewer"])
         self.dev_icon_viewer_btn.setFont(QtGui.QFont("Microsoft YaHei", 8))
+        self.metahuman_import_group.setTitle(LANG[CURRENT_LANG]["Import"])
+        self.metahuman_import_group.setFont(QtGui.QFont("Microsoft YaHei", 8))
 
 
 # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1471,6 +1519,7 @@ class MetaBox(QtWidgets.QWidget):
 # ************************************************************************************************************************************************************************************************************
 def show():
     global main_window
+    current_width = 300
     try:
         if cmds.workspaceControl(WKSP_CTRL_NAME, exists=True):
             current_width = cmds.workspaceControl(WKSP_CTRL_NAME, q=True, width=True)
@@ -1479,7 +1528,6 @@ def show():
             main_window.close()
             main_window.deleteLater()
     except:
-        current_width = 300
         pass
     
     def create_ui(retry_count=0, width=300):
