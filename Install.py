@@ -1,78 +1,143 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#===================================== 1. Module Imports =====================================
+# Standard library imports
 import os
 import sys
 import webbrowser
+
+# Maya imports
 import maya.mel as mel
-from PySide2 import QtWidgets, QtGui, QtCore
 import maya.cmds as cmds
 import maya.OpenMayaUI as omui
+
+# Qt imports
+from PySide2 import QtWidgets, QtGui, QtCore
 from shiboken2 import wrapInstance
 
-TOOLBOX_NAME = "MetaBox"
-TOOLBOX_ICON = "MetaBox.png"
-TOOLBOX_HELP_URL = "https://www.google.com"
+#===================================== 2. Global Variables =====================================
+# Path configurations
+try:
+    ROOT_PATH = os.path.dirname(INSTALL_PATH)
+except NameError:
+    ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+# Tool information
+TOOL_NAME = "MetaBox"
+TOOL_VERSION = "Beta v1.0.0"
+TOOL_AUTHOR = "Virtuos"
+TOOL_LANG = 'en_US'
+SCRIPTS_PATH = os.path.join(ROOT_PATH, "Scripts")
+ICONS_PATH = os.path.join(ROOT_PATH, "icons")
+TOOL_ICON = os.path.join(ICONS_PATH, "logo.png")
+DEFAULT_ICON = "commandButton.png"
+TOOL_HELP_URL = f"http://10.72.61.59:3000/ArtGroup/{TOOL_NAME}/wiki"
+TOOL_WSCL_NAME = "ToolBoxWorkSpaceControl"
+MOD_FILE_NAME = f"{TOOL_NAME}.mod"
+MAIN_SCRIPT_NAME = f"{TOOL_NAME}.py"
 
+# UI Style configurations
+BUTTON_STYLE = """
+    QPushButton {
+        background-color: #D0D0D0;
+        color: #303030;
+        border-radius: 10px;
+        padding: 5px;
+        font-weight: bold;
+        min-width: 80px;
+    }
+    QPushButton:hover {
+        background-color: #E0E0E0;
+    }
+    QPushButton:pressed {
+        background-color: #C0C0C0;
+    }
+"""
+
+MESSAGE_BUTTON_STYLE = """
+    QPushButton {
+        background-color: #B0B0B0;
+        color: #303030;
+        border-radius: 10px;
+        padding: 5px;
+        font-weight: bold;
+        min-width: 80px;
+    }
+    QPushButton:hover {
+        background-color: #C0C0C0;
+    }
+    QPushButton:pressed {
+        background-color: #A0A0A0;
+    }
+"""
+
+#===================================== 3. Utility Functions =====================================
 def maya_main_window():
+    """Get Maya main window as QWidget"""
     main_window_ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
 
-class RoundedButton(QtWidgets.QPushButton):
+def ensure_directory(directory_path):
+    """Ensure directory exists, create if not"""
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+        print(f"Created directory: {directory_path}")
+    return directory_path
+
+def get_maya_modules_dir():
+    """Get Maya modules directory path"""
+    maya_app_dir = cmds.internalVar(userAppDir=True)
+    return ensure_directory(os.path.join(maya_app_dir, "modules"))
+
+#===================================== 4. UI Component Classes =====================================
+class SetButton(QtWidgets.QPushButton):
+    """Custom styled button for installation interface"""
     def __init__(self, text):
-        super(RoundedButton, self).__init__(text)
-        self.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #D0D0D0;
-                color: #303030;
-                border-radius: 10px;
-                padding: 5px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #E0E0E0;
-            }
-            QPushButton:pressed {
-                background-color: #C0C0C0;
-            }
-            """
-        )
+        super(SetButton, self).__init__(text)
+        self.setStyleSheet(BUTTON_STYLE)
 
+#===================================== 5. Main Window Class =====================================
 class InstallDialog(QtWidgets.QDialog):
-
-    # Widgets
-    
     def __init__(self, parent=maya_main_window()):
-        CURRENT_PATH = self.get_script_path()
-        ICON_PATH = os.path.abspath(os.path.join(CURRENT_PATH, "Icons", TOOLBOX_ICON).replace("\\", "/"))
         super(InstallDialog, self).__init__(parent)
-        self.setWindowTitle(f"{TOOLBOX_NAME} Installation")
+        self.setup_ui()
+        
+    def setup_ui(self):
+        """Initialize and setup UI components"""
+        self.setWindowTitle(f"{TOOL_NAME} Installation")
         self.setFixedSize(220, 120)
-        if os.path.exists(ICON_PATH):
-            self.setWindowIcon(QtGui.QIcon(ICON_PATH))
-        else:
-            print(f"Warning: Custom icon file '{ICON_PATH}' does not exist, will use default icon.")
+        self.setup_window_icon()
         self.create_widgets()
         self.create_layouts()
         self.create_connections()
 
+    def setup_window_icon(self):
+        """Setup window icon if available"""
+        if os.path.exists(TOOL_ICON):
+            self.setWindowIcon(QtGui.QIcon(TOOL_ICON))
+        else:
+            print(f"Warning: Icon file not found: {TOOL_ICON}")
+
+    #----------------- 5.1 UI Methods -----------------
     def create_widgets(self):
-        self.new_shelf_toggle = QtWidgets.QCheckBox("MetaBox Installation")
-        self.install_button = RoundedButton("Install " + TOOLBOX_NAME)
-        self.uninstall_button = RoundedButton("Uninstall " + TOOLBOX_NAME)
+        self.new_shelf_toggle = QtWidgets.QCheckBox(f"{TOOL_NAME} Installation")
+        self.install_button = SetButton("Install " + TOOL_NAME) 
+        self.uninstall_button = SetButton("Uninstall " + TOOL_NAME)
 
     def create_layouts(self):
         main_layout = QtWidgets.QVBoxLayout(self)
         main_layout.setContentsMargins(10, 2, 10, 5)
         main_layout.setSpacing(5)
 
-        toggle_layout = QtWidgets.QHBoxLayout()
-        toggle_layout.setSpacing(5)
+        header_layout = QtWidgets.QHBoxLayout()
+        header_layout.setSpacing(5)
 
-        label = QtWidgets.QLabel("Welcome to "+TOOLBOX_NAME+"!")
-        label.setStyleSheet("font-size: 11px; padding: 0px; margin: 0px;")
-        toggle_layout.addWidget(label)
-        toggle_layout.addStretch()
-        
-        main_layout.addLayout(toggle_layout)
+        welcome_label = QtWidgets.QLabel("Welcome to " + TOOL_NAME + "!")
+        welcome_label.setStyleSheet("font-size: 11px; padding: 0px; margin: 0px;")
+        header_layout.addWidget(welcome_label)
+        header_layout.addStretch()
+
+        main_layout.addLayout(header_layout)
         main_layout.addWidget(self.install_button)
         main_layout.addWidget(self.uninstall_button)
 
@@ -80,26 +145,8 @@ class InstallDialog(QtWidgets.QDialog):
         self.uninstall_button.setFixedHeight(30)
 
     def create_connections(self):
-        self.install_button.clicked.connect(self.install_metabox)
-        self.uninstall_button.clicked.connect(self.uninstall_metabox)
-
-    def event(self, event):
-        if event.type() == QtCore.QEvent.EnterWhatsThisMode:
-            QtWidgets.QWhatsThis.leaveWhatsThisMode()
-            self.open_help_url()
-            return True
-        return QtWidgets.QDialog.event(self, event)
-    
-    def open_help_url(self):
-        webbrowser.open(TOOLBOX_HELP_URL)
-        QtWidgets.QApplication.restoreOverrideCursor()
-
-    def closeEvent(self, event):
-        super(InstallDialog, self).closeEvent(event)
-
-    def helpEvent(self, event):
-        self.open_help_url()
-        event.accept()
+        self.install_button.clicked.connect(self.install)
+        self.uninstall_button.clicked.connect(self.uninstall)
 
     def create_styled_message_box(self, title, text):
         msg_box = QtWidgets.QMessageBox(self)
@@ -107,7 +154,6 @@ class InstallDialog(QtWidgets.QDialog):
         msg_box.setText(text)
         msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
         
-        # Set button style
         button_style = """
         QPushButton {
             background-color: #B0B0B0;
@@ -130,379 +176,324 @@ class InstallDialog(QtWidgets.QDialog):
         
         return msg_box
     
-    def install(self):
-        msg_box = self.create_styled_message_box(
-            "Confirm Installation",
-            f"Are you sure you want to install {TOOLBOX_NAME}?"
-        )
-        result = msg_box.exec_()
-        
-        if result == QtWidgets.QMessageBox.Yes:
-            self.close()
-            self.install_metabox()
+    #----------------- 5.2 Event Handler Methods -----------------
+    def event(self, event):
+        if event.type() == QtCore.QEvent.EnterWhatsThisMode:
+            QtWidgets.QWhatsThis.leaveWhatsThisMode()
+            self.open_help_url()
+            return True
+        return QtWidgets.QDialog.event(self, event)
+    
+    def closeEvent(self, event):
+        """Handle window close event"""
+        try:
+            super(InstallDialog, self).closeEvent(event)
+        except Exception as e:
+            print(f"Error closing window: {e}")
+            event.accept()
 
-    def uninstall(self):
-        msg_box = self.create_styled_message_box(
-            "Confirm Uninstallation",
-            f"Are you sure you want to uninstall {TOOLBOX_NAME}?"
-        )
-        result = msg_box.exec_()
-        
-        if result == QtWidgets.QMessageBox.Yes:
-            self.close()
-            self.uninstall_metabox()
+    def helpEvent(self, event):
+        self.open_help_url()
+        event.accept()
 
-    # PATHS
+    #----------------- 5.3 Utility Methods -----------------
+    def open_help_url(self):
+        webbrowser.open(TOOL_HELP_URL)
+        QtWidgets.QApplication.restoreOverrideCursor()
+
     def get_script_path(self):
-        MEL_SCRIPT = mel.eval('getenv("MAYA_SCRIPT_NAME")')
-        if MEL_SCRIPT and os.path.exists(MEL_SCRIPT):
-            return os.path.dirname(MEL_SCRIPT)
-        for path in sys.path:
-            POSSIBLE_PATH = os.path.join(path, "Install.py")
-            if os.path.exists(POSSIBLE_PATH):
-                return os.path.dirname(POSSIBLE_PATH)
+        maya_script = mel.eval('getenv("MAYA_SCRIPT_NAME")')
+        if maya_script and os.path.exists(maya_script):
+            return os.path.dirname(maya_script)
+            
+        for sys_path in sys.path:
+            install_path = os.path.join(sys_path, "install.py")
+            if os.path.exists(install_path):
+                return os.path.dirname(install_path)
+                
         return os.getcwd()
     
-    # MOD FILE
+    #----------------- 5.4 Installation Methods -----------------
+    def install(self):
+        """Handle install request with error handling"""
+        if not self._validate_paths():
+            return
+
+        msg_box = self.create_styled_message_box(
+            "Confirm Installation",
+            f"Are you sure you want to install {TOOL_NAME}?"
+        )
+        if msg_box.exec_() == QtWidgets.QMessageBox.Yes:
+            try:
+                self.install_tool()
+                self.close()
+            except Exception as e:
+                error_msg = f"Error during installation: {e}"
+                print(error_msg)
+                QtWidgets.QMessageBox.critical(self, "Error", error_msg)
+
+    def uninstall(self, *args):
+        """Handle uninstall request"""
+        msg_box = self.create_styled_message_box(
+            "Confirm Uninstallation",
+            f"Are you sure you want to uninstall {TOOL_NAME}?"
+        )
+        
+        if msg_box.exec_() == QtWidgets.QMessageBox.Yes:
+            try:
+                self.uninstall_tool()
+                self.close()
+            except Exception as e:
+                error_msg = f"Error during uninstallation: {e}"
+                print(error_msg)
+                QtWidgets.QMessageBox.critical(self, "Error", error_msg)
+        else:
+            print("Uninstallation cancelled")
+
     def create_mod_file(self):
-        CURRENT_PATH = self.get_script_path()
-        MAYA_APP_DIR = cmds.internalVar(userAppDir=True)
-        MODULES_DIR = os.path.join(MAYA_APP_DIR, "modules")
-
-        print(f"Current path: {CURRENT_PATH}")
-        print(f"Maya application directory: {MAYA_APP_DIR}")
-        print(f"Modules directory: {MODULES_DIR}")
-
-        if not os.path.exists(MODULES_DIR):
-            print(f"Creating modules directory: {MODULES_DIR}")
-            os.makedirs(MODULES_DIR)
-        else:
-            print("Modules directory already exists")
-
-        MOD_CONTENT = f"""+ MetaBox 1.0 {CURRENT_PATH}
-        scripts: {os.path.join(CURRENT_PATH, "Scripts")}
+        """Create or update the .mod file for Maya"""
+        modules_dir = get_maya_modules_dir()
+        mod_content = f"""+ {TOOL_NAME} 1.0 {ROOT_PATH}
+        scripts: {SCRIPTS_PATH}
         """
-        MOD_FILE_PATH = os.path.join(MODULES_DIR, "MetaBox.mod")
-        if os.path.exists(MOD_FILE_PATH):
-            with open(MOD_FILE_PATH, 'r') as f:
-                existing_content = f.read()
-            if existing_content.strip() == MOD_CONTENT.strip():
-                print("Existing .mod file content is correct, no update needed")
-                return
-            else:
-                print("Existing .mod file content is incorrect, will update")
-        print(f"Creating/updating .mod file: {MOD_FILE_PATH}")
+        mod_file_path = os.path.join(modules_dir, MOD_FILE_NAME)
+        self._write_mod_file(mod_file_path, mod_content)
 
+    def _write_mod_file(self, file_path, content):
+        """Helper method to write .mod file"""
         try:
-            with open(MOD_FILE_PATH, "w") as f:
-                f.write(MOD_CONTENT)
-            print(".mod file created/updated successfully")
+            with open(file_path, "w") as f:
+                f.write(content)
+            print(f"Successfully created/updated: {file_path}")
         except Exception as e:
-            print(f"Error creating/updating .mod file: {e}")
-
-        if os.path.exists(MOD_FILE_PATH):
-            print(f".mod file successfully created/updated: {MOD_FILE_PATH}")
-        else:
-            print(f"Warning: .mod file could not be created/updated: {MOD_FILE_PATH}")
+            error_msg = f"Error writing .mod file: {e}"
+            print(error_msg)
+            QtWidgets.QMessageBox.critical(self, "Error", error_msg)
 
     def uninstall_mod_file(self):
-        MAYA_APP_DIR = cmds.internalVar(userAppDir=True)
-        MOD_FILE_PATH = os.path.join(MAYA_APP_DIR, "modules", "MetaBox.mod")
-        # First check if the mod file exists, if so, delete it
-        if os.path.exists(MOD_FILE_PATH):
+        modules_dir = get_maya_modules_dir()
+        mod_file_path = os.path.join(modules_dir, MOD_FILE_NAME)
+        if os.path.exists(mod_file_path):
             try:
-                os.remove(MOD_FILE_PATH)
-                print("MetaBox.mod file deleted")
+                os.remove(mod_file_path)
+                print(f"{TOOL_NAME}.mod file deleted")
             except Exception as e:
-                print(f"Error deleting MetaBox.mod file: {e}")
+                print(f"Error deleting {TOOL_NAME}.mod file: {e}")
     
-    # BUTTONS
     def clean_existing_buttons(self):
-        if cmds.shelfLayout("MetaBox", exists=True):
-            buttons = cmds.shelfLayout("MetaBox", query=True, childArray=True) or []
+        if cmds.shelfLayout(TOOL_NAME, exists=True):
+            buttons = cmds.shelfLayout(TOOL_NAME, query=True, childArray=True) or []
             for btn in buttons:
                 if cmds.shelfButton(btn, query=True, exists=True):
-                    label = cmds.shelfButton(btn, query=True, label=True)
-                    if label == "MetaBox":
+                    label = cmds.shelfButton(btn, query=True, label=True) 
+                    if label == TOOL_NAME:
                         cmds.deleteUI(btn)
-                        print(f"Deleted existing MetaBox button: {btn}")
+                        print(f"Deleted existing {TOOL_NAME} button: {btn}")
 
-    def install_metabox(self):
-        CURRENT_PATH = self.get_script_path()
-        SCRIPTS_PATH = os.path.abspath(os.path.join(CURRENT_PATH, "Scripts"))
-        ICON_PATH = os.path.abspath(os.path.join(CURRENT_PATH, "Icons", "MetaBox.png"))
-        MAYA_APP_DIR = cmds.internalVar(userAppDir=True)
-        MAYA_VERSION = cmds.about(version=True)
-
-        print(f"Current path: {CURRENT_PATH}")
-        print(f"Scripts path: {SCRIPTS_PATH}")
-        print(f"sys.path: {sys.path}")
-        print(f"Current working directory: {os.getcwd()}")
-
-        # Create mod file
-        self.create_mod_file()
-
-        # Ensure Scripts folder exists
+    def install_tool(self):
+        """Install the tool to Maya"""
         if not os.path.exists(SCRIPTS_PATH):
-            print(f"{SCRIPTS_PATH} does not exist, please check the installation")
+            print(f"Error: Scripts path does not exist: {SCRIPTS_PATH}")
             return
 
-        # Check if MetaBox.py exists
-        META_BOX_FILE = os.path.join(SCRIPTS_PATH, "MetaBox.py")
-        if not os.path.exists(META_BOX_FILE):
-            print(f"Error: MetaBox.py file does not exist at {META_BOX_FILE}, please check the installation")
+        main_script = os.path.join(SCRIPTS_PATH, MAIN_SCRIPT_NAME)
+        if not os.path.exists(main_script):
+            print(f"Error: Main script file not found: {main_script}")
             return
-        else:
-            print(f"MetaBox.py file exists at {META_BOX_FILE}")
 
-        # Ensure Scripts folder is in sys.path
+        # Add scripts path to Python path
         if SCRIPTS_PATH not in sys.path:
             sys.path.insert(0, SCRIPTS_PATH)
-            print(f"Added {SCRIPTS_PATH} to sys.path")
 
-        # Check and create shelf
+        # Create shelf and button
+        self._create_shelf_button()
+        self.create_mod_file()
+        
+        # 切换到新创建的工具架
+        try:
+            cmds.shelfTabLayout("ShelfLayout", edit=True, selectTab=TOOL_NAME)
+            print(f"Switched to {TOOL_NAME} shelf")
+        except Exception as e:
+            print(f"Error switching to {TOOL_NAME} shelf: {e}")
+        
+        self._show_install_success_message()
+
+    def _create_shelf_button(self):
+        """Create shelf button for the tool"""
         shelf_layout = mel.eval('$tmpVar=$gShelfTopLevel')
-        if not cmds.shelfLayout("MetaBox", exists=True):
-            cmds.shelfLayout("MetaBox", parent=shelf_layout)
-            print("Created MetaBox shelf")
-        else:
-            print("MetaBox shelf already exists")
-
+        
+        # Create shelf if not exists
+        if not cmds.shelfLayout(TOOL_NAME, exists=True):
+            cmds.shelfLayout(TOOL_NAME, parent=shelf_layout)
+        
         # Clean existing buttons
         self.clean_existing_buttons()
 
-        # Use custom icon
-        if not os.path.exists(ICON_PATH):
-            print(f"Warning: Custom icon file '{ICON_PATH}' does not exist, will use default icon.")
-            ICON_PATH = "commandButton.png"
-        else:
-            print(f"Using custom icon: {ICON_PATH}")
-
-        command = f"""
-import sys
-import os
-CURRENT_PATH = r'{CURRENT_PATH}'
-SCRIPTS_PATH = os.path.join(CURRENT_PATH, 'Scripts')
-if SCRIPTS_PATH not in sys.path:
-    sys.path.insert(0, SCRIPTS_PATH)
-os.chdir(SCRIPTS_PATH)
-try:
-    import MetaBox
-    MetaBox.show()
-except ImportError as e:
-    print("Error importing MetaBox:", str(e))
-    print("Current path:", CURRENT_PATH)
-    print("Scripts path:", SCRIPTS_PATH)
-    print("sys.path:", sys.path)
-    print("Contents of Scripts folder:", os.listdir(SCRIPTS_PATH))
-    """
         # Create new button
-        new_button = cmds.shelfButton(
-            parent=TOOLBOX_NAME,
-            image1=ICON_PATH,
-            label=TOOLBOX_NAME,
+        icon_path = TOOL_ICON if os.path.exists(TOOL_ICON) else DEFAULT_ICON
+        
+        command = self._get_shelf_button_command()
+        
+        cmds.shelfButton(
+            parent=TOOL_NAME,
+            image1=icon_path,
+            label=TOOL_NAME,
             command=command,
             sourceType="python",
-            annotation=TOOLBOX_NAME+" v1.0",
+            annotation=f"{TOOL_NAME} {TOOL_VERSION}",
             noDefaultPopup=True,
             style="iconOnly"
         )
 
-        # Show confirmation dialog before installation
-        msg_box = QtWidgets.QMessageBox()
-        msg_box.setWindowTitle("Confirm Installation")
-        msg_box.setText(f"Are you sure you want to install {TOOLBOX_NAME}?")
-        msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+    def _get_shelf_button_command(self):
+        """Get the command string for shelf button"""
+        return f"""
+import sys
+import os
+SCRIPTS_PATH = r'{SCRIPTS_PATH}'
+if SCRIPTS_PATH not in sys.path:
+    sys.path.insert(0, SCRIPTS_PATH)
+os.chdir(SCRIPTS_PATH)
+try:
+    import {TOOL_NAME}
+    {TOOL_NAME}.show()
+except ImportError as e:
+    print("Error importing {TOOL_NAME}:", str(e))
+    print("Scripts path:", SCRIPTS_PATH)
+    print("sys.path:", sys.path)
+    print("Contents of Scripts folder:", os.listdir(SCRIPTS_PATH))
+"""
 
-        # Set button style for confirmation dialog
-        button_style = """
-        QPushButton {
-            background-color: #B0B0B0;
-            color: #303030;
-            border-radius: 10px;
-            padding: 5px;
-            font-weight: bold;
-            min-width: 80px;
-        }
-        QPushButton:hover {
-            background-color: #C0C0C0;
-        }
-        QPushButton:pressed {
-            background-color: #A0A0A0;
-        }
-        """
-        for button in msg_box.buttons():
-            button.setStyleSheet(button_style)
+    def uninstall_tool(self):
+        """Uninstall the tool from Maya"""
+        window_name = f"{TOOL_NAME}Window"
+        dock_name = f"{TOOL_NAME}WindowDock"
+        shelf_file = f"shelf_{TOOL_NAME}.mel"
 
-        result = msg_box.exec_()
-        if result == QtWidgets.QMessageBox.Yes:
-            # Proceed with installation
-            # Create installation successful message box
-            msg_box = QtWidgets.QMessageBox()
-            msg_box.setWindowTitle("Installation Successful")
-            msg_box.setText(f"{TOOLBOX_NAME} has been successfully installed!")
-            msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        if cmds.window(window_name, exists=True):
+            try:
+                cmds.deleteUI(window_name)
+            except Exception as e:
+                print(f"Error closing {TOOL_NAME} window: {e}")
 
-            # Set button style for successful message box
-            for button in msg_box.buttons():
-                button.setStyleSheet(button_style)
+        if cmds.dockControl(dock_name, exists=True):
+            try:
+                cmds.deleteUI(dock_name)
+            except Exception as e:
+                print(f"Error closing docked {TOOL_NAME} window: {e}")
 
-            msg_box.exec_()
-        else:
-            print("Installation cancelled")
+        self.uninstall_mod_file()
 
-        # Verify installation
-        try:
-            import_module = __import__(TOOLBOX_NAME)
-            print(f"{TOOLBOX_NAME} module imported successfully")
-        except ImportError as e:
-            print(f"Unable to import {TOOLBOX_NAME} module: {e}")
-            print("sys.path:", sys.path)
-            print("Scripts folder contents:", os.listdir(SCRIPTS_PATH))
+        # 移除工具架之前先获取当前工具架
+        current_shelf = cmds.shelfTabLayout("ShelfLayout", query=True, selectTab=True)
 
-        # Switch to MetaBox shelf
-        try:
-            current_shelf = cmds.shelfTabLayout("ShelfLayout", query=True, selectTab=True)
-            if current_shelf != TOOLBOX_NAME:
-                cmds.shelfTabLayout("ShelfLayout", edit=True, selectTab=TOOLBOX_NAME)
-                print("Switched to "+TOOLBOX_NAME+" shelf")
-            else:
-                print("Already on "+TOOLBOX_NAME+" shelf")
-        except Exception as e:
-            print(f"Error switching to {TOOLBOX_NAME} shelf: {e}")
+        # 删除工具架和按钮
+        if cmds.shelfLayout(TOOL_NAME, exists=True):
+            try:
+                cmds.deleteUI(TOOL_NAME, layout=True)
+            except Exception as e:
+                print(f"Error deleting {TOOL_NAME} shelf: {e}")
 
-        # Save shelf
-        mel.eval('saveNewShelf "shelf_MetaBox.mel"')
+        self._clean_all_shelf_buttons()
 
-    def uninstall_metabox(self):
-        # Show confirmation dialog before uninstallation
-        msg_box = QtWidgets.QMessageBox()
-        msg_box.setWindowTitle("Confirm Uninstallation")
-        msg_box.setText(f"Are you sure you want to uninstall {TOOLBOX_NAME}?")
-        msg_box.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        # 从Python路径中移除
+        if SCRIPTS_PATH in sys.path:
+            sys.path.remove(SCRIPTS_PATH)
 
-        # Set button style for confirmation dialog
-        button_style = """
-        QPushButton {
-            background-color: #B0B0B0;
-            color: #303030;
-            border-radius: 10px;
-            padding: 5px;
-            font-weight: bold;
-            min-width: 80px;
-        }
-        QPushButton:hover {
-            background-color: #C0C0C0;
-        }
-        QPushButton:pressed {
-            background-color: #A0A0A0;
-        }
-        """
-        for button in msg_box.buttons():
-            button.setStyleSheet(button_style)
-
-        result = msg_box.exec_()
-        if result == QtWidgets.QMessageBox.Yes:
-            # Proceed with uninstallation
-            CURRENT_PATH = self.get_script_path()
-            SCRIPTS_PATH = os.path.join(CURRENT_PATH, "Scripts")
-            MAYA_APP_DIR = cmds.internalVar(userAppDir=True)
-            MAYA_VERSION = cmds.about(version=True)
-            SHELF_FILE_PATH = os.path.join(MAYA_APP_DIR, MAYA_VERSION, "prefs", "shelves", "shelf_" + TOOLBOX_NAME + ".mel")
-
-            # Close MetaBox window
-            if cmds.window("MetaBoxWindow", exists=True):
-                try:
-                    cmds.deleteUI("MetaBoxWindow")
-                    print("Closed " + TOOLBOX_NAME + " window")
-                except Exception as e:
-                    print(f"Error closing {TOOLBOX_NAME} window: {e}")
-            else:
-                print(TOOLBOX_NAME + " window does not exist, no need to delete")
-
-            # Close docked window
-            if cmds.dockControl(TOOLBOX_NAME + "WindowDock", exists=True):
-                try:
-                    cmds.deleteUI(TOOLBOX_NAME + "WindowDock")
-                    print("Closed docked " + TOOLBOX_NAME + " window")
-                except Exception as e:
-                    print(f"Error closing docked {TOOLBOX_NAME} window: {e}")
-
-            # Delete mod file
-            self.uninstall_mod_file()
-
-            # Delete shelf file
-            if os.path.exists(SHELF_FILE_PATH):
-                try:
-                    os.remove(SHELF_FILE_PATH)
-                    print(f"Deleted shelf file: {SHELF_FILE_PATH}")
-                except Exception as e:
-                    print(f"Error deleting shelf file: {e}")
-            else:
-                print(f"Shelf file does not exist: {SHELF_FILE_PATH}")
-
-            # Delete shelf and buttons
-            if cmds.shelfLayout("MetaBox", exists=True):
-                try:
-                    cmds.deleteUI(TOOLBOX_NAME, layout=True)
-                    print("Deleted " + TOOLBOX_NAME + " shelf")
-                except Exception as e:
-                    print(f"Error deleting {TOOLBOX_NAME} shelf: {e}")
-            else:
-                print(TOOLBOX_NAME + " shelf does not exist, no need to delete")
-
-            # Check all shelves, delete any MetaBox buttons
-            all_shelves = cmds.shelfTabLayout("ShelfLayout", query=True, childArray=True)
-            for shelf in all_shelves:
-                shelf_buttons = cmds.shelfLayout(shelf, query=True, childArray=True) or []
-                for btn in shelf_buttons:
-                    if cmds.shelfButton(btn, query=True, exists=True):
-                        label = cmds.shelfButton(btn, query=True, label=True)
-                        if label == "MetaBox":
-                            cmds.deleteUI(btn)
-                            print(f"Deleted {TOOLBOX_NAME} button: {btn}")
-
-            # Remove Scripts path from sys.path
-            if SCRIPTS_PATH in sys.path:
-                sys.path.remove(SCRIPTS_PATH)
-                print(f"Removed {SCRIPTS_PATH} from sys.path")
-
-            # Reload shelves to ensure changes take effect
-            mel.eval('loadNewShelf "shelf_MetaBox.mel"')
-            print("Reloaded shelves")
-
-            # Create uninstallation successful message box
-            msg_unintsall_box = QtWidgets.QMessageBox()
-            msg_unintsall_box.setWindowTitle("Uninstallation Successful")
-            msg_unintsall_box.setText(f"{TOOLBOX_NAME} has been successfully uninstalled!")
-            msg_unintsall_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
-
-            # Set button style for success message box
-            for button in msg_unintsall_box.buttons():
-                button.setStyleSheet(button_style)
-
-            msg_unintsall_box.exec_()
-        else:
-            print("Uninstallation cancelled")
-    
-    def uninstall(self, *args):
-        result = cmds.confirmDialog(
-            title="Confirm Uninstallation",
-            message="Are you sure you want to uninstall "+TOOLBOX_NAME+"?",
-            button=['Yes', 'No'],
-            defaultButton='Yes',
-            cancelButton='No',
-            dismissString='No'
+        # 删除工具架文件
+        shelf_path = os.path.join(
+            cmds.internalVar(userAppDir=True),
+            cmds.about(version=True),
+            "prefs",
+            "shelves",
+            f"shelf_{TOOL_NAME}.mel"
         )
-        if result == 'Yes':
-            cmds.deleteUI(self.window, window=True)
-            self.uninstall_metabox()
-        else:
-            print("Uninstallation cancelled")
+        
+        if os.path.exists(shelf_path):
+            try:
+                os.remove(shelf_path)
+            except Exception as e:
+                print(f"Error deleting shelf file: {e}")
 
-if __name__ == "__main__":
+        # 如果当前工具架是被删除的工具架，切换到其他工具架
+        if current_shelf == TOOL_NAME:
+            shelves = cmds.shelfTabLayout("ShelfLayout", query=True, childArray=True)
+            if shelves and len(shelves) > 0:
+                cmds.shelfTabLayout("ShelfLayout", edit=True, selectTab=shelves[0])
+
+        self._show_uninstall_success_message()
+
+    def _clean_all_shelf_buttons(self):
+        """Clean up all shelf buttons related to the tool"""
+        all_shelves = cmds.shelfTabLayout("ShelfLayout", query=True, childArray=True) or []
+        for shelf in all_shelves:
+            shelf_buttons = cmds.shelfLayout(shelf, query=True, childArray=True) or []
+            for btn in shelf_buttons:
+                if cmds.shelfButton(btn, query=True, exists=True):
+                    if cmds.shelfButton(btn, query=True, label=True) == TOOL_NAME:
+                        cmds.deleteUI(btn)
+
+    def _show_uninstall_success_message(self):
+        """Show uninstallation success message"""
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setWindowTitle("Uninstallation Successful")
+        msg_box.setText(f"{TOOL_NAME} has been successfully uninstalled!")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+
+        for button in msg_box.buttons():
+            button.setStyleSheet(MESSAGE_BUTTON_STYLE)
+
+        msg_box.exec_()
+
+    def _show_install_success_message(self):
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setWindowTitle("Installation Successful")
+        msg_box.setText(f"{TOOL_NAME} has been successfully installed!")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        for button in msg_box.buttons():
+            button.setStyleSheet(MESSAGE_BUTTON_STYLE)
+        msg_box.exec_()
+
+    def _validate_paths(self):
+        """Validate all required paths exist"""
+        paths = {
+            "Root": ROOT_PATH,
+            "Scripts": SCRIPTS_PATH,
+            "Icons": ICONS_PATH
+        }
+        
+        for name, path in paths.items():
+            if not os.path.exists(path):
+                error_msg = f"Error: {name} path does not exist: {path}"
+                print(error_msg)
+                QtWidgets.QMessageBox.critical(self, "Error", error_msg)
+                return False
+        return True
+
+    def _log(self, message, error=False):
+        """Log messages with timestamp"""
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log_message = f"[{timestamp}] {message}"
+        print(log_message)
+        if error:
+            QtWidgets.QMessageBox.critical(self, "Error", message)
+
+    def _load_mel_shelf(self):
+        """Load mel shelf file with error handling"""
+        try:
+            mel.eval(f'loadNewShelf "shelf_{TOOL_NAME}.mel"')
+        except Exception as e:
+            self._log(f"Error loading shelf file: {e}", error=True)
+
+#===================================== 6. Main Function =====================================
+def main():
+    """Main entry point for the installer"""
     app = QtWidgets.QApplication.instance() or QtWidgets.QApplication(sys.argv)
     dialog = InstallDialog()
     dialog.show()
-    app.exec_()
+    return app.exec_()
+
+if __name__ == "__main__":
+    sys.exit(main())
 

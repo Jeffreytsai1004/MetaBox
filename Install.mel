@@ -1,11 +1,17 @@
-global proc installMetaBox()
+global proc install()
 {
-    string $scriptPath = `whatIs installMetaBox`;
+    string $scriptPath = `whatIs install`;
     string $dirPath = `substring $scriptPath 25 (size($scriptPath))`;
     $dirPath = `dirname $dirPath`;
     string $pythonPath = $dirPath + "/Install.py";
     $pythonPath = substituteAllString($pythonPath, "\\", "/");
-    python("import os, sys; sys.path.append(os.path.dirname(r'" + $pythonPath + "')); exec(open(r'" + $pythonPath + "', encoding='utf-8').read())");
+    
+    string $pythonCmd = "import os, sys\n";
+    $pythonCmd += "INSTALL_PATH = r'" + $pythonPath + "'\n";
+    $pythonCmd += "sys.path.append(os.path.dirname(INSTALL_PATH))\n";
+    $pythonCmd += "exec(open(INSTALL_PATH, encoding='utf-8').read())\n";
+    
+    python($pythonCmd);
 }
 
-installMetaBox();
+install();
