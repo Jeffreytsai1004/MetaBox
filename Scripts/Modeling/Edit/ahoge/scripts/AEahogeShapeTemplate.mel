@@ -1,0 +1,102 @@
+global proc AEahogeShapeTemplate(string $nodeName)
+{
+    editorTemplate -beginScrollLayout;
+
+        editorTemplate -beginLayout "Seed" -collapse true;
+            editorTemplate -addControl "seed";
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Color" -collapse false;
+            AEaddRampControl($nodeName + ".colorRamp");
+
+            editorTemplate -beginLayout "Mutant Color" -collapse true;
+                editorTemplate -l "Mutant Color" -addControl "mutantColor";
+                editorTemplate -l "Mutant Percent" -addControl "mutantPercent";
+                editorTemplate -l "Mutant Fuzziness" -addControl "mutantFuzziness";
+            editorTemplate -endLayout;
+
+            editorTemplate -beginLayout "Randomize Color" -collapse true;
+                editorTemplate -l "Randomize Color" -addControl "randomizeColor";
+                editorTemplate -l "Randomize Saturation" -addControl "randomizeSaturation";
+                editorTemplate -l "Randomize Value" -addControl "randomizeValue";
+            editorTemplate -endLayout;
+
+            editorTemplate -beginLayout "Absolute Length" -collapse true;
+                editorTemplate -l "Use Absolute Length" -addControl "useAbsoluteLength";
+                editorTemplate -l "Absolute Length" -addControl "absoluteLength";
+            editorTemplate -endLayout;
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "General" -collapse false;
+            editorTemplate -l "Segments" -addControl "numSegments";
+            editorTemplate -l "Curves" -addControl "numCurves";
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Width" -collapse false;
+            editorTemplate -l "Width" -addControl "width";
+            AEaddRampControl($nodeName + ".widthRamp");
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Noise" -collapse false;
+            editorTemplate -l "Random Placement" -addControl "randomPlacement";
+            editorTemplate -l "Noise" -addControl "noise";
+            editorTemplate -l "Frequency" -addControl "frequency";
+            editorTemplate -l "Octaves" -addControl "octaves";
+            editorTemplate -l "Persistence" -addControl "persistence";
+            AEaddRampControl($nodeName + ".noiseRamp");
+            editorTemplate -beginLayout "Randomize Frequency" -collapse true;
+                editorTemplate -l "Enable Randomize Frequency" -addControl "enableRandomizeFrequency";
+                editorTemplate -l "Randomize Frequency Min" -addControl "randomizeFrequencyMin";
+                editorTemplate -l "Randomize Frequency Max" -addControl "randomizeFrequencyMax";
+                AEaddRampControl($nodeName + ".randomizeFrequencyDistribution");
+            editorTemplate -endLayout;
+            editorTemplate -beginLayout "Randomize Noise" -collapse true;
+                editorTemplate -l "Randomize Noise" -addControl "randomizeNoise";
+                AEaddRampControl($nodeName + ".randomizeNoiseDistribution");
+            editorTemplate -endLayout;
+        editorTemplate -endLayout;
+        
+        editorTemplate -beginLayout "Cut" -collapse false;
+            editorTemplate -l "Cut" -addControl "cut";
+            editorTemplate -l "Compress Noise Frequency" -addControl "compressNoiseFrequency";
+            AEaddRampControl($nodeName + ".cutDistribution");
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Spray" -collapse false;
+            editorTemplate -l "Fill" -addControl "fill";
+            editorTemplate -l "Shift" -addControl "shift";
+            editorTemplate -l "Spray Along Normal" -addControl "sprayAlongNormal";
+            editorTemplate -l "Spray" -addControl "spray";
+            AEaddRampControl($nodeName + ".sprayRamp");
+            AEaddRampControl($nodeName + ".sprayDistribution");
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Multistrand" -collapse false;
+            editorTemplate -l "Multistrand" -addControl "multistrand";
+            editorTemplate -l "Multistrand Percent" -addControl "multistrandPercent";
+            editorTemplate -l "Multistrand Randomize" -addControl "multistrandRandomize";
+            editorTemplate -l "Multistrand Randomize Tip" -addControl "multistrandRandomizeTip";
+            editorTemplate -l "Multistrand Twist" -addControl "multistrandTwist";
+            editorTemplate -l "Multistrand Twist Randomize" -addControl "multistrandTwistRandomize";
+            editorTemplate -l "Multistrand Spray" -addControl "multistrandSpray";
+            editorTemplate -l "Multistrand Randomize Spray" -addControl "multistrandRandomizeSpray";
+            AEaddRampControl($nodeName + ".multistrandSprayRamp");
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Arnold" -collapse true;
+            editorTemplate -l "Mode" -addControl "aiMode";
+            editorTemplate -l "Min Pixel Width" -addControl "aiMinPixelWidth";
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Viewport" -collapse true;
+            editorTemplate -l "Display Mode" -addControl "displayMode";
+            editorTemplate -l "Preview Percent" -addControl "previewPercent";
+            editorTemplate -l "Preview Sides" -addControl "previewSides";
+        editorTemplate -endLayout;
+
+        AEsurfaceShapeTemplate $nodeName;
+
+        editorTemplate -addExtraControls;
+
+    editorTemplate -endScrollLayout;
+}

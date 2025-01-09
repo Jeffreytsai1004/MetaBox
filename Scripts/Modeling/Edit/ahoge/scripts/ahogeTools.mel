@@ -1,0 +1,433 @@
+global proc ahogeTools()
+{
+    if (`menu -exists ahogeToolsMenu`) 
+        deleteUI ahogeToolsMenu;
+    else
+    {
+        menu -l "Ahoge" -tearOff true -p "MayaWindow" ahogeToolsMenu;
+        menuItem -l "Create" -c "ahogeTools_create" -ann "Create an ahogeShape node with a random seed and connect the selected surfaces" -i "ahogeShape.png" -p ahogeToolsMenu ;
+        menuItem -l "Connect" -c "ahogeTools_connect" -ann "Connect the selected nurbs surfaces to the selected ahogeShape nodes" -i "ahoge_connect.png" -p ahogeToolsMenu ;
+        menuItem -l "Disconnect" -c "ahogeTools_disconnect" -ann "Disconnect the selected nurbs surfaces from the selected ahogeShape nodes" -i "ahoge_disconnect.png" -p ahogeToolsMenu ;
+        menuItem -l "Duplicate" -subMenu true -ann "Duplicate ahogeShape nodes" -i "ahoge_duplicate.png" -p ahogeToolsMenu ahogeToolsMenu_duplicate_menu; 
+        menuItem -l "Ahoge" -c "ahogeTools_duplicateAhoge" -ann "Duplicate the selected ahogeShape nodes and set random seeds" -i "ahogeShape.png" -p ahogeToolsMenu_duplicate_menu;
+        menuItem -l "Ahoge and Connect" -c "ahogeTools_duplicateAhoge_connect" -ann "Duplicate the selected ahogeShape nodes, connect the selected surfaces to them, and set random seeds" -i "ahoge_connect.png" -p ahogeToolsMenu_duplicate_menu;
+        menuItem -l "Misc" -subMenu true -ann "Miscellaneous Tools" -i "ahoge_misc.png" -p ahogeToolsMenu ahogeToolsMenu_misc_menu; 
+        menuItem -l "Create Nurbopus" -c "ahogeTools_createNurbopus" -ann "Select curves and optionally a mesh to create Nurbopus" -i "out_nurbopusNode.png" -p ahogeToolsMenu_misc_menu;
+        menuItem -d true -p ahogeToolsMenu_misc_menu;
+        menuItem -l "Fix Surfaces" -c "ahogeTools_fixSurfaces" -ann "Select Nurbs Surfaces and a Mesh to fix the Surfaces" -i "ahoge_fix.png" -p ahogeToolsMenu_misc_menu;
+        menuItem -l "Select Connected Surfaces" -c "ahogeTools_selectConnectedSurfaces" -ann "Select Nurbs Surfaces that are connected to the selected Ahoge Shapes" -i "aselect.png" -p ahogeToolsMenu_misc_menu;
+        menuItem -l "Disconnect Connected Surfaces" -c "ahogeTools_disconnectConnectedSurfaces" -ann "Disconnect Nurbs Surfaces that are connected to the selected Ahoge Shapes" -i "ahoge_disconnect.png" -p ahogeToolsMenu_misc_menu;
+        menuItem -l "Select" -subMenu true -ann "Select ahogeShape nodes" -p ahogeToolsMenu -pmc "ahogeTools_select_pmc"  -i "aselect.png" ahogeToolsMenu_select_menu;
+        menuItem -l "Convert" -subMenu true -ann "Convert ahogeShape nodes" -i "ahoge_convert.png" -p ahogeToolsMenu ahogeToolsMenu_convert_menu;
+        menuItem -l "Convert to Curves" -c "ahogeTools_convertToCurves" -ann "Convert the selected ahogeShape nodes to nurbs curves" -i "curveEP.png" -p ahogeToolsMenu_convert_menu;
+        menuItem -l "Export" -subMenu true -ann "Export ahogeShape nodes" -i "ahoge_export.png" -p ahogeToolsMenu ahogeToolsMenu_export_menu;
+        menuItem -l "Export Alembic" -c "ahogeTools_exportAbc" -ann "Export ahogeShape nodes to Alembic" -i "ahoge_abc.png" -p ahogeToolsMenu_export_menu; 
+        menuItem -d true -p ahogeToolsMenu;
+        menuItem -l "Support" -c "ahogeTools_support" -ann "Get support and updates" -i "ahoge_info.png" -p ahogeToolsMenu ;
+    }
+}
+
+global proc ahogeTools_create()
+{
+    string $surfaces[] = `ls -sl -dag -type "nurbsSurface"`;
+    
+    string $ahogeShape = `createNode "ahogeShape"`;
+    setAttr ($ahogeShape + ".seed") (int(rand(100000)));
+    
+    int $i = 0;
+    for (; $i < size($surfaces); $i++ ) 
+    {
+        if ((`getAttr ($surfaces[$i] + ".fu")` == 0) && (`getAttr ($surfaces[$i] + ".fv")` == 2))
+        {
+            warning($surfaces[$i] + " swapping UV");
+            reverseSurface -d 3 -ch 1 -rpo 1 $surfaces[$i];
+            reverseSurface -d 0 -ch 1 -rpo 1 $surfaces[$i];
+        }
+        connectAttr ($surfaces[$i] + ".worldSpace[0]") ($ahogeShape + ".inputSurfaces[" + $i + "]");
+    }
+}
+
+global proc ahogeTools_disconnect_attr( string $left, string $right )
+{
+    string $connections[] = `listConnections -p true $left`;
+    string $connection;
+    for ($connection in $connections)
+    {
+        string $ending = `match "\[[0-9]+\]$" $connection`;
+        string $short = `substring $connection 1 (size($connection) - size($ending))`;
+        if ( $short == $right ) 
+        {
+            disconnectAttr $left $connection;
+        }
+    }
+}
+
+global proc ahogeTools_connect()
+{
+    string $surfaces[] = `ls -sl -dag -type "nurbsSurface"`;
+    string $ahogeShapes[] = `ls -sl -dag -type "ahogeShape"`;
+    
+    string $ahogeShape;
+    for ($ahogeShape in $ahogeShapes)
+    {
+        string $inputSurfaces[] = `listConnections -p true ($ahogeShape + ".inputSurfaces")`;
+        string $inputSurfacesObj[] = `listConnections -p false ($ahogeShape + ".inputSurfaces")`;
+        $inputSurfacesObj = `ls -dag -type "nurbsSurface" $inputSurfacesObj`;
+               
+        string $connect;
+        for ($connect in $inputSurfaces)
+        {
+            ahogeTools_disconnect_attr $connect ($ahogeShape + ".inputSurfaces");
+        }
+
+        string $surfacesToAdd[] = {};
+        string $surface;
+        for ($surface in $surfaces)
+        {
+            if (!stringArrayContains($surface, $inputSurfacesObj))
+            {
+                $surfacesToAdd[size($surfacesToAdd)] = $surface;
+            }
+        }
+        
+        string $diffSurfaces[] = stringArrayCatenate($inputSurfacesObj, $surfacesToAdd);
+                
+        int $i = 0;
+        for (; $i < size($diffSurfaces); $i++ ) 
+        {
+            connectAttr ($diffSurfaces[$i] + ".worldSpace[0]") ($ahogeShape + ".inputSurfaces[" + $i + "]");
+        }
+    }
+}
+
+global proc ahogeTools_disconnect()
+{
+    string $surfaces[] = `ls -sl -dag -type "nurbsSurface"`;
+    string $ahogeShapes[] = `ls -sl -dag -type "ahogeShape"`;
+    
+    string $ahogeShape;
+    for ($ahogeShape in $ahogeShapes)
+    {
+        string $inputSurfaces[] = `listConnections -p true ($ahogeShape + ".inputSurfaces")`;
+        string $inputSurfacesObj[] = `listConnections -p false ($ahogeShape + ".inputSurfaces")`;
+        $inputSurfacesObj = `ls -dag -type "nurbsSurface" $inputSurfacesObj`;
+               
+        string $connect;
+        for ($connect in $inputSurfaces)
+        {
+            ahogeTools_disconnect_attr $connect ($ahogeShape + ".inputSurfaces");
+        }
+        
+        string $diffSurfaces[] = stringArrayRemove($surfaces, $inputSurfacesObj);
+                
+        int $i = 0;
+        for (; $i < size($diffSurfaces); $i++ ) 
+        {
+            connectAttr ($diffSurfaces[$i] + ".worldSpace[0]") ($ahogeShape + ".inputSurfaces[" + $i + "]");
+        }
+    }
+}
+
+global proc ahogeTools_duplicateAhoge()
+{
+    string $ahoges[] = `ls -dag -sl -l -type ahogeShape`;
+    string $ahoge;
+    for ($ahoge in $ahoges)
+    {
+        string $dup[] = `duplicate -ic $ahoge`;
+        setAttr ($dup[0] + ".seed") (int(rand(100000)));
+    }
+}
+
+global proc ahogeTools_duplicateAhoge_connect()
+{
+    string $ahoges[] = `ls -dag -sl -l -type ahogeShape`;
+    string $surfaces[] = `ls -dag -sl -l -type nurbsSurface`; 
+    
+    if (size($ahoges) < 1) error "you haven't selected any ahogeShapes";
+    if (size($surfaces) < 1) error "you haven't selected any surfaces";
+    
+    string $ahoge;
+    for ($ahoge in $ahoges)
+    {
+        string $dup[] = `duplicate $ahoge`;
+        string $multiInstances[] = `listAttr ($dup[0] + ".inputSurfaces[*]")`;
+        
+        string $multiInstance;
+        for ($multiInstance in $multiInstances)
+        {
+            removeMultiInstance -b true ($dup[0] + "." + $multiInstance);
+        }
+        
+        int $i = 0;
+        for (; $i < size($surfaces); $i++)
+        {
+            connectAttr -f ($surfaces[$i] + ".worldSpace[0]") ($dup[0] + ".inputSurfaces[" + $i + "]");
+        }
+        
+        setAttr ($dup[0] + ".seed") (int(rand(100000)));
+    }
+}
+
+global proc ahogeTools_select_pmc()
+{
+    menu -e -dai ahogeToolsMenu_select_menu;
+    
+    string $ahogeShapes[] = `ls -l -type ahogeShape`;
+    string $ahogeShapesSelected[] = `ls -sl -dag -l -type ahogeShape`;
+    string $node;
+    
+    for ($node in $ahogeShapes)
+    {
+        string $name[] = `listRelatives -parent $node`;
+        menuItem -cb (stringArrayContains($node, $ahogeShapesSelected)) -l $name[0] -c ("select " + $node) -p ahogeToolsMenu_select_menu;
+    }
+    if (!size($ahogeShapes)) menuItem -l "Nothing" -en false -p ahogeToolsMenu_select_menu;
+}
+
+global proc ahogeTools_convertToCurves()
+{
+    string $ahogeShape[] = `ls -l -sl -dag -type "ahogeShape"`;
+    string $node;
+    for ($node in $ahogeShape)
+    {
+        int $num = `getAttr ($node + ".numSegments")` + 1;
+        float $cvs[] = `getAttr ($node + ".outputPoints")`;
+        string $parent[] = `listRelatives -f -parent $node`;
+        float $m[] = `xform -q -ws -m $parent[0]`;
+        int $numCurves = size($cvs) / $num / 3;
+        int $i = 0;
+        for (; $i < $numCurves; $i++)
+        {
+            string $curve = "curve -d 3";
+            int $j = 0;
+            for (; $j < $num; $j++)
+            {
+                vector $p = << $cvs[$i*$num*3+$j*3], $cvs[$i*$num*3+$j*3 + 1], $cvs[$i*$num*3+$j*3 + 2] >>;
+                $p = pointMatrixMult($p, $m);
+                $p += <<$m[12], $m[13], $m[14]>>;
+                $curve += " -p " + ($p.x) + " " + ($p.y) + " " + ($p.z);
+            }
+            eval $curve;
+        }
+    }
+}
+
+global proc ahogeTools_support()
+{
+    python("import webbrowser;webbrowser.open('https://boosty.to/ahoge')");
+}
+
+
+// Misc
+global proc ahogeTools_createNurbopus()
+{
+    string $curves[] = `ls -dag -sl -l -type nurbsCurve`;
+    string $meshes[] = `ls -dag -sl -l -type mesh`; 
+    
+    if (!size($curves)) error "No curves selected";
+    
+    string $nurbopus = `createNode "nurbopusNode"`;
+    string $curve;
+    int $count = 0;
+    int $setMembers = size(`listConnections initialShadingGroup.dagSetMembers`); // `getAttr -size "initialShadingGroup.dagSetMembers"` doesn't always work for some reason
+
+    for ($curve in $curves)
+    {
+        connectAttr ($curve + ".worldSpace[0]") ($nurbopus + ".inputCurves[" + $count + "]");
+        string $surface = `createNode "nurbsSurface"`;
+        connectAttr ($nurbopus + ".outputSurfaces[" + $count + "]") ($surface + ".create");
+        
+        connectAttr ($surface + ".instObjGroups[0]") ("initialShadingGroup.dagSetMembers[" + $setMembers + $count + "]");
+        $count++;
+    }
+    
+    if (size($meshes))
+    {
+        connectAttr ($meshes[0] + ".worldMesh[0]") ($nurbopus + ".inputMesh");
+    }
+    
+    select $nurbopus;
+}
+
+global proc float ahoge_distance(vector $v1, vector $v2) 
+{
+    return sqrt(pow(($v1.x) - ($v2.x), 2) + pow(($v1.y) - ($v2.y), 2) + pow(($v1.z) - ($v2.z), 2));
+}
+
+global proc ahogeTools_fixSurfaces()
+{
+    string $surfaces[] = `ls -dag -sl -l -type nurbsSurface`;
+    string $meshes[] = `ls -dag -sl -l -type mesh`;
+
+    if (!size($surfaces)) error "No nurbsSurfaces selected";
+    if (size($meshes) != 1) error "Select a mesh";
+
+    string $surface;
+    for ($surface in $surfaces)
+    {
+        vector $first_point = << 0, 0, 0 >>;
+        vector $second_point = << 0, 0, 0 >>;
+
+        int $i = 0;
+        for (; $i < 4; $i++)
+        {
+            $first_point += `pointOnSurface -u (float($i) / 4) -v 0.0 -position $surface`;
+            $second_point += `pointOnSurface -u (float($i) / 4) -v 1.0 -position $surface`;
+        }
+
+        $first_point = $first_point / 4;
+        $second_point = $second_point / 4;
+
+        // check for inverted normals first 
+        vector $norm = `pointOnSurface -u 0.0 -v 0.0 -nn $surface`;
+        vector $origin = `pointOnSurface -u 0.0 -v 0.0 -position $surface`;
+        if (dot($norm, $first_point - $origin) > 0)
+        {
+            reverseSurface -d 0 -ch 1 -rpo 1 $surface;
+        }
+
+        //print($first_point.x + " " + $first_point.y + " " + $first_point.z + "\n");
+        //print($second_point.x + " " + $second_point.y + " " + $second_point.z + "\n");
+
+        vector $first_point_surface = `ahogeCmd -m $meshes[0] -cp ($first_point.x) ($first_point.y) ($first_point.z)`;
+        vector $second_point_surface = `ahogeCmd -m $meshes[0] -cp ($second_point.x) ($second_point.y) ($second_point.z)`;
+
+        float $first_point_distance = ahoge_distance($first_point, $first_point_surface);
+        float $second_point_distance = ahoge_distance($second_point, $second_point_surface);
+
+        if ($first_point_distance > $second_point_distance) // needs to reverse V then
+        {
+            reverseSurface -d 1 -ch 1 -rpo 1 $surface;
+            reverseSurface -d 0 -ch 1 -rpo 1 $surface;
+        }
+
+    }
+}
+
+global proc ahogeTools_selectConnectedSurfaces()
+{
+    string $ahogeShapes[] = `ls -sl -dag -type "ahogeShape"`;
+    
+    string $result[] = {};
+    
+    string $ahogeShape;
+    for ($ahogeShape in $ahogeShapes)
+    {
+        string $inputSurfacesObj[] = `listConnections -p false ($ahogeShape + ".inputSurfaces")`;
+        $inputSurfacesObj = `ls -dag -type "nurbsSurface" $inputSurfacesObj`;
+        
+        string $surface;
+        for ($surface in $inputSurfacesObj)
+        {
+            $result[size($result)] = $surface;
+        }
+    }
+    
+    select $result;
+}
+
+global proc ahogeTools_disconnectConnectedSurfaces()
+{
+    string $ahogeShapes[] = `ls -sl -dag -type "ahogeShape"`;
+    
+    string $ahogeShape;
+    for ($ahogeShape in $ahogeShapes)
+    {
+        string $inputSurfaces[] = `listConnections -p true ($ahogeShape + ".inputSurfaces")`;
+               
+        string $connect;
+        for ($connect in $inputSurfaces)
+        {
+            ahogeTools_disconnect_attr $connect ($ahogeShape + ".inputSurfaces");
+        }
+    }
+}
+
+global proc ahogeTools_exportAbc()
+{
+    if (`window -exists ahogeTools_exportAbc_ui`) deleteUI ahogeTools_exportAbc_ui;
+
+    window -title "Ahoge Export Alembic"
+        -iconName "Export Abc"
+        -widthHeight 500 70 ahogeTools_exportAbc_ui;
+        
+    string $path = "C:/test.abc";
+    
+    if (`optionVar -exists "ahoge_abc_path"`)
+    {
+        $path = `optionVar -q "ahoge_abc_path"`;
+    }
+    
+    string $export_mode = "default";
+    
+    if (`optionVar -exists "ahoge_abc_export_mode"`)
+    {
+        $export_mode = `optionVar -q "ahoge_abc_export_mode"`;
+    }
+    
+    int $selected_export_mode = 1;
+    
+    if ($export_mode == "unreal")
+    {
+        $selected_export_mode = 2;
+    }
+    else if ($export_mode == "marmoset")
+    {
+        $selected_export_mode = 3;
+    }
+
+    columnLayout -adjustableColumn true;
+        optionMenuGrp -label "Export Mode" ahoge_abc_export_mode;
+            menuItem -label "Default";
+            menuItem -label "Unreal";
+            menuItem -label "Marmoset";
+            
+        optionMenuGrp -e -sl $selected_export_mode ahoge_abc_export_mode;
+
+        textFieldButtonGrp -label "Path:" -text $path -buttonLabel "Browse" -buttonCommand "ahogeTools_exportAbc_browse" ahoge_abc_path;
+    
+        button -label "Export" -c "ahogeTools_exportAbc_export";
+    setParent ..;
+    showWindow ahogeTools_exportAbc_ui;
+}
+
+global proc ahogeTools_exportAbc_browse()
+{
+    string $path = `textFieldButtonGrp -q -text ahoge_abc_path`;
+    string $result[] = `fileDialog2 -dir $path -fileFilter "*.abc" -dialogStyle 2`;
+    
+    if (size($result))
+    {
+        textFieldButtonGrp -e -text ($result[0]) ahoge_abc_path;
+    }
+}
+
+global proc ahogeTools_exportAbc_export()
+{
+    int $start_time = `timerX`;
+
+    window -e -title "Ahoge Export Alembic: Exporting..." ahogeTools_exportAbc_ui;
+    
+    int $export_mode_selected = `optionMenuGrp -q -sl ahoge_abc_export_mode`;
+    string $export_mode = "default";
+    
+    if ($export_mode_selected == 2)
+    {
+        $export_mode = "unreal";
+    }
+    else if ($export_mode_selected == 3)
+    {
+        $export_mode = "marmoset";
+    }
+    
+    string $path = `textFieldButtonGrp -q -text ahoge_abc_path`;
+    optionVar -sv "ahoge_abc_path" $path;
+    optionVar -sv "ahoge_abc_export_mode" $export_mode;
+    
+    ahogeCmd -e $path -exportMode $export_mode;
+    
+    int $total_time = `timerX -startTime $start_time`;
+
+    window -e -title ("Ahoge Export Alembic: Exporting Done (" + $total_time + "s)") ahogeTools_exportAbc_ui;
+}

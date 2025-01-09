@@ -1,0 +1,32 @@
+global proc AEnurbopusNodeTemplate(string $nodeName)
+{
+    editorTemplate -beginScrollLayout;
+
+        editorTemplate -beginLayout "General" -collapse false;
+            editorTemplate -l "Up Vector" -addControl "upVector";
+            editorTemplate -l "Method" -addControl "method";
+            editorTemplate -l "Shape" -addControl "shape";
+            editorTemplate -l "U Segments" -addControl "uSegments";
+            editorTemplate -l "V Segments" -addControl "vSegments";
+            editorTemplate -l "Segments Power" -addControl "segmentsPower";
+            editorTemplate -l "Radius" -addControl "radius";
+            editorTemplate -l "Scale Y" -addControl "scaleY";
+            editorTemplate -l "Rotate" -addControl "rotate";
+            editorTemplate -l "twist" -addControl "twist";
+            AEaddRampControl($nodeName + ".ramp");
+        editorTemplate -endLayout;
+
+        editorTemplate -beginLayout "Orientation" -collapse false;
+            editorTemplate -l "Use Mesh Normal" -addControl "useMeshNormal";
+            editorTemplate -l "Orient Method" -addControl "orientMethod";
+            editorTemplate -l "Orient" -addControl "orient";
+            editorTemplate -l "Orient Point" -addControl "orientPoint";
+            editorTemplate -l "Orient Segment" -addControl "orientSegment";
+        editorTemplate -endLayout;
+
+        AEdependNodeTemplate $nodeName;
+
+        editorTemplate -addExtraControls;
+
+    editorTemplate -endScrollLayout;
+}

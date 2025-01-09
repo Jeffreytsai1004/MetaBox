@@ -1,0 +1,91 @@
+// This procedure installs the new shelfButton if it does not exists
+
+global proc QuadRemesher_shelf () {
+	global string $gShelfTopLevel ;
+	$verbose = false;
+	
+	if ($verbose) print "QuadRemesher_shelf execution...\n";
+	
+	$theButtonCommand = "import QuadRemesher\nqr = QuadRemesher.QuadRemesher()\n";
+	
+	// search if the shelfButton exists:
+	// NB: shelfButton -query -exists "QuadRemesher" doesn't work because, the name of the shelfButtons are not saved by Maya in shelf.mel
+	// so it works only after the install, but at next Maya start, it doesn't work....
+	//$qrButtonExists = `shelfButton -query -exists "QuadRemesher"`;
+	$qrButtonExists = false;
+	string $shelves[] = `tabLayout -q -childArray $gShelfTopLevel`;
+	for ( $shelf in $shelves ) {
+		//if ($verbose) print ("  --- search in shelf: "+$shelf+"\n");
+		string $shelfButtons[] = `shelfLayout -q -childArray $shelf`;
+		for ( $button in $shelfButtons ) {
+			//if ($verbose) print ("  button: "+$button+"\n");
+			if (`shelfButton -q -exists $button`) {
+				/*
+				$buttonDocTag = `shelfButton -q -docTag $button`;
+				if ($verbose) print ("  buttonDocTag = "+$buttonDocTag+"\n");
+				if ($buttonDocTag == "QRBfd456sg45") {
+					$qrButtonExists = true;
+					break;
+				}
+				*/
+				
+				// NB: MMB drag icon in another shelf : the docTag is not copied -> need another way to identify it : the Command!
+				$buttonCmd = `shelfButton -q -command $button`;
+				//if ($verbose) print ("  buttonCmd = '"+$buttonCmd+"'\n");
+				if ($theButtonCommand == $buttonCmd) {
+					$qrButtonExists = true;
+					break;
+				}
+			}
+		}
+		if ($qrButtonExists)
+			break;
+	}
+
+	
+	if ($verbose) print ("    QuadRemesher Button Exists (from Query 'QuadRemesher') = "+`shelfButton -query -exists "QuadRemesher"`+"\n");
+	if ($verbose) print ("    QuadRemesher Button Exists (from Query 'QR') = "+`shelfButton -query -exists "QR"`+"\n");
+	if ($verbose) print ("    QuadRemesher Button Exists (from docTag,cmd) = " + $qrButtonExists + "\n");
+	
+	if ( !$qrButtonExists	) {
+		// new in 1.0.1 : always install in QuadRemesh shelf tab
+		/*
+		$theParentShelf = "Custom";
+		$tabExists = `layout -ex $theParentShelf`;
+		if ($tabExists==0) {
+			if ($verbose) print "Custom shelf does not Exist...\n";
+			addNewShelfTab "QuadRemesh";
+			$theParentShelf = "QuadRemesh";
+		} else {
+			if ($verbose) print "Custom shelf exist => install in Custom!\n";
+		}*/
+		$theParentShelf = "QuadRemesh";
+		int $shelfExists = `layout -q -ex $theParentShelf`;
+		if ($shelfExists == 0)
+			addNewShelfTab $theParentShelf;
+		
+		
+		shelfButton
+			-parent $theParentShelf
+			-enable 1 -visible 1 -preventOverride 0
+			-label "QR" 
+			-annotation "QuadRemesher" 
+			-image "QuadRemesher.png" 
+			-style "iconOnly" 
+			-noBackground 1
+			-align "center" -marginWidth 1 -marginHeight 1
+			-command $theButtonCommand
+			-sourceType "python" 
+			-commandRepeatable 1
+			-docTag "QRBfd456sg45"
+			"QuadRemesher";
+			
+		shelfTabLayout -edit -selectTab $theParentShelf $gShelfTopLevel ;
+		
+		// log info (not with verbose!)
+		print ("Loading QuadRemesher (new shelfButton installed in '"+$theParentShelf+"' shelf)...\n");
+		
+	} else {
+		if ($verbose) print "_shelf: Loading QuadRemesher...\n";
+	}
+} 

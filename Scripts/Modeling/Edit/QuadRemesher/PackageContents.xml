@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage SchemaVersion="1.0"
+	ProductType="Application"
+
+	AutodeskProduct="Maya"
+	Name="QuadRemesher"
+	Description="QuadRemesher"
+	AppVersion="1.0.1"
+	Author=""
+	AppNameSpace=""
+	HelpFile=""
+	OnlineDocumentation="http://www.exoside.com/"
+
+	ProductCode="*"
+	UpgradeCode="{A456FFFF-1234-6549-4562-FDSQQSGDFGSD}" >
+	
+	<CompanyDetails Name="exoside.com"
+		Phone=" "
+		Url="http://www.exoside.com"
+		Email="support@exoside.com" />
+
+	<!-- Prevent to load in other version than Maya 2012 -->
+	<RuntimeRequirements SupportPath="./Contents/docs" OS="win64|macOS" Platform="Maya" SeriesMin="2012" />
+
+	<Components>
+		<RuntimeRequirements SupportPath="./Contents/docs" OS="win64|macOS" Platform="Maya" SeriesMin="2012" />
+		<MayaEnv expr="MAYA_SCRIPT_PATH+:=shelves" />
+		<ComponentEntry ModuleName="./Contents/scripts/QuadRemesher.py" />
+		<ComponentEntry ModuleName="./Contents/scripts/QuadRemesher_load.mel" />
+		<ComponentEntry ModuleName="./Contents/shelves/QuadRemesher_shelf.mel" />
+	</Components>
+</ApplicationPackage>

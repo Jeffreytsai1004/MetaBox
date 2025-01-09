@@ -37,3 +37,8 @@ Scripts/Modeling/UV/__pycache__/UVSetEditor.cpython-39.pyc
 Scripts/Modeling/Edit/gs_curvetools/log.log
 Scripts/Modeling/Edit/__pycache__/XgenController.cpython-39.pyc
 Scripts/Modeling/Edit/__pycache__/AutoSnap.cpython-39.pyc
+.__pycache__/
+.idea/
+*.pyc
+*.log
+.gitignore

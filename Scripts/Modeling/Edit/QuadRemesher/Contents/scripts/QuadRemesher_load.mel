@@ -1,0 +1,25 @@
+// This script is automatically executed when Maya starts! (even if the Plugin is not loaded!)
+
+
+$verbose = false;
+
+if ($verbose) print "QuadRemesher_load execution.........\n";
+$alreadyInstalled = `optionVar -exists "QuadRemesherInstalled"`;
+if ($verbose) print ("  _load: alreadyInstalled="+$alreadyInstalled+"\n");
+
+if ($alreadyInstalled == 0) { // First time -> set the Plugin as Loaded + AutoLoad
+	if ($verbose) print "   _load: First time -> install it automatically\n";
+	
+	// load the plugin
+	loadPlugin "QuadRemesherPlugIn";
+	
+	// set as "AutoLoad"
+	pluginInfo -edit -autoload true "QuadRemesherPlugIn";
+	
+	optionVar -stringValue "QuadRemesherInstalled" "installed" ;
+	
+} else {
+	// Other times: depends on User choice : Plugin Loaded or not!
+	if ($verbose) print "    _load: Not First time -> nothing !\n";
+}
+
