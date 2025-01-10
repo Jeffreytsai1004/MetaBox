@@ -42,3 +42,4 @@ Scripts/Modeling/Edit/__pycache__/AutoSnap.cpython-39.pyc
 *.pyc
 *.log
 .gitignore
+Scripts/Modeling/Edit/gs_curvetools/log.log

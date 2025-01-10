@@ -117,5 +117,10 @@ TypeError: 'NoneType' object is not iterable
 [21:02:25,417 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
 [21:02:25,417 | DEBUG |     main |    54]: <module>() :                  02/01/2025, 21:02:25                 
 [21:03:03,240 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
-[20:37:49,447 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
-[20:37:49,447 | DEBUG |     main |    54]: <module>() :                  09/01/2025, 20:37:49                 
+[09:58:36,078 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[09:58:36,078 | DEBUG |     main |    54]: <module>() :                  10/01/2025, 09:58:36                 
+[09:59:04,960 |  INFO |     main |    78]: checkScriptJobs() : scriptJobs created for "main" UI!
+[10:29:44,404 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[10:29:44,404 | DEBUG |     main |    54]: <module>() :                  10/01/2025, 10:29:44                 
+[10:31:50,217 | DEBUG |     main |    53]: <module>() : -----------------Starting Log Session-----------------
+[10:31:50,218 | DEBUG |     main |    54]: <module>() :                  10/01/2025, 10:31:50                 
